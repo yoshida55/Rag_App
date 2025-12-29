@@ -1,0 +1,195 @@
+▢　背景画像はPCとSPで切り替え（`<picture>`タグ or メディア
+切り替えたい場合は以下のように指定する。
+
+
+background-image: url("../img/mainvisual-pc.jpg");をするときは
+普段とちがってima srcと時と違い　../一度上のフォルダに移動する必要がある
+
+▢　ＰＣとスマホで画像を変える場合は、HTMLでＳＲＣを指定せず
+スマホ版で
+以下のように設定する
+
+<header class="header_area">
+
+.header_area {
+  background-image: url("../img/mainvisual-pc.jpg");
+  background-size: cover; /* 要素いっぱいに広げる */
+  background-position: center; /* 中央基準で表示 */
+
+
+
+▢ポジションアブソリュートの使い方
+
+親に relative、子に absolute を設定します。
+親（position: relative）
+ └ 子（position: absolute）← 親を基準に配置される
+
+
+ ★同じ階層でもできる上は間違い
+ →かならず重ねたい要素をリラティブにする。
+
+
+
+ HTML構造-------------------------------------------------
+html<header class="header_area">  <!-- 親 -->
+  <nav>
+    <!-- ナビゲーション -->
+  </nav>
+  
+  ★親のメインヘッダに対して、子階層にセットする
+  <div class="header_online">  <!-- 子：これを左下に配置したい -->
+    <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+      オンラインストアを見る
+    </a>
+  </div>
+</header>
+
+---------------------------------------------------------
+ポジションリラティブは子要素に書く必要ある。
+
+
+.header_area {
+  position: relative;  /* ← これがないとabsoluteが効かない */
+}
+
+
+/* 子：左下に配置 */
+.header_online {
+  position: absolute;  /* 親を基準に配置 */
+  left: 20px;         /* 左から20px */
+  bottom: 20px;       /* 下から20px */
+}
+
+
+HTML構造-------------------------------------------------
+
+▢　たてがきは
+  writing-mode: vertical-rl;
+
+  これは親要素ではなく aタグにかく。
+
+▢　prettierできずいたらすぐ、
+コパイロットにいってタグをなおしてもらう
+
+▢　フレックスは、上にかかれたものから左から
+順番に記載されることをわすれない。
+
+
+▢　　
+            <ul class="footer_location">
+              <!-- └ 子フレックス -->
+              <li class="nav-item">
+                <a href="#">０ ３ | Ｘ Ｘ Ｘ Ｘ | Ｘ Ｘ Ｘ Ｘ</a>
+              </li>
+              <li class="nav-item">
+                <a href="#"
+                  >〒 １ ０ ６ | ０ ０ ３ ２ 　 東 京 都 港 区 六 本 木 ５ 丁 目
+                  × × × × ×</a
+                >
+              </li>
+            </ul>
+
+            nav-itemが縦書きにならない
+
+
+.footer_location {
+  display: flex;
+  gap: 3rem;
+  writing-mode: horizontal-tb;
+}
+
+縦書きで「横並び」にしたい時の呪文
+CSS
+
+
+答え
+.target {
+  display: flex;
+  writing-mode: vertical-rl; /* 縦書きにする */
+  flex-direction: column;    /* 横に並べるための必須スイッチ */
+}
+
+▢　flex
+子フレックスで、widthを指定すると、flex1としているより
+優先されるため、基本、サイズを指定する必要がない場合は
+flex1にきめておくと楽。
+
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+自分でデザインカンプ
+
+▢　画面をよこにみて、absoluteの回数を減らす。
+(理由、
+★Absoluteを減らして、流れ（横方向）で作る理由
+
+壊れないから（一番大事） Absoluteは「画鋲で止める」ようなものです。
+画面の大きさが変わると、止めた場所がズレてレイアウトが崩壊します。
+流れで作れば、画面に合わせて柔軟に動いてくれます。
+
+計算しなくていいから vertical-rl（縦書きモード）を使えば、
+h1（ロゴ）の隣に nav（メニュー）が自動的に並びます。座標を計算して配置する手間がゼロになります。
+
+結論： 「頑張って配置する」のではなく、
+「勝手に並ぶようにする」のがプロの書き方です。)
+
+
+header
+  h1
+  nav
+
+
+▢　クラスを直接指定する方法
+
+タグ名で省略せず　ネストされたクラス名も
+かならずかく
+
+
+a タグにもクラス名をかっく
+<div class="online_absolute">
+  <a href="#" target="_blank" class="online_link">オンラインストアを見る</a>
+</div>
+
+▢全体像を把握してまとめてパディングをしかける
+
+
+▢naviはメインメニューの場合だけ使用する
+
+news一覧 などでは　ul liで仕上げる
+
+
+
+▢タイトルなどの項目は親ディブで囲む。また中身はspanタグがベスト
+        <h2 class="section-title">
+          <span class="ja">新しい価値の創造</span>
+          <span class="en">Create New Values</span>
+        </h2>
+
+
+▢　ぜんたいのメインカラーがあれば
+最初にBODYでいろをぬっておく
+
+そうするとsectionのエリアでマージンボトムした
+ときも色がつく
+
+▢ 更新した時途中からブラウザで表示したい場合
+
+・URLの最後に、　aboutをつける
+http://localhost:5500/#about
+
+・HTMLのセクションでIDをふる
+<section id="about" class="concept_area">
+
+
+▢flexで指定した画像にabsoluteで文字を配置しようとすると、
+
+top bottomなどと指定した位置と、表示があわなくなる
+
+Flexだと画像の高さが隣のタイトルに合わせられてしまうので、
+
+align-items: flex-startをかけて高さを画像に合わせる必要がある。
+
+▢サイズがサイズが違うと思ったら、Style CSSでフォントサイズを1400pxに指定しているのを忘れていた。
+
+
+※設計者は、 「ヘッダーは文字が流れるだけだから、縦書き設定だけで十分」 「商品はスマホでレイアウトをガラッと変えたいし、画像との位置関係を調整したいから、Flexboxという強力なツールを使おう」 と判断して使い分けた、ということです。

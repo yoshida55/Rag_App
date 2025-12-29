@@ -1,0 +1,12 @@
+  仕様書に詳細を書く → CLAUDE.mdは概要だけ
+
+  docs/rag-specification.md
+    → 詳細な設計・仕様
+
+  CLAUDE.md
+    → 概要 + 「詳細は仕様書参照」
+
+  メリット：
+  - 二重管理を避ける
+  - CLAUDE.mdはClaudeがサッと見る用（軽量）
+  - 仕様書は人間が読む詳細ドキュメント

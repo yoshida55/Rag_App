@@ -1,0 +1,24 @@
+# Environment
+venv/
+__pycache__/
+*.pyc
+
+# Secrets (CRITICAL - never commit)
+secrets/
+.env
+token.json
+
+# Data
+data/chroma_db/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml

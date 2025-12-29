@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m venv:*)",
+      "Bash(dir:*)",
+      "Bash(venv\\\\Scripts\\\\pip install -r requirements.txt)",
+      "Bash(./venv/Scripts/pip.exe install:*)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "WebSearch",
+      "WebFetch(domain:ai.google.dev)",
+      "Bash(cat:*)",
+      "Bash(.\\\\venv\\\\Scripts\\\\streamlit run:*)",
+      "Bash(venv\\\\Scripts\\\\streamlit.exe run:*)",
+      "Bash(./venv/Scripts/streamlit.exe run:*)",
+      "Bash(python:*)",
+      "Bash(netstat:*)",
+      "Bash(cmd.exe /c \"tasklist | findstr python\")",
+      "Bash(timeout:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist:*)",
+      "Bash(D:\\\\01_AI\\\\10_Python\\\\00_Python_src\\\\99_commit\\\\80_RAG\\\\venv\\\\Scripts\\\\streamlit.exe run:*)",
+      "Bash(D:\\\\01_AI\\\\10_Python\\\\00_Python_src\\\\99_commit\\\\80_RAG\\\\venv\\\\Scripts\\\\pip.exe install:*)",
+      "Bash(venv\\\\Scripts\\\\pip.exe install:*)"
+    ]
+  }
+}

@@ -1,0 +1,88 @@
+# .claudeignore
+# Claude Codeが自動的に無視するファイル・ディレクトリを指定
+
+# Python仮想環境
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Troubleshooting（Grep検索専用、全探索禁止）
+Troubleshooting/2025-*/
+Troubleshooting/**/*.md
+
+# ログファイル
+*.log
+all.log
+backup.log
+*.tmp
+
+# アップロード・一時ファイル
+uploads/
+bkup/
+backup/
+temp/
+tmp/
+
+# Node.js（もし使う場合）
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Git管理情報
+.git/
+.gitignore
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# データベースファイル
+*.db
+*.sqlite
+*.sqlite3
+
+# 環境変数（重要情報）
+.env
+.env.local
+.env.*.local
+
+# 実行ファイル
+*.exe
+*.dll
+*.so
+*.dylib
+
+# 画像・メディアファイル（大容量）
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.avi
+*.mov
+
+# 圧縮ファイル
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z

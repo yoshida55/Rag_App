@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS/HTML ベストプラクティス RAG - 画面イメージ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    
+    /* タブ切り替え */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: #ecf0f1;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      background: #3498db;
+      color: white;
+    }
+    
+    .tab:hover:not(.active) {
+      background: #dfe6e9;
+    }
+    
+    /* パネル */
+    .panel {
+      display: none;
+      background: white;
+      border-radius: 0 12px 12px 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .panel.active {
+      display: block;
+    }
+    
+    /* 検索画面 */
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    .search-input:focus {
+      border-color: #3498db;
+    }
+    
+    .search-btn {
+      padding: 15px 30px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .search-btn:hover {
+      background: #2980b9;
+    }
+    
+    /* 検索結果 */
+    .results-section {
+      margin-top: 30px;
+    }
+    
+    .results-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .results-header h2 {
+      font-size: 1.2rem;
+      color: #2c3e50;
+    }
+    
+    .badge {
+      background: #27ae60;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+    
+    /* AI回答 */
+    .ai-answer {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+    
+    .ai-answer h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .ai-answer p {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    
+    .ai-answer code {
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+    }
+    
+    /* 参考データカード */
+    .reference-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+    }
+    
+    .ref-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    
+    .ref-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .ref-card-image {
+      width: 100%;
+      height: 180px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .ref-card-image .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: #95a5a6;
+    }
+    
+    .ref-card-image .placeholder svg {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .ref-card-body {
+      padding: 20px;
+    }
+    
+    .ref-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .ref-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+    
+    .tag {
+      background: #e8f4fd;
+      color: #3498db;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+    }
+    
+    .ref-card-desc {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+    
+    .code-preview {
+      background: #2d3436;
+      color: #dfe6e9;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    
+    .code-preview .keyword {
+      color: #74b9ff;
+    }
+    
+    .code-preview .value {
+      color: #55efc4;
+    }
+    
+    .code-preview .property {
+      color: #fdcb6e;
+    }
+    
+    /* 登録画面 */
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+    
+    .form-group .required {
+      color: #e74c3c;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+      border-color: #3498db;
+    }
+    
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .image-upload {
+      border: 2px dashed #bdc3c7;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .image-upload:hover {
+      border-color: #3498db;
+      background: #f8fbff;
+    }
+    
+    .image-upload svg {
+      width: 48px;
+      height: 48px;
+      color: #95a5a6;
+      margin-bottom: 10px;
+    }
+    
+    .image-upload p {
+      color: #7f8c8d;
+    }
+    
+    .image-upload .hint {
+      font-size: 0.85rem;
+      color: #bdc3c7;
+      margin-top: 5px;
+    }
+    
+    .code-editor {
+      background: #2d3436;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .code-editor-header {
+      background: #1e272e;
+      padding: 10px 15px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .code-editor-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .code-editor-dot.red { background: #e74c3c; }
+    .code-editor-dot.yellow { background: #f1c40f; }
+    .code-editor-dot.green { background: #2ecc71; }
+    
+    .code-editor textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      background: transparent;
+      border: none;
+      color: #dfe6e9;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      outline: none;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      padding: 15px 35px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #27ae60;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #219a52;
+    }
+    
+    .btn-secondary {
+      background: #ecf0f1;
+      color: #7f8c8d;
+    }
+    
+    .btn-secondary:hover {
+      background: #dfe6e9;
+    }
+    
+    /* データ一覧 */
+    .data-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .data-count {
+      color: #7f8c8d;
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .data-table th,
+    .data-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .data-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    .data-table tr:hover td {
+      background: #f8fbff;
+    }
+    
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .action-btn.edit {
+      background: #3498db;
+      color: white;
+    }
+    
+    .action-btn.delete {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .reference-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-box {
+        flex-direction: column;
+      }
+    }
+    
+    /* ページセクション区切り */
+    .page-divider {
+      text-align: center;
+      padding: 60px 0;
+      background: linear-gradient(to right, #ecf0f1, #fff, #ecf0f1);
+      margin: 40px 0;
+    }
+    
+    .page-divider h2 {
+      color: #95a5a6;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎨 CSS/HTML ベストプラクティス RAG</h1>
+  <p class="subtitle">デザインカンプ → 実装のベストプラクティスを検索・登録</p>
+  
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('search')">🔍 検索</button>
+    <button class="tab" onclick="showPanel('register')">📝 新規登録</button>
+    <button class="tab" onclick="showPanel('list')">📋 データ一覧</button>
+  </div>
+  
+  <!-- 検索パネル -->
+  <div id="search" class="panel active">
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="例: 横並びのカードを均等に配置したい" value="横並びのカードを均等に配置したい">
+      <button class="search-btn">🔍 検索</button>
+    </div>
+    
+    <div class="results-section">
+      <div class="results-header">
+        <h2>検索結果</h2>
+        <span class="badge">3件ヒット</span>
+      </div>
+      
+      <!-- AI回答 -->
+      <div class="ai-answer">
+        <h3>🤖 AIによる回答</h3>
+        <p>
+          横並びのカードを均等に配置するには、<code>display: flex</code> と <code>gap</code> プロパティの組み合わせがベストです。<br><br>
+          親要素に <code>display: flex; gap: 20px;</code> を設定し、子要素（カード）に <code>flex: 1;</code> を指定すると均等幅になります。<br><br>
+          レスポンシブ対応には <code>flex-wrap: wrap;</code> を追加し、カードに <code>min-width</code> を設定するのがおすすめです。
+        </p>
+      </div>
+      
+      <!-- 参考カード -->
+      <h3 style="margin-bottom: 15px; color: #2c3e50;">📚 参考データ</h3>
+      <div class="reference-cards">
+        
+        <div class="ref-card">
+          <div class="ref-card-image">
+            <div class="placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>カードレイアウト.png</span>
+            </div>
+          </div>
+          <div class="ref-card-body">
+            <div class="ref-card-title">Flexboxカードレイアウト（均等配置）</div>
+            <div class="ref-card-tags">
+              <span class="tag">flexbox</span>
+              <span class="tag">card</span>
+              <span class="tag">gap</span>
+              <span class="tag">responsive</span>
+            </div>
+            <p class="ref-card-desc">カードを横並びで均等に配置する最もシンプルな方法。gapで余白管理。</p>
+            <div class="code-preview">
+<span class="keyword">.cards</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">gap</span>: <span class="value">20px</span>;
+}
+<span class="keyword">.card</span> {
+  <span class="property">flex</span>: <span class="value">1</span>;
+}
+            </div>
+          </div>
+        </div>
+        
+        <div class="ref-card">
+          <div class="ref-card-image">
+            <div class="placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>grid-cards.png</span>
+            </div>
+          </div>
+          <div class="ref-card-body">
+            <div class="ref-card-title">CSS Gridカードレイアウト</div>
+            <div class="ref-card-tags">
+              <span class="tag">grid</span>
+              <span class="tag">card</span>
+              <span class="tag">auto-fit</span>
+            </div>
+            <p class="ref-card-desc">Grid + auto-fitで自動折り返し。カード枚数が可変の場合に最適。</p>
+            <div class="code-preview">
+<span class="keyword">.cards</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: 
+    <span class="value">repeat(auto-fit, minmax(280px, 1fr))</span>;
+  <span class="property">gap</span>: <span class="value">20px</span>;
+}
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- 登録パネル -->
+  <div id="register" class="panel">
+    <h2 style="margin-bottom: 25px; color: #2c3e50;">📝 新規ベストプラクティス登録</h2>
+    
+    <div class="form-group">
+      <label>タイトル <span class="required">*</span></label>
+      <input type="text" class="form-control" placeholder="例: Flexboxカードレイアウト（均等配置）">
+    </div>
+    
+    <div class="form-group">
+      <label>説明文（検索対象） <span class="required">*</span></label>
+      <textarea class="form-control" placeholder="例: カードを横並びで均等に配置する方法。gapプロパティで余白を管理し、flex: 1で均等幅に。レスポンシブ対応にはflex-wrapを使用。"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>タグ（カンマ区切り）</label>
+      <input type="text" class="form-control" placeholder="例: flexbox, card, gap, responsive">
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>HTMLコード</label>
+        <div class="code-editor">
+          <div class="code-editor-header">
+            <span class="code-editor-dot red"></span>
+            <span class="code-editor-dot yellow"></span>
+            <span class="code-editor-dot green"></span>
+          </div>
+          <textarea placeholder="<div class='cards'>
+  <div class='card'>Card 1</div>
+  <div class='card'>Card 2</div>
+  <div class='card'>Card 3</div>
+</div>"></textarea>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>CSSコード</label>
+        <div class="code-editor">
+          <div class="code-editor-header">
+            <span class="code-editor-dot red"></span>
+            <span class="code-editor-dot yellow"></span>
+            <span class="code-editor-dot green"></span>
+          </div>
+          <textarea placeholder=".cards {
+  display: flex;
+  gap: 20px;
+}
+.card {
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+}"></textarea>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>参考画像</label>
+      <div class="image-upload">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p>クリックまたはドラッグ&ドロップで画像をアップロード</p>
+        <p class="hint">PNG, JPG, GIF（最大5MB）</p>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>補足説明・注意点</label>
+      <textarea class="form-control" placeholder="例: IE非対応。gapプロパティはFlexboxでは比較的新しい機能なので、古いブラウザではmarginで代用する。"></textarea>
+    </div>
+    
+    <div class="btn-group">
+      <button class="btn btn-primary">✅ 登録する</button>
+      <button class="btn btn-secondary">キャンセル</button>
+    </div>
+  </div>
+  
+  <!-- データ一覧パネル -->
+  <div id="list" class="panel">
+    <div class="data-list-header">
+      <h2 style="color: #2c3e50;">📋 登録済みデータ一覧</h2>
+      <span class="data-count">全 24 件</span>
+    </div>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>タイトル</th>
+          <th>タグ</th>
+          <th>登録日</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Flexboxカードレイアウト（均等配置）</td>
+          <td>
+            <span class="tag">flexbox</span>
+            <span class="tag">card</span>
+          </td>
+          <td>2025/12/27</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit">編集</button>
+              <button class="action-btn delete">削除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>CSS Gridカードレイアウト</td>
+          <td>
+            <span class="tag">grid</span>
+            <span class="tag">card</span>
+          </td>
+          <td>2025/12/26</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit">編集</button>
+              <button class="action-btn delete">削除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>ヘッダー固定レイアウト</td>
+          <td>
+            <span class="tag">header</span>
+            <span class="tag">sticky</span>
+          </td>
+          <td>2025/12/25</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit">編集</button>
+              <button class="action-btn delete">削除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>中央寄せレイアウト各種</td>
+          <td>
+            <span class="tag">centering</span>
+            <span class="tag">flexbox</span>
+          </td>
+          <td>2025/12/24</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit">編集</button>
+              <button class="action-btn delete">削除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>レスポンシブナビゲーション</td>
+          <td>
+            <span class="tag">navigation</span>
+            <span class="tag">responsive</span>
+          </td>
+          <td>2025/12/23</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn edit">編集</button>
+              <button class="action-btn delete">削除</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+
+<script>
+  function showPanel(panelId) {
+    // パネル切り替え
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(panelId).classList.add('active');
+    
+    // タブ切り替え
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

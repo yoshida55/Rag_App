@@ -1,0 +1,42 @@
+{
+  "monthly": {
+    "2025-12": {
+      "input_tokens": 370546,
+      "output_tokens": 29209,
+      "cost_usd": 0.144955675,
+      "calls": 970,
+      "by_model": {
+        "gemini-2.5-flash": {
+          "input_tokens": 20655,
+          "output_tokens": 23179,
+          "cost_usd": 0.063525025,
+          "calls": 19
+        },
+        "gemini-embedding-001": {
+          "input_tokens": 280349,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "calls": 935
+        },
+        "gemini-2.0-flash": {
+          "input_tokens": 35335,
+          "output_tokens": 2621,
+          "cost_usd": 0.004581900000000001,
+          "calls": 10
+        },
+        "gemini-3-pro-preview": {
+          "input_tokens": 34207,
+          "output_tokens": 3409,
+          "cost_usd": 0.07684875,
+          "calls": 6
+        }
+      }
+    }
+  },
+  "total": {
+    "input_tokens": 370546,
+    "output_tokens": 29209,
+    "cost_usd": 0.144955675
+  },
+  "_note": "2025-12-29リセット: 日本語トークン計算修正後"
+}
