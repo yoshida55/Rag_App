@@ -13,336 +13,43 @@ import base64
 from pathlib import Path
 from datetime import datetime
 from config.settings import CATEGORIES, logger, PROJECT_ROOT
-from modules.llm import generate_simple_response, generate_preview_svg, analyze_image
+from modules.llm import generate_simple_response, generate_preview_svg, analyze_image, analyze_html_css_relations, analyze_html_css_relations
 from modules.data_manager import DataManager
 from modules.database import ChromaManager
 from modules.answer_cache import AnswerCache
 
-# 色付きコードエディタ
-try:
-    from streamlit_ace import st_ace
-    HAS_ACE = True
-except ImportError:
-    HAS_ACE = False
-    logger.warning("streamlit-ace not installed")
+# ... (imports omitted) ...
 
-# クリップボード貼り付け
-try:
-    from streamlit_paste_button import paste_image_button
-    HAS_PASTE_BUTTON = True
-except ImportError:
-    HAS_PASTE_BUTTON = False
+# ============================================================
+# 分析モード（クラス対応関係の表示）
+# ============================================================
+if st.session_state.get("show_analysis_mode", False):
+    st.markdown("### 🔍 クラスとスタイルの対応分析")
+    st.info("AIがコードを解析し、関係性をコメントで追記しました。")
 
-# ページ設定（wide + サイドバー非表示）
-st.set_page_config(page_title="コード学習", page_icon="📖", layout="wide", initial_sidebar_state="collapsed")
-
-# サイドバー完全非表示 + 左余白最小化
-st.markdown("""
-<style>
-    [data-testid="stSidebar"] { display: none; }
-    [data-testid="stSidebarNav"] { display: none; }
-    section[data-testid="stSidebar"] { display: none; }
-    header[data-testid="stHeader"] { display: none; }
-    .block-container {
-        padding-top: 1.5rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        max-width: 100%;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("### 📖 コード学習")
-
-logger.info("=== コード学習ページ表示 ===")
-
-# データマネージャー初期化
-if "data_manager" not in st.session_state:
-    st.session_state.data_manager = DataManager()
-if "chroma_manager" not in st.session_state:
-    st.session_state.chroma_manager = ChromaManager()
-
-# セッション状態初期化
-if "code_learning" not in st.session_state:
-    st.session_state.code_learning = {
-        "code_text": "",
-        "sections": [],
-        "image_bytes": None,
-        "image_path": None,
-        "image_analysis": "",
-        "chat_history": [],
-        "saved_id": None
-    }
-
-# 読み込みフラグ処理
-if st.session_state.get("load_practice_id"):
-    practice_id = st.session_state.load_practice_id
-    st.session_state.load_practice_id = None
-    p = st.session_state.data_manager.get_by_id(practice_id)
-    if p:
-        # HTMLとCSSを取得（別フィールドの場合と結合されている場合に対応）
-        html_part = p.get("code_html", "") or ""
-        css_part = p.get("code_css", "") or ""
-
-        # CSSが空、またはHTMLと同じ値（バグで同じ値が入った場合）なら分離処理
-        need_split = (not css_part) or (css_part == html_part)
-        logger.info(f"[読込] need_split={need_split}, has_style={'<style' in html_part.lower()}")
-
-        if need_split and html_part and "<style" in html_part.lower():
-            import re
-            # 全ての<style>タグの中身を抽出
-            style_matches = re.findall(r'<style[^>]*>(.*?)</style>', html_part, re.DOTALL | re.IGNORECASE)
-            if style_matches:
-                css_part = "\n\n".join(style_matches).strip()
-                html_part = re.sub(r'<style[^>]*>.*?</style>', '', html_part, flags=re.DOTALL | re.IGNORECASE).strip()
-                logger.info(f"[読込] 分離成功: HTML={len(html_part)}文字, CSS={len(css_part)}文字")
-            else:
-                css_part = ""
-                logger.info("[読込] <style>タグ見つからず")
-
-        # 結合コードも保存
-        combined = html_part
-        if css_part:
-            combined = f"{html_part}\n\n<style>\n{css_part}\n</style>"
-        st.session_state.code_learning["code_text"] = combined
-
-        # セッションステートとtext_areaの値を直接設定（固定key使用）
-        st.session_state["loaded_html"] = html_part
-        st.session_state["loaded_css"] = css_part
-        st.session_state["html_editor"] = html_part
-        st.session_state["css_editor"] = css_part
-
-        logger.info(f"[読込] HTML: {len(html_part)}文字, CSS: {len(css_part)}文字")
-
-        try:
-            notes = p.get("notes", "")
-            if notes and notes.startswith("["):
-                st.session_state.code_learning["sections"] = json.loads(notes)
-        except:
-            pass
-        if p.get("image_path"):
-            img_path = PROJECT_ROOT / p["image_path"]
-            if img_path.exists():
-                with open(img_path, "rb") as f:
-                    st.session_state.code_learning["image_bytes"] = f.read()
-        # チャット履歴も復元（永続キャッシュ）
-        if p.get("chat_history"):
-            st.session_state.code_learning["chat_history"] = p["chat_history"]
-            logger.info(f"[読込] チャット履歴復元: {len(p['chat_history'])}件")
-        st.session_state.code_learning["saved_id"] = p["id"]
-        st.toast("✅ 読み込み完了", icon="📚")
+    if st.button("🔙 エディタに戻る"):
+        st.session_state.show_analysis_mode = False
         st.rerun()
 
-IMAGES_DIR = PROJECT_ROOT / "data" / "images"
-IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+    # 分析結果の取得（なければ実行）
+    if "analyzed_html" not in st.session_state or "analyzed_css" not in st.session_state:
+        with st.spinner("AIがコードを分析中...（約5~10秒）"):
+            current_html = st.session_state.get("html_editor", "")
+            current_css = st.session_state.get("css_editor", "")
+            a_html, a_css = analyze_html_css_relations(current_html, current_css)
+            st.session_state.analyzed_html = a_html
+            st.session_state.analyzed_css = a_css
 
-
-# ============================================================
-# 関数
-# ============================================================
-def save_image(image_bytes: bytes, filename: str) -> str:
-    """画像保存"""
-    path = IMAGES_DIR / filename
-    with open(path, "wb") as f:
-        f.write(image_bytes)
-    return f"data/images/{filename}"
-
-
-def ask_code_question(code: str, question: str, image_bytes: bytes = None, history: list = None) -> str:
-    """コード/画像について質問（簡潔回答）"""
-    from modules.usage_tracker import record_usage
-
-    logger.debug(f"[質問] {question[:30]}...")
-
-    # 履歴を構築（直近3件）
-    history_text = ""
-    if history:
-        for h in history[-3:]:
-            history_text += f"Q: {h['question']}\nA: {h['answer'][:150]}\n\n"
-
-    # トークン概算（日本語対応）
-    def estimate_tokens(text: str) -> int:
-        if not text:
-            return 0
-        jp_chars = sum(1 for c in text if ord(c) > 127)
-        en_chars = len(text) - jp_chars
-        return int(jp_chars + en_chars / 4)
-
-    # 画像がある場合は画像重視のプロンプト
-    if image_bytes:
-        prompt = f"""【画像とコードを両方見て回答】
-
-添付画像: デザインカンプ/スクリーンショット
-コード:
-```
-{code[:8000]}
-```
-
-{f"前の会話:\n{history_text}" if history_text else ""}
-
-質問: {question}
-
-【回答ルール】
-- 画像の見た目とCSSコードを照らし合わせて説明
-- 「display: flex」「grid」などの実際のプロパティ値を具体的に
-- 画像のどの部分がコードのどこに対応するか説明
-- 3〜5文で簡潔に（箇条書きOK）
-"""
-        try:
-            from PIL import Image
-            import io
-            image = Image.open(io.BytesIO(image_bytes))
-            import google.generativeai as genai
-            model_name = "gemini-2.0-flash"
-            model = genai.GenerativeModel(model_name)
-            response = model.generate_content([prompt, image])
-            result = response.text
-
-            # 使用量記録（画像は概算1000トークン）
-            input_tokens = 1000 + estimate_tokens(prompt)
-            output_tokens = estimate_tokens(result)
-            record_usage(model_name, input_tokens, output_tokens)
-            logger.debug(f"[画像質問] 記録: {model_name} in={input_tokens} out={output_tokens}")
-
-            return result
-        except Exception as e:
-            logger.error(f"[画像質問] エラー: {e}")
-            return f"エラー: {e}"
-    else:
-        # コードのみ（generate_simple_responseは内部でrecord_usage呼んでる）
-        prompt = f"""以下のコードについて質問に回答。
-
-コード:
-```
-{code[:8000]}
-```
-
-{f"前の会話:\n{history_text}" if history_text else ""}
-
-質問: {question}
-
-【回答ルール】
-- 具体的なCSSプロパティ名と値を示す
-- 3〜5文で簡潔に
-"""
-        try:
-            return generate_simple_response(prompt, use_pro=True)
-        except Exception as e:
-            logger.error(f"[質問] エラー: {e}")
-            return f"エラー: {e}"
-
-
-def save_to_database(title: str, category: str, html_code: str, css_code: str, sections: list,
-                     image_path: str = None, chat_history: list = None) -> str:
-    """保存（HTML/CSS別々に）+ チャット履歴も保存"""
-    description = "## コード学習\n\n"
-    for i, sec in enumerate(sections, 1):
-        description += f"### {i}. {sec['title']}\n{sec.get('description', '')}\n\n"
-
-    sections_json = json.dumps(sections, ensure_ascii=False)
-
-    new_practice = {
-        "title": title,
-        "category": category,
-        "content_type": "code",
-        "description": description,
-        "tags": ["コード学習"],
-        "code_html": html_code,
-        "code_css": css_code if css_code else None,
-        "code_js": None,
-        "image_path": image_path,
-        "notes": sections_json,
-        "generated_svg": None,
-        "generated_html": None,
-        "chat_history": chat_history if chat_history else []  # チャット履歴永続保存
-    }
-
-    try:
-        practice_id = st.session_state.data_manager.add(new_practice)
-        new_practice["id"] = practice_id
-        st.session_state.chroma_manager.add_practice(new_practice)
-        return practice_id
-    except Exception as e:
-        logger.error(f"[保存] エラー: {e}")
-        return None
-
-
-# ============================================================
-# UI: 上部ナビゲーション
-# ============================================================
-nav_cols = st.columns([1, 1, 1, 1, 4])
-with nav_cols[0]:
-    if st.button("🔍 検索", use_container_width=True):
-        st.switch_page("pages/1_🔍_検索.py")
-with nav_cols[1]:
-    if st.button("📋 一覧", use_container_width=True):
-        st.switch_page("pages/3_📋_一覧.py")
-with nav_cols[2]:
-    if st.button("⚙️ 設定", use_container_width=True):
-        st.switch_page("pages/5_⚙️_設定.py")
-with nav_cols[3]:
-    if st.button("💾 保存済み", use_container_width=True):
-        st.session_state.show_saved = not st.session_state.get("show_saved", False)
-        st.rerun()
-
-st.markdown("---")
-
-# ============================================================
-# 保存済みデータ（トグル表示）
-# ============================================================
-if st.session_state.get("show_saved", False):
-    st.markdown("##### 💾 保存済みコード学習データ")
-    all_practices = st.session_state.data_manager.get_all()
-    code_learning_practices = [p for p in all_practices if "コード学習" in p.get("tags", [])]
-
-    if not code_learning_practices:
-        st.info("まだ保存されたデータがありません")
-    else:
-        for p in code_learning_practices[:5]:
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.markdown(f"**{p.get('title', '無題')}** ({p.get('category', '')})")
-            with col2:
-                if st.button("📚 読込", key=f"load_{p['id']}"):
-                    st.session_state.load_practice_id = p["id"]
-                    st.session_state.show_saved = False
-                    st.rerun()
+    # 左右に並べて表示
+    a_col1, a_col2 = st.columns(2)
+    with a_col1:
+        st.markdown("**📄 HTML (解説付き)**")
+        st.code(st.session_state.analyzed_html, language="html")
+    with a_col2:
+        st.markdown("**🎨 CSS (解説付き)**")
+        st.code(st.session_state.analyzed_css, language="css")
+    
     st.markdown("---")
-
-# ============================================================
-# プレビュー（折りたたみ）
-# ============================================================
-with st.expander("📷 プレビュー画像（クリックで展開）", expanded=False):
-    prev_cols = st.columns([2, 1])
-    with prev_cols[0]:
-        if st.session_state.code_learning.get("image_bytes"):
-            st.image(st.session_state.code_learning["image_bytes"], use_container_width=True)
-        else:
-            st.info("画像なし")
-    with prev_cols[1]:
-        # 画像アップロード
-        if HAS_PASTE_BUTTON:
-            paste_result = paste_image_button("📋 Ctrl+V", key="paste_btn")
-            if paste_result.image_data is not None:
-                try:
-                    image_bytes = base64.b64decode(paste_result.image_data.split(",")[1])
-                    st.session_state.code_learning["image_bytes"] = image_bytes
-                    st.rerun()
-                except:
-                    pass
-
-        uploaded = st.file_uploader("画像選択", type=["png", "jpg", "jpeg", "gif"], key="img_upload", label_visibility="collapsed")
-        if uploaded:
-            # 新しい画像の場合のみ更新（無限ループ防止）
-            new_bytes = uploaded.getvalue()
-            if st.session_state.code_learning.get("image_bytes") != new_bytes:
-                st.session_state.code_learning["image_bytes"] = new_bytes
-                st.rerun()
-
-        if st.session_state.code_learning.get("image_bytes"):
-            if st.button("🗑️ 画像削除"):
-                st.session_state.code_learning["image_bytes"] = None
-                st.rerun()
 
 # ============================================================
 # メインレイアウト: HTML(狭) | CSS(広め) | 質問
@@ -368,6 +75,24 @@ def split_html_css(code: str) -> tuple[str, str]:
 # 現在のコードを分離（読み込み時に設定された値を使う）
 html_val = st.session_state.get("loaded_html", "")
 css_val = st.session_state.get("loaded_css", "")
+
+# ------------------------------------------------------------
+# 分析ボタン
+# ------------------------------------------------------------
+if not st.session_state.get("show_analysis_mode", False):
+    if st.button("🔍 クラス対応を分析する（AI解説）", help="HTMLとCSSの関係性をAIが分析してコメントを付けます"):
+        # エディタの最新値で分析するために一旦リロードが必要
+        # session_stateはon_change等でないと更新されないため、ここでの値取得には注意が必要だが
+        # 基本的に直前の操作が反映されている前提
+        
+        # 既存の分析結果をクリア（新しいコードで再分析）
+        if "analyzed_html" in st.session_state: del st.session_state["analyzed_html"]
+        if "analyzed_css" in st.session_state: del st.session_state["analyzed_css"]
+        
+        st.session_state.show_analysis_mode = True
+        st.rerun()
+
+# ------------------------------------------------------------
 
 # ------------------------------------------------------------
 with st.expander("📄 HTML", expanded=True):

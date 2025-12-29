@@ -288,6 +288,41 @@ def analyze_image(image_data: bytes, title: str = "") -> dict:
         return {"description": "", "tags": [], "keywords": ""}
 
 
+def analyze_html_css_relations(html_code: str, css_code: str) -> tuple[str, str]:
+    """
+    HTMLとCSSの対応関係を分析し、コメント付きのコードを返す
+    """
+    prompt = f"""
+    あなたはWeb制作の講師です。以下のHTMLとCSSを見て、
+    「どのHTML要素にどのCSSが効いているか」が初心者にも分かるように、
+    コードに直接コメント（注釈）を追加してください。
+
+    【ルール】
+    1. HTMLには `<!-- .class名: 説明 -->` の形式でコメント追記
+    2. CSSには `/* .class名: 説明 */` の形式でコメント追記
+    3. 説明は「これはカードの外枠です」「ここで横並びにしています」のように具体的に。
+    4. コードの構造（インデントなど）は極力変えないこと。
+    5. 出力は以下のJSON形式のみ。マークダウンは不要。
+    {{
+        "html": "コメント付きHTML",
+        "css": "コメント付きCSS"
+    }}
+
+    HTML:
+    {html_code}
+
+    CSS:
+    {css_code}
+    """
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+        result = json.loads(response.text)
+        return result.get("html", html_code), result.get("css", css_code)
+    except Exception as e:
+        logger.error(f"[分析] エラー: {e}")
+        return html_code, css_code
+
 def generate_preview_svg(description: str, title: str = "") -> str:
     """
     説明文からSVG図解を生成
