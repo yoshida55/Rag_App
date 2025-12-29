@@ -21,7 +21,8 @@ st.markdown("""
 <style>
     /* 全体の余白調整（モバイル向けに上部を詰める） */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 1rem !important; /* さらに詰める */
+        padding-bottom: 5rem !important;
     }
 
     /* Expander（カテゴリ）のヘッダースタイル */
@@ -29,7 +30,7 @@ st.markdown("""
         background-color: #f0f2f6;
         border-radius: 4px;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1.0rem; /* 少し小さく */
         color: #0e1117;
         border: 1px solid #e0e0e0;
     }
@@ -38,24 +39,32 @@ st.markdown("""
     .tag-header {
         color: #1f77b4;
         border-bottom: 2px solid #1f77b4;
-        padding-bottom: 5px;
-        margin-top: 15px;
-        margin-bottom: 10px;
+        padding-bottom: 3px;
+        margin-top: 10px;
+        margin-bottom: 8px;
         font-weight: bold;
         display: inline-block;
+        font-size: 0.95rem;
     }
 
-    /* ボタンの微調整（Streamlitのデフォルトボタンを少し大きく） */
+    /* ボタンの微調整 */
     .stButton button {
         font-weight: bold;
     }
     
-    /* タイトルをコンパクトに */
+    /* タイトルを極小・コンパクトに */
     .compact-title {
-        font-size: 1.5rem;
+        font-size: 1.2rem; /* さらに小さく */
         font-weight: 700;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+    
+    /* 検索ボックスなどを目立たなくする */
+    .stExpander {
+        border: none !important;
+        box-shadow: none !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -71,32 +80,30 @@ if "chroma_manager" not in st.session_state:
 # データ取得
 all_practices = st.session_state.data_manager.get_all()
 
-# ヘッダー（コンパクト化：タイトルと件数を横並び）
+# ヘッダー（極小タイトルと件数）
 col_head1, col_head2 = st.columns([3, 1])
 with col_head1:
     st.markdown('<div class="compact-title">📋 登録データ一覧</div>', unsafe_allow_html=True)
 with col_head2:
-    st.markdown(f"<div style='text-align: right; padding-top: 10px;'>全 <b>{len(all_practices)}</b> 件</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='text-align: right; font-size: 0.9rem; padding-top: 5px;'>全 <b>{len(all_practices)}</b> 件</div>", unsafe_allow_html=True)
 
-# フィルタ
-col1, col2 = st.columns(2)
+# フィルタ（目立たない場所に格納）
+with st.expander("🔍 検索条件を変更する", expanded=False):
+    col1, col2 = st.columns(2)
+    with col1:
+        filter_category = st.selectbox(
+            "カテゴリ",
+            options=["all"] + list(CATEGORIES.keys()),
+            format_func=lambda x: "すべて" if x == "all" else CATEGORIES[x]
+        )
+    with col2:
+        search_keyword = st.text_input(
+            "キーワード",
+            placeholder="タイトル・説明・タグ..."
+        )
 
-with col1:
-    filter_category = st.selectbox(
-        "カテゴリフィルタ",
-        options=["all"] + list(CATEGORIES.keys()),
-        format_func=lambda x: "すべて" if x == "all" else CATEGORIES[x]
-    )
-
-with col2:
-    search_keyword = st.text_input(
-        "キーワード検索",
-        placeholder="タイトル・説明・タグで検索"
-    )
-
-# ビューモード切り替え
-view_mode = st.radio("表示モード", ["リスト", "ボード"], horizontal=True, label_visibility="collapsed")
-st.markdown("---")
+# ビューモード（リスト固定）
+view_mode = "リスト" 
 
 # フィルタ適用
 filtered_practices = all_practices
