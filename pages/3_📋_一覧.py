@@ -19,6 +19,11 @@ logger.info("=== 一覧ページ表示 ===")
 # カスタムCSSの注入
 st.markdown("""
 <style>
+    /* 全体の余白調整（モバイル向けに上部を詰める） */
+    .block-container {
+        padding-top: 2rem !important;
+    }
+
     /* Expander（カテゴリ）のヘッダースタイル */
     .streamlit-expanderHeader {
         background-color: #f0f2f6;
@@ -44,6 +49,14 @@ st.markdown("""
     .stButton button {
         font-weight: bold;
     }
+    
+    /* タイトルをコンパクトに */
+    .compact-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -55,13 +68,15 @@ if "chroma_manager" not in st.session_state:
     from modules.database import ChromaManager
     st.session_state.chroma_manager = ChromaManager(persistent=False)
 
-# ヘッダー
-st.title("📋 登録データ一覧")
-
 # データ取得
 all_practices = st.session_state.data_manager.get_all()
-st.markdown(f"全 **{len(all_practices)}** 件")
-st.markdown("---")
+
+# ヘッダー（コンパクト化：タイトルと件数を横並び）
+col_head1, col_head2 = st.columns([3, 1])
+with col_head1:
+    st.markdown('<div class="compact-title">📋 登録データ一覧</div>', unsafe_allow_html=True)
+with col_head2:
+    st.markdown(f"<div style='text-align: right; padding-top: 10px;'>全 <b>{len(all_practices)}</b> 件</div>", unsafe_allow_html=True)
 
 # フィルタ
 col1, col2 = st.columns(2)
