@@ -1,7 +1,7 @@
 """
 Gemini LLM モジュール
-- 検索回答: gemini-3-pro-preview
-- 整形・生成: gemini-2.5-flash
+- 検索回答・SVG図解: gemini-3-pro-preview
+- 整形・HTML生成: gemini-2.5-flash
 - 画像分析: gemini-2.0-flash
 """
 import json
@@ -569,7 +569,7 @@ SVGコードのみ出力:
         # 使用量記録（日本語対応）
         input_tokens = estimate_tokens(prompt)
         output_tokens = estimate_tokens(result)
-        record_usage(GEMINI_MODELS["format"], input_tokens, output_tokens)
+        record_usage(GEMINI_MODELS["answer"], input_tokens, output_tokens)
 
         logger.debug(f"[LLM] SVG生成完了: {len(result)}文字")
         return result

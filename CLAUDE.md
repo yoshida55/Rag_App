@@ -39,7 +39,7 @@ app.py                    # Entry point (自動で検索ページへ遷移)
 ├── modules/
 │   ├── embedding.py      # Gemini Embedding (text-embedding-004)
 │   ├── database.py       # ChromaDB operations (search, search_visuals, search_images)
-│   ├── llm.py            # Gemini Pro (answer), Flash (SVG/HTML生成)
+│   ├── llm.py            # Gemini Pro (answer/SVG生成), Flash (整形)
 │   ├── answer_cache.py   # 永続キャッシュ（類似度85%マッチング）
 │   ├── data_manager.py   # JSON CRUD operations
 │   ├── usage_tracker.py  # API usage logging
