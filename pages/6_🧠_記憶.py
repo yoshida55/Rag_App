@@ -18,6 +18,10 @@ from modules.llm import generate_preview_svg
 # ページ設定
 st.set_page_config(page_title="記憶", page_icon="🧠", layout="wide")
 
+# 共通スタイル適用（サイドバー統一）
+from modules.ui_styles import inject_common_styles
+st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+
 logger.info("=== 記憶ページ表示 ===")
 
 # セッション状態

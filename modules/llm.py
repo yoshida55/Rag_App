@@ -288,6 +288,41 @@ def analyze_image(image_data: bytes, title: str = "") -> dict:
         return {"description": "", "tags": [], "keywords": ""}
 
 
+def ask_code_question(question: str, code_context: str, history_text: str) -> str:
+    """
+    HTMLとCSSのコードに関する質問に回答する
+    """
+    prompt = f"""
+    あなたはプロフェッショナルな「Webエンジニア兼プログラミング講師」です。
+    ユーザーから提供されたHTML/CSSのコードに関する質問に、分かりやすく、かつ技術的に正確に答えてください。
+
+    【コンテキスト（対象コード）】
+    {code_context}
+
+    【チャット履歴】
+    {history_text}
+
+    【質問】
+    {question}
+
+    【回答のルール】
+    1. **専門用語を平易な言葉で**噛み砕いて解説してください（例: Flexboxは「横並びボックス」など）。
+    2. HTMLの構造（親要素・子要素の関係）と、CSSによる見た目の変化（row-reverseでの順序逆転など）の違いを**明確に区別**して説明してください。「HTMLではこう書いてあるが、CSSでこう見える」という対比が重要です。
+    3. 重要な部分は**太字**で強調し、箇条書きを使って読みやすくしてください。
+    4. コード修正が必要な場合は、修正前後の比較や、具体的な修正コードを提示してください。
+    5. 「なんとなく」ではなく「なぜそうなるのか（理屈）」を教えてあげてください。
+    
+    もし画像が添付されている場合は、その画像のデザイン意図も汲み取って回答してください。
+    """
+    try:
+        model = genai.GenerativeModel(GEMINI_MODELS["answer"])
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        logger.error(f"[LLM] コード質問応答エラー: {e}")
+        return f"コードに関する質問への回答中にエラーが発生しました: {e}"
+
+
 def analyze_html_css_relations(html_code: str, css_code: str) -> tuple[str, str]:
     """
     HTMLとCSSの対応関係を分析し、コメント付きのコードを返す
@@ -297,15 +332,16 @@ def analyze_html_css_relations(html_code: str, css_code: str) -> tuple[str, str]
     「どのHTML要素にどのCSSが効いているか」が初心者にも分かるように、
     コードに直接コメント（注釈）を追加してください。
 
-    【ルール】
-    1. HTMLには `<!-- .class名: 説明 -->` の形式でコメント追記
-    2. CSSには `/* .class名: 説明 */` の形式でコメント追記
-    3. 説明は「これはカードの外枠です」「ここで横並びにしています」のように具体的に。
+    【絶対的なルール】
+    1. HTMLには `<!-- .class名: ここは〇〇をする要素です -->` のように、必ずコメントを追記すること。
+    2. CSSには `/* .class名: 幅を指定しています */` のように、必ずコメントを追記すること。
+    3. **何もコメントを追加しないことは禁止**です。必ず何かしらの解説を入れてください。
     4. コードの構造（インデントなど）は極力変えないこと。
     5. 出力は以下のJSON形式のみ。マークダウンは不要。
+
     {{
-        "html": "コメント付きHTML",
-        "css": "コメント付きCSS"
+        "html": "<!-- 解説コメント付きのHTML -->...",
+        "css": "/* 解説コメント付きのCSS */..."
     }}
 
     HTML:
@@ -323,6 +359,131 @@ def analyze_html_css_relations(html_code: str, css_code: str) -> tuple[str, str]
         logger.error(f"[分析] エラー: {e}")
         return html_code, css_code
 
+def extract_code_sections(html_code: str, css_code: str) -> list[dict]:
+    """
+    HTMLとCSSを解析し、機能ごとのセクション（ヘッダー、メイン、フッターなど）に分割して返す
+    Method: Raw Text + マーカー挿入方式（JSONパースエラー回避のため確実性を重視）
+    Improvement: 名前寄せロジックを追加し、HTMLとCSSの乖離を防ぐ
+    """
+    import re
+    
+    # マーカー定義
+    MARKER_PREFIX = "SECTION_MARKER"
+    SEPARATOR = "<<<<CSS_START>>>>"
+    
+    prompt = f"""
+    あなたは「コード構造解析エンジン」です。
+    Providing HTML and CSS, insert "marker comments" to split them into functional sections.
+
+    【Task】
+    1. Insert `<!-- {MARKER_PREFIX}: SectionName -->` at section starts in HTML.
+    2. Insert `/* {MARKER_PREFIX}: SectionName */` at section starts in CSS.
+    3. Output the FULL text with markers (Do not omit any code). Use `{SEPARATOR}` to separate HTML and CSS.
+
+    【CRITICAL RULE: Consistent Naming】
+    - **Use EXACTLY the same SectionName for the same feature in HTML and CSS.**
+    - If you use "News" in HTML, you MUST use "News" in CSS (not "News Section").
+    - Group generic setup code (html, head, body tags, resets) into "**Base**".
+    - Group meaningful blocks (Header, Hero, Services, Contact, Footer).
+    - **Avoid too many small sections.** Combine logic parts into main features.
+
+    HTML:
+    {html_code}
+
+    CSS:
+    {css_code}
+    """
+    
+    try:
+        model = genai.GenerativeModel(GEMINI_MODELS["answer"]) 
+        response = model.generate_content(prompt)
+        # logger.info(f"[セクション分割] Raw Response: {response.text[:200]}...") 
+        
+        text_resp = response.text.replace("```html", "").replace("```css", "").replace("```", "").strip()
+        
+        if SEPARATOR in text_resp:
+            parts = text_resp.split(SEPARATOR)
+            marked_html = parts[0].strip()
+            marked_css = parts[1].strip()
+        else:
+            logger.warning("[セクション分割] セパレータが見つかりません。HTMLのみ処理します。")
+            marked_html = text_resp
+            marked_css = css_code 
+
+        # Helper to parse sections
+        def parse_marked_text(text, is_html=True):
+            sections = {}
+            pattern = f'<!-- {MARKER_PREFIX}: (.*?) -->' if is_html else f'/\* {MARKER_PREFIX}: (.*?) \*/'
+            parts = re.split(pattern, text)
+            
+            if len(parts) > 1:
+                # Pre-marker content
+                if parts[0].strip():
+                    sections["Base"] = parts[0] # Default to Base for top content
+                
+                for i in range(1, len(parts), 2):
+                    name = parts[i].strip()
+                    content = parts[i+1]
+                    # Merge "General", "Document Start" etc into "Base"
+                    if name.lower() in ["general", "document start", "html start", "head", "body"]:
+                        name = "Base"
+                    sections[name] = sections.get(name, "") + content
+            else:
+                sections["Base"] = text
+            return sections
+
+        html_secs = parse_marked_text(marked_html, is_html=True)
+        css_secs = parse_marked_text(marked_css, is_html=False)
+        
+        # --- Name Normalization & Merging Logic ---
+        # AI might still output "News" vs "News Section". We try to match them.
+        
+        final_sections_map = {} # {normalized_key: {name: display_name, html: ..., css: ...}}
+        
+        def normalize_key(name):
+            # "Products1 Section" -> "products1"
+            s = name.lower().replace(" section", "").replace(" area", "").replace(" part", "").strip()
+            return s
+            
+        # 1. Register all HTML sections
+        for name, content in html_secs.items():
+            key = normalize_key(name)
+            if key not in final_sections_map:
+                final_sections_map[key] = {"name": name, "html": "", "css": ""}
+            final_sections_map[key]["html"] += content
+            # Update display name priority (Keep "News" over "base")
+            if name != "Base": 
+                 final_sections_map[key]["name"] = name
+        
+        # 2. Register/Merge CSS sections
+        for name, content in css_secs.items():
+            key = normalize_key(name)
+            if key not in final_sections_map:
+                final_sections_map[key] = {"name": name, "html": "", "css": ""}
+            final_sections_map[key]["css"] += content
+            # Be careful not to overwrite a good HTML name with a generic CSS name unless necessary
+        
+        # 3. Convert to list
+        sections_list = []
+        
+        # Priority sort order
+        priority_order = ["base", "header", "hero", "main", "footer"]
+        
+        sorted_keys = sorted(final_sections_map.keys(), key=lambda k: priority_order.index(k) if k in priority_order else 99)
+        
+        for key in sorted_keys:
+            data = final_sections_map[key]
+            if data["html"].strip() or data["css"].strip():
+                sections_list.append(data)
+
+        logger.info(f"[セクション分割] 解析完了: {len(sections_list)}セクション (Merged)")
+        return sections_list
+        
+    except Exception as e:
+        logger.error(f"[セクション分割] エラー: {e}")
+        return [{"name": "Full Code (Fallback)", "html": html_code, "css": css_code}]
+
+
 def generate_preview_svg(description: str, title: str = "") -> str:
     """
     説明文からSVG図解を生成
@@ -336,7 +497,8 @@ def generate_preview_svg(description: str, title: str = "") -> str:
     """
     logger.debug(f"[LLM] SVG生成開始: {title[:30]}...")
 
-    model = genai.GenerativeModel(GEMINI_MODELS["format"])
+    # SVG生成は高品質モデル（gemini-3-pro-preview）を使用
+    model = genai.GenerativeModel(GEMINI_MODELS["answer"])
 
     prompt = f"""説明文の内容を、わかりやすいSVG図解で表現してください。
 

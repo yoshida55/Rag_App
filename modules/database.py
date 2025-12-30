@@ -46,11 +46,13 @@ class ChromaManager:
 
     def load_from_json(self, json_path: Path = None) -> int:
         """
-        JSONファイルからデータを読み込んでChromaDBに登録
+        JSONファイルからデータを読み込んでChromaDBに登録（バッチ処理対応）
 
         Returns:
             登録件数
         """
+        from .embedding import get_embeddings_batch
+        
         json_path = json_path or PRACTICES_JSON
         logger.debug(f"[ChromaDB] JSONから読み込み: {json_path}")
 
@@ -62,22 +64,57 @@ class ChromaManager:
             data = json.load(f)
 
         practices = data.get("practices", [])
-        logger.debug(f"[ChromaDB] {len(practices)}件のデータを登録開始")
+        if not practices:
+            logger.debug("[ChromaDB] 登録データなし")
+            return 0
+            
+        logger.info(f"[ChromaDB] {len(practices)}件のデータを一括登録開始")
 
         # 既存データをクリア
         if self.collection.count() > 0:
             logger.debug("[ChromaDB] 既存データをクリア")
-            # 全IDを取得して削除
             all_ids = self.collection.get()["ids"]
             if all_ids:
                 self.collection.delete(ids=all_ids)
 
-        # データ登録
-        for i, practice in enumerate(practices):
-            self.add_practice(practice)
-            logger.debug(f"[ChromaDB] {i+1}/{len(practices)} 登録完了")
+        # 一括処理用にデータ準備
+        ids = []
+        documents = []
+        metadatas = []
+        
+        for practice in practices:
+            practice_id = practice.get("id") or str(uuid.uuid4())
+            search_text = self._create_search_text(practice)
+            
+            metadata = {
+                "title": practice.get("title", ""),
+                "category": practice.get("category", "other"),
+                "content_type": practice.get("content_type", "code"),
+                "tags": ",".join(practice.get("tags", [])),
+                "created_at": practice.get("created_at", ""),
+                "updated_at": practice.get("updated_at", ""),
+                "has_svg": bool(practice.get("generated_svg")),
+                "has_html": bool(practice.get("generated_html")),
+                "has_image": bool(practice.get("image_path"))
+            }
+            
+            ids.append(practice_id)
+            documents.append(search_text)
+            metadatas.append(metadata)
+        
+        # 一括Embedding取得（1回のAPI呼び出し）
+        logger.info(f"[ChromaDB] Embedding一括取得中... ({len(documents)}件)")
+        embeddings = get_embeddings_batch(documents)
+        
+        # ChromaDBに一括登録
+        self.collection.add(
+            ids=ids,
+            embeddings=embeddings,
+            metadatas=metadatas,
+            documents=documents
+        )
 
-        logger.debug(f"[ChromaDB] 全{len(practices)}件の登録完了")
+        logger.info(f"[ChromaDB] 全{len(practices)}件の一括登録完了")
         return len(practices)
 
     def add_practice(self, practice: dict) -> str:

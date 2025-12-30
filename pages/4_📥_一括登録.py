@@ -19,6 +19,10 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 # ページ設定
 st.set_page_config(page_title="一括登録", page_icon="📥", layout="wide")
 
+# 共通スタイル適用（サイドバー統一）
+from modules.ui_styles import inject_common_styles
+st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+
 logger.info("=== 一括登録ページ表示 ===")
 
 # セッション状態初期化

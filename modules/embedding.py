@@ -53,7 +53,7 @@ def get_embedding(text: str) -> list[float]:
 
 def get_embeddings_batch(texts: list[str]) -> list[list[float]]:
     """
-    複数テキストを一括でベクトル化
+    複数テキストを一括でベクトル化（Gemini APIのバッチ処理対応）
 
     Args:
         texts: テキストのリスト
@@ -61,20 +61,37 @@ def get_embeddings_batch(texts: list[str]) -> list[list[float]]:
     Returns:
         ベクトルのリスト
     """
+    if not texts:
+        return []
+    
     logger.debug(f"[Embedding Batch] 開始: {len(texts)}件")
 
-    embeddings = []
-    for i, text in enumerate(texts):
-        try:
+    try:
+        # Gemini APIの一括embed（1回のAPI呼び出しで複数テキスト処理）
+        result = genai.embed_content(
+            model=GEMINI_MODELS["embedding"],
+            content=texts,  # リストを直接渡す
+            output_dimensionality=EMBEDDING_DIMENSIONS
+        )
+        
+        embeddings = result['embedding']  # バッチの場合はリストが返る
+        
+        # 使用量記録
+        total_tokens = sum(estimate_tokens(t) for t in texts)
+        record_usage(GEMINI_MODELS["embedding"], total_tokens, 0)
+        
+        logger.debug(f"[Embedding Batch] 完了: {len(embeddings)}件（1回のAPI呼び出し）")
+        return embeddings
+
+    except Exception as e:
+        logger.error(f"[Embedding Batch] エラー: {e}")
+        # フォールバック: 1件ずつ処理
+        logger.warning("[Embedding Batch] フォールバック: 1件ずつ処理に切り替え")
+        embeddings = []
+        for i, text in enumerate(texts):
             embedding = get_embedding(text)
             embeddings.append(embedding)
-            logger.debug(f"[Embedding Batch] {i+1}/{len(texts)} 完了")
-        except Exception as e:
-            logger.error(f"[Embedding Batch] {i+1}件目でエラー: {e}")
-            raise
-
-    logger.debug(f"[Embedding Batch] 全{len(embeddings)}件完了")
-    return embeddings
+        return embeddings
 
 
 if __name__ == "__main__":

@@ -1,0 +1,120 @@
+<svg width="800" height="900" viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: sans-serif; }
+    .label { font-size: 14px; font-weight: bold; fill: #333; }
+    .class-name { font-family: monospace; font-size: 12px; fill: #d32f2f; }
+    .desc { font-size: 12px; fill: #666; }
+
+    /* Box Styles */
+    .wrapper-box { fill: #f9f9f9; stroke: #ccc; stroke-width: 2; stroke-dasharray: 5,5; }
+    .img-box { fill: #e0e0e0; stroke: #333; stroke-width: 2; }
+    .img-placeholder { fill: #b0bec5; }
+    .title-box { fill: #fff; stroke: #333; stroke-width: 2; }
+
+    /* Overlay Text Boxes */
+    .text-overlay-1 { fill: rgba(249, 233, 6, 0.6); stroke: #fbc02d; stroke-width: 2; }
+    .text-overlay-2 { fill: rgba(149, 42, 38, 0.6); stroke: #b71c1c; stroke-width: 2; }
+
+    /* Arrows */
+    .arrow { stroke: #2196f3; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2196f3" />
+    </marker>
+  </defs>
+
+  <!-- #products1 Section -->
+  <g transform="translate(50, 50)">
+    <text x="0" y="-20" font-size="20" font-weight="bold">#products1 (Flex: row-reverse)</text>
+
+    <!-- Wrapper -->
+    <rect x="0" y="0" width="700" height="350" class="wrapper-box" />
+    <text x="10" y="20" class="class-name">.products (#products1)</text>
+    <text x="10" y="40" class="desc">flex-direction: row-reverse;</text>
+
+    <!-- Flex Item 1: Title (Visually on Right because of row-reverse) -->
+    <!-- Original HTML order is Title then Image. Row-reverse swaps them visually. -->
+    <g transform="translate(620, 50)">
+      <rect x="0" y="0" width="60" height="250" class="title-box" />
+      <text x="5" y="-10" class="class-name">.section-title</text>
+      <!-- Vertical Text Simulation -->
+      <text x="30" y="30" text-anchor="middle" writing-mode="tb" glyph-orientation-vertical="0" style="writing-mode: vertical-lr;">新</text>
+      <text x="30" y="60" text-anchor="middle">し</text>
+      <text x="30" y="90" text-anchor="middle">い</text>
+      <text x="30" y="150" font-size="10" text-anchor="middle" transform="rotate(90, 30, 150)">Create...</text>
+      <text x="70" y="125" class="desc" fill="#2196f3">vertical-lr</text>
+    </g>
+
+    <!-- Flex Item 2: Image Wrapper (Visually on Left) -->
+    <g transform="translate(20, 100)">
+      <!-- .img container -->
+      <rect x="0" y="0" width="550" height="200" class="img-box" /> <!-- 65% width simulation -->
+      <text x="5" y="-10" class="class-name">.img (position: relative)</text>
+
+      <!-- Actual Image -->
+      <rect x="10" y="10" width="530" height="180" class="img-placeholder" />
+      <text x="265" y="100" text-anchor="middle" fill="#fff">img src="..."</text>
+
+      <!-- Absolute Text Overlay -->
+      <!-- left: -20px, bottom: -20px -->
+      <g transform="translate(-20, 160)">
+        <rect x="0" y="0" width="300" height="60" class="text-overlay-1" rx="5" />
+        <text x="10" y="20" class="class-name" fill="#333">.text (position: absolute)</text>
+        <text x="150" y="40" text-anchor="middle" font-size="12">left: -20px / bottom: -20px</text>
+      </g>
+    </g>
+
+    <!-- Flow Arrow -->
+    <path d="M 680 320 L 20 320" class="arrow" />
+    <text x="350" y="340" text-anchor="middle" fill="#2196f3" font-size="12">HTML順序: Title → Img (Row-Reverseで視覚的に反転)</text>
+  </g>
+
+  <!-- #products2 Section -->
+  <g transform="translate(50, 500)">
+    <text x="0" y="-20" font-size="20" font-weight="bold">#products2 (Flex: row)</text>
+
+    <!-- Wrapper -->
+    <rect x="0" y="0" width="700" height="350" class="wrapper-box" />
+    <text x="10" y="20" class="class-name">.products (#products2)</text>
+    <text x="10" y="40" class="desc">Default row direction</text>
+
+    <!-- Flex Item 1: Title (Left) -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="60" height="250" class="title-box" />
+      <text x="5" y="-10" class="class-name">.section-title</text>
+      <!-- Vertical Text Simulation -->
+      <text x="30" y="30" text-anchor="middle">科</text>
+      <text x="30" y="60" text-anchor="middle">学</text>
+      <text x="30" y="90" text-anchor="middle">と</text>
+      <text x="30" y="150" font-size="10" text-anchor="middle" transform="rotate(90, 30, 150)">Science...</text>
+      <text x="-10" y="125" class="desc" fill="#2196f3" text-anchor="end">vertical-rl</text>
+    </g>
+
+    <!-- Flex Item 2: Image Wrapper (Right) -->
+    <g transform="translate(130, 100)">
+      <!-- .img container -->
+      <rect x="0" y="0" width="550" height="200" class="img-box" />
+      <text x="5" y="-10" class="class-name">.img (position: relative)</text>
+
+      <!-- Actual Image -->
+      <rect x="10" y="10" width="530" height="180" class="img-placeholder" />
+      <text x="265" y="100" text-anchor="middle" fill="#fff">img src="..."</text>
+
+      <!-- Absolute Text Overlay -->
+      <!-- right: -20px, bottom: -20px -->
+      <!-- Wrapper width is 550. Overlay width 300. Right align with -20px offset means x starts at (550 - 300 + 20) = 270 -->
+      <g transform="translate(270, 160)">
+        <rect x="0" y="0" width="300" height="60" class="text-overlay-2" rx="5" />
+        <text x="10" y="20" class="class-name" fill="#fff">.text (position: absolute)</text>
+        <text x="150" y="40" text-anchor="middle" font-size="12" fill="#fff">right: -20px / bottom: -20px</text>
+      </g>
+    </g>
+
+    <!-- Flow Arrow -->
+    <path d="M 20 320 L 680 320" class="arrow" />
+    <text x="350" y="340" text-anchor="middle" fill="#2196f3" font-size="12">HTML順序: Title → Img (通常配置)</text>
+  </g>
+
+</svg>

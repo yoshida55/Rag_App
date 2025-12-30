@@ -51,16 +51,17 @@ class AnswerCache:
         b = np.array(vec2)
         return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
-    def find_similar(self, query: str, category: str = None) -> dict | None:
+    def find_similar(self, query: str, category: str = None, threshold: float = None) -> dict | None:
         """
         類似クエリを検索
 
         Args:
             query: 検索クエリ
             category: カテゴリ（オプション）
+            threshold: 類似度閾値（Noneの場合はデフォルト使用）
 
         Returns:
-            類似度90%以上の既存回答があれば返す、なければNone
+            類似度閾値以上の既存回答があれば返す、なければNone
         """
         if not self.cache.get("entries"):
             logger.debug("[Cache] キャッシュ空")
@@ -84,8 +85,11 @@ class AnswerCache:
                 best_score = score
                 best_match = entry
 
-        if best_match and best_score >= SIMILARITY_THRESHOLD:
-            logger.info(f"[Cache] ヒット！類似度: {best_score:.1%} - '{best_match['query'][:30]}...'")
+        # 閾値判定
+        target_threshold = threshold if threshold is not None else SIMILARITY_THRESHOLD
+        
+        if best_match and best_score >= target_threshold:
+            logger.info(f"[Cache] ヒット！類似度: {best_score:.1%} (閾値: {target_threshold}) - '{best_match['query'][:30]}...'")
             return {
                 "answer": best_match["answer"],
                 "original_query": best_match["query"],

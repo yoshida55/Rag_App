@@ -10,6 +10,10 @@ from modules.usage_tracker import get_current_month_usage, get_all_usage, reset_
 # ページ設定
 st.set_page_config(page_title="設定", page_icon="⚙️", layout="wide")
 
+# 共通スタイル適用（サイドバー統一）
+from modules.ui_styles import inject_common_styles
+st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+
 logger.info("=== 設定ページ表示 ===")
 
 # ヘッダー
@@ -131,6 +135,103 @@ st.markdown("---")
 # リセットボタン
 st.markdown("### 🔧 管理")
 
+# セクションキャッシュ
+from modules.section_cache import clear_cache, get_cache_stats
+
+st.markdown("#### 📂 セクションキャッシュ")
+cache_stats = get_cache_stats()
+col_c1, col_c2, col_c3 = st.columns(3)
+with col_c1:
+    st.metric("キャッシュ数", f"{cache_stats['entry_count']} 件")
+with col_c2:
+    st.metric("総セクション数", f"{cache_stats['total_sections']} 件")
+with col_c3:
+    st.metric("ファイルサイズ", f"{cache_stats['file_size_kb']} KB")
+
+st.caption("💡 セクションキャッシュは、コード学習ページのセクション分析結果を保存しています。")
+
+if st.button("🗑️ セクションキャッシュをクリア", type="secondary"):
+    if clear_cache():
+        st.success("✅ セクションキャッシュをクリアしました")
+        st.rerun()
+    else:
+        st.warning("キャッシュファイルが存在しません")
+
+st.markdown("---")
+
+st.markdown("---")
+
+# 検索設定
+st.markdown("#### 🧠 検索設定")
+
+col_s1, col_s2, col_s3 = st.columns(3)
+
+with col_s1:
+    # 全体検索の閾値
+    if "global_search_threshold" not in st.session_state:
+        st.session_state.global_search_threshold = 0.64
+    
+    st.session_state.global_search_threshold = st.slider(
+        "🔍 全体検索 (0.00-1.00)",
+        min_value=0.0,
+        max_value=1.0,
+        value=float(st.session_state.global_search_threshold),
+        step=0.01,
+        format="%.2f",
+        help="検索ページで結果を表示するための最低類似度。標準: 0.64"
+    )
+
+with col_s2:
+    # 関連図解の閾値
+    if "related_visual_threshold" not in st.session_state:
+        st.session_state.related_visual_threshold = 0.70
+        
+    st.session_state.related_visual_threshold = st.slider(
+        "📐 関連図解 (0.00-1.00)",
+        min_value=0.0,
+        max_value=1.0,
+        value=float(st.session_state.related_visual_threshold),
+        step=0.01,
+        format="%.2f",
+        help="チャットで図解を表示するための最低類似度。標準: 0.70"
+    )
+
+with col_s3:
+    # AI回答キャッシュの閾値
+    if "answer_cache_threshold" not in st.session_state:
+        st.session_state.answer_cache_threshold = 0.85
+        
+    st.session_state.answer_cache_threshold = st.slider(
+        "💾 キャッシュ (0.00-1.00)",
+        min_value=0.0,
+        max_value=1.0,
+        value=float(st.session_state.answer_cache_threshold),
+        step=0.01,
+        format="%.2f",
+        help="既存のAI回答を再利用するための類似度。標準: 0.85"
+    )
+
+st.divider()
+
+# ChromaDB同期
+st.markdown("#### 🔄 データベース管理")
+col_db1, col_db_space = st.columns([1, 3])
+
+
+
+with col_db1:
+    if st.button("🔄 ChromaDB全件再同期", help="全てのデータを検索DBに登録し直します"):
+        with st.spinner("データベース同期中..."):
+            from modules.database import ChromaManager
+            # セッションになければ一時作成
+            cm = st.session_state.get("chroma_manager") or ChromaManager()
+            count = cm.load_from_json()
+            st.success(f"✅ 同期完了: {count}件")
+
+st.markdown("---")
+
+# API使用量リセット
+st.markdown("#### 📊 API使用量")
 col_reset, col_space = st.columns([1, 3])
 with col_reset:
     if st.button("🗑️ 使用量リセット", type="secondary"):

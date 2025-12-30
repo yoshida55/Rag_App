@@ -147,15 +147,14 @@ def render_preview(html_code: str, css_code: str, js_code: str, key: str):
 # ページ設定
 st.set_page_config(page_title="検索 - RAG", page_icon="🔍", layout="wide")
 
-# サイドバーを狭く
-st.markdown("""
-<style>
-    /* サイドバーを狭く */
-    [data-testid="stSidebar"] { min-width: 180px !important; max-width: 180px !important; }
-    /* 上部の余白を調整 */
-    .block-container { padding-top: 3rem !important; }
-</style>
-""", unsafe_allow_html=True)
+# サイドバーを狭く + 共通スタイル適用
+from modules.ui_styles import inject_common_styles
+
+st.markdown(inject_common_styles(
+    include_headings=True,
+    sidebar_mode="narrow",
+    include_compact_title=False
+), unsafe_allow_html=True)
 
 logger.info("=== 検索ページ表示 ===")
 
@@ -233,11 +232,12 @@ if query:
         if not practices:
              st.info("🔍 条件に一致する結果は見つかりませんでした。")
         else:
-             # スコアでフィルタリング（65%未満はノイズとして除外）
-             valid_practices = [p for p in practices if p.get("_score", 0) >= 0.65]
+             # スコアでフィルタリング（設定値を使用）
+             threshold = st.session_state.get("global_search_threshold", 0.64)
+             valid_practices = [p for p in practices if p.get("_score", 0) >= threshold]
              
              if not valid_practices:
-                 st.warning("⚠️ 関連性の高い結果が見つかりませんでした。（一致度 65% 未満）")
+                 st.warning(f"⚠️ 関連性の高い結果が見つかりませんでした。（一致度 {threshold:.0%} 未満）")
              else:
                 # 検索結果をカード表示（グリッド）
                 st.markdown(f"### 🎯 検索結果候補")
@@ -267,10 +267,11 @@ if query:
                                     st.image(str(img_path), use_container_width=True)
                                 elif has_svg:
                                     try:
-                                        b64 = base64.b64encode(p["generated_svg"].encode('utf-8')).decode("utf-8")
-                                        st.image(f"data:image/svg+xml;base64,{b64}", use_container_width=True)
-                                    except Exception:
-                                        pass
+                                        # Base64エンコードせずに直接SVG文字列を渡す
+                                        st.image(p["generated_svg"], use_container_width=True)
+                                    except Exception as e:
+                                        # エラー時はデバッグ表示
+                                        st.caption(f"SVG表示エラー: {e}")
                                 
                                 # 簡易詳細（Markdownの見出しなどを除去してプレビュー）
                                 desc_preview = p.get("description", "")
@@ -376,8 +377,9 @@ if query:
         # 🔹 登録モード取得（早めに取得）
         registration_mode = st.session_state.get("learning_registration_mode", False)
 
-        # セッションキャッシュキー
-        session_cache_key = f"answer_{hash(query + str(selected_category))}"
+        # セッションキャッシュキー（閾値が変われば別回答として扱う）
+        threshold_val = st.session_state.get("global_search_threshold", 0.64)
+        session_cache_key = f"answer_{hash(query + str(selected_category) + str(threshold_val))}"
 
         try:
             # 1. セッションキャッシュ確認（同一セッション内の完全一致）
@@ -386,10 +388,12 @@ if query:
                 logger.debug("[検索] セッションキャッシュ使用")
 
             else:
-                # 2. 永続キャッシュ確認（類似度90%以上でマッチ）
+                # 2. 永続キャッシュ確認
+                cache_threshold = st.session_state.get("answer_cache_threshold", 0.85)
                 cached = st.session_state.answer_cache.find_similar(
                     query=query,
-                    category=selected_category if selected_category != "all" else None
+                    category=selected_category if selected_category != "all" else None,
+                    threshold=cache_threshold
                 )
 
                 if cached:
@@ -402,7 +406,11 @@ if query:
 
                 else:
                     # 3. 新規生成
-                    answer_stream = generate_answer_stream(query, practices)
+                    # AIにも閾値以上のデータのみを渡す（参考データとの整合性確保）
+                    ai_threshold = st.session_state.get("global_search_threshold", 0.64)
+                    ai_practices = [p for p in practices if p.get("_score", 0) >= ai_threshold]
+                    
+                    answer_stream = generate_answer_stream(query, ai_practices)
                     answer_text = st.write_stream(answer_stream)
 
                     # セッションキャッシュに保存
@@ -1079,9 +1087,16 @@ if query:
         else:
             # 登録モードOFF時
             st.caption("💡 一括追加は「記憶」ページで登録モードをONにしてください")
-            st.markdown(f"### 📚 参考データ（{len(practices)}件）")
+            # 件数表示（フィルタリング適用）
+            cnt_th = st.session_state.get("global_search_threshold", 0.64)
+            cnt = len([p for p in practices if p.get("_score", 0) >= cnt_th])
+            st.markdown(f"### 📚 参考データ（{cnt}件）")
 
-        for practice in practices:
+        # 表示用フィルタリング（全体閾値を適用）
+        disp_th = st.session_state.get("global_search_threshold", 0.64)
+        disp_practices = [p for p in practices if p.get("_score", 0) >= disp_th]
+        
+        for practice in disp_practices:
             # カード型デザインに変更（リストビューと統一感を持たせる）
             with st.container(border=True):
                 # タイトルとスコア

@@ -16,58 +16,15 @@ st.set_page_config(page_title="一覧 - RAG", page_icon="📋", layout="wide")
 
 logger.info("=== 一覧ページ表示 ===")
 
-# カスタムCSSの注入
-st.markdown("""
-<style>
-    /* 全体の余白調整（モバイル向けに上部を詰める） */
-    .block-container {
-        padding-top: 1rem !important; /* さらに詰める */
-        padding-bottom: 5rem !important;
-    }
+# 共通スタイル適用
+from modules.ui_styles import inject_common_styles, get_compact_title_styles, get_list_page_styles
 
-    /* Expander（カテゴリ）のヘッダースタイル */
-    .streamlit-expanderHeader {
-        background-color: #f0f2f6;
-        border-radius: 4px;
-        font-weight: bold;
-        font-size: 1.0rem; /* 少し小さく */
-        color: #0e1117;
-        border: 1px solid #e0e0e0;
-    }
-    
-    /* タグ見出しのスタイル */
-    .tag-header {
-        color: #1f77b4;
-        border-bottom: 2px solid #1f77b4;
-        padding-bottom: 3px;
-        margin-top: 10px;
-        margin-bottom: 8px;
-        font-weight: bold;
-        display: inline-block;
-        font-size: 0.95rem;
-    }
-
-    /* ボタンの微調整 */
-    .stButton button {
-        font-weight: bold;
-    }
-    
-    /* タイトルを極小・コンパクトに */
-    .compact-title {
-        font-size: 1.2rem; /* さらに小さく */
-        font-weight: 700;
-        margin: 0;
-        padding: 0;
-        color: #333;
-    }
-    
-    /* 検索ボックスなどを目立たなくする */
-    .stExpander {
-        border: none !important;
-        box-shadow: none !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(inject_common_styles(
+    include_headings=True,
+    sidebar_mode="narrow",  # サイドバーを狭く
+    include_compact_title=True
+), unsafe_allow_html=True)
+st.markdown(get_list_page_styles(), unsafe_allow_html=True)
 
 # セッション状態初期化
 if "data_manager" not in st.session_state:
@@ -239,9 +196,23 @@ else:
                         for j, p in enumerate(chunk):
                             with cols[j]:
                                 with st.container(border=True):
-                                    icon = "💻" if p.get("content_type") == "code" else "📄"
-                                    st.markdown(f"**{icon} {p['title']}**")
-                                    
+                                    # ヘッダー（アイコン+タイトル | チェックボックス）
+                                    col_icon, col_chk = st.columns([4, 1.5])
+                                    with col_icon:
+                                        icon = "💻" if p.get("content_type") == "code" else "📄"
+                                        title_display = p['title']
+                                        if p.get("is_completed"):
+                                            title_display = f"~~{title_display}~~"
+                                            icon = "✅"
+                                        st.markdown(f"**{icon} {title_display}**")
+                                    with col_chk:
+                                        # 完了チェックボックス（ラベルなし）
+                                        is_done = st.checkbox(" ", value=p.get("is_completed", False), key=f"done_{p['id']}", label_visibility="collapsed")
+                                        if is_done != p.get("is_completed", False):
+                                            p["is_completed"] = is_done
+                                            st.session_state.data_manager.update(p["id"], {"is_completed": is_done})
+                                            st.rerun()
+
                                     # 更新日
                                     st.caption(f"更新: {p.get('updated_at', '')[:10]}")
                                     
@@ -274,7 +245,7 @@ else:
                         
                         # 行の下に詳細ビューを表示（フル幅）
                         if opened_item:
-                            st.markdown(f"#### 📖 {opened_item['title']} の詳細")
+                            st.markdown(f"### 📖 {opened_item['title']} の詳細")
                             with st.container(border=True):
                                 p = opened_item
                                 # 編集・削除ボタンと説明の間にビジュアルを表示
@@ -522,7 +493,7 @@ else:
 
                         # フル幅詳細表示（その他カテゴリ）
                         if opened_item_nt:
-                            st.markdown(f"#### 📖 {opened_item_nt['title']} の詳細")
+                            st.markdown(f"### 📖 {opened_item_nt['title']} の詳細")
                             with st.container(border=True):
                                 # 編集・削除ボタンと説明の間にビジュアルを表示
 

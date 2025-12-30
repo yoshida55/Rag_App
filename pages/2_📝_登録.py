@@ -18,6 +18,10 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 # ページ設定
 st.set_page_config(page_title="登録", page_icon="📝", layout="wide")
 
+# 共通スタイル適用（サイドバー統一）
+from modules.ui_styles import inject_common_styles
+st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+
 logger.info("=== 登録ページ表示 ===")
 
 # セッション状態初期化
@@ -114,14 +118,26 @@ description = st.text_area(
 st.markdown("###### 📷 画像（任意）")
 uploaded_image = st.file_uploader(
     "画像をアップロード",
-    type=["png", "jpg", "jpeg", "gif", "webp"],
+    type=["png", "jpg", "jpeg", "gif", "webp", "svg"],
     label_visibility="collapsed",
-    help="スクリーンショットや参考画像をアップロードすると、AIが自動分析します"
+    help="スクリーンショットや参考画像をアップロードすると、AIが自動分析します（SVGは分析スキップ）"
 )
 
 # 画像プレビュー
 if uploaded_image:
-    st.image(uploaded_image, caption="アップロード画像", use_container_width=True)
+    file_ext = uploaded_image.name.split(".")[-1].lower() if "." in uploaded_image.name else "png"
+    if file_ext == "svg":
+        # SVGはPILで開けないため、コード（文字列）として渡す
+        try:
+            svg_content = uploaded_image.getvalue().decode("utf-8")
+            st.image(svg_content, caption="アップロード画像 (SVG)", use_container_width=True)
+        except Exception as e:
+            st.error(f"SVGプレビューエラー: {e}")
+        finally:
+            # ポインタを先頭に戻す（後の処理のため）
+            uploaded_image.seek(0)
+    else:
+        st.image(uploaded_image, caption="アップロード画像", use_container_width=True)
 
 # 登録ボタン
 if st.button("✨ 登録", type="primary", use_container_width=True):
@@ -133,19 +149,25 @@ if st.button("✨ 登録", type="primary", use_container_width=True):
 
             image_path = None
             image_analysis = None
+            is_svg = False
 
             # 画像がある場合は先に分析・保存
             if uploaded_image:
-                with st.spinner("🖼️ 画像分析中..."):
+                file_ext = uploaded_image.name.split(".")[-1].lower() if "." in uploaded_image.name else "png"
+                is_svg = (file_ext == "svg")
+                
+                with st.spinner("🖼️ 画像処理中..."):
                     image_data = uploaded_image.getvalue()
 
-                    # 画像AI分析
-                    image_analysis = analyze_image(image_data, description[:100] if description else "")
-                    logger.info(f"[登録] 画像分析完了: {len(image_analysis.get('description', ''))}文字")
+                    # 画像AI分析 (SVGはスキップ)
+                    if not is_svg:
+                        image_analysis = analyze_image(image_data, description[:100] if description else "")
+                        logger.info(f"[登録] 画像分析完了: {len(image_analysis.get('description', ''))}文字")
+                    else:
+                        logger.info("[登録] SVG形式のためAI分析をスキップします")
 
                     # 画像保存
-                    ext = uploaded_image.name.split(".")[-1] if "." in uploaded_image.name else "png"
-                    image_filename = f"{uuid.uuid4().hex[:12]}.{ext}"
+                    image_filename = f"{uuid.uuid4().hex[:12]}.{file_ext}"
                     image_path = IMAGES_DIR / image_filename
 
                     with open(image_path, "wb") as f:

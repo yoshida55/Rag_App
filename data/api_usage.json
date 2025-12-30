@@ -1,22 +1,22 @@
 {
   "monthly": {
     "2025-12": {
-      "input_tokens": 370546,
-      "output_tokens": 29209,
-      "cost_usd": 0.144955675,
-      "calls": 970,
+      "input_tokens": 749692,
+      "output_tokens": 86119,
+      "cost_usd": 0.6849131250000001,
+      "calls": 1460,
       "by_model": {
         "gemini-2.5-flash": {
-          "input_tokens": 20655,
-          "output_tokens": 23179,
-          "cost_usd": 0.063525025,
-          "calls": 19
+          "input_tokens": 28534,
+          "output_tokens": 33475,
+          "cost_usd": 0.091628725,
+          "calls": 27
         },
         "gemini-embedding-001": {
-          "input_tokens": 280349,
+          "input_tokens": 615045,
           "output_tokens": 0,
           "cost_usd": 0.0,
-          "calls": 935
+          "calls": 1380
         },
         "gemini-2.0-flash": {
           "input_tokens": 35335,
@@ -25,18 +25,18 @@
           "calls": 10
         },
         "gemini-3-pro-preview": {
-          "input_tokens": 34207,
-          "output_tokens": 3409,
-          "cost_usd": 0.07684875,
-          "calls": 6
+          "input_tokens": 70778,
+          "output_tokens": 50023,
+          "cost_usd": 0.5887025,
+          "calls": 43
         }
       }
     }
   },
   "total": {
-    "input_tokens": 370546,
-    "output_tokens": 29209,
-    "cost_usd": 0.144955675
+    "input_tokens": 749692,
+    "output_tokens": 86119,
+    "cost_usd": 0.6849131250000001
   },
   "_note": "2025-12-29リセット: 日本語トークン計算修正後"
 }
