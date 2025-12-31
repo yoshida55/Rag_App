@@ -6,12 +6,89 @@ import uuid
 import base64
 from pathlib import Path
 from datetime import datetime
-from config.settings import CATEGORIES, logger, PROJECT_ROOT
+from config.settings import CATEGORIES, logger, PROJECT_ROOT, DATA_DIR
 from modules.llm import generate_simple_response, generate_preview_svg, analyze_image, analyze_html_css_relations, extract_code_sections
 from modules.data_manager import DataManager
 from modules.database import ChromaManager
 from modules.answer_cache import AnswerCache
 from modules.section_cache import get_cached_sections, save_sections_to_cache, get_code_hash
+
+# セッション永続化ファイル
+SESSION_FILE = DATA_DIR / "code_learning_session.json"
+
+def save_last_session():
+    """現在のセッション状態を保存"""
+    try:
+        state = {
+            # ウィジェットがない場合（フォーカスモード時など）もあるため、loaded_xxも確認
+            "html": st.session_state.get("html_editor") or st.session_state.get("loaded_html", ""),
+            "css": st.session_state.get("css_editor") or st.session_state.get("loaded_css", ""),
+            "show_section_mode": st.session_state.get("show_section_mode", False),
+            "show_analysis_mode": st.session_state.get("show_analysis_mode", False),
+            "image_bytes_b64": None
+        }
+        
+        # 画像も保存 (Base64)
+        if st.session_state.code_learning.get("image_bytes"):
+            try:
+                img_b64 = base64.b64encode(st.session_state.code_learning["image_bytes"]).decode("utf-8")
+                state["image_bytes_b64"] = img_b64
+                state["image_ext"] = st.session_state.code_learning.get("image_ext", "")
+            except Exception as e:
+                logger.error(f"画像保存エラー: {e}")
+
+        with open(SESSION_FILE, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.error(f"セッション保存エラー: {e}")
+
+def load_last_session():
+    """前回のセッション状態を復元"""
+    if not SESSION_FILE.exists():
+        return
+
+    try:
+        with open(SESSION_FILE, "r", encoding="utf-8") as f:
+            state = json.load(f)
+
+        # 復元 (セッションが空の場合、または明示的にロード)
+        # HTML/CSS
+        if "html_editor" not in st.session_state:
+            st.session_state["html_editor"] = state.get("html", "")
+            st.session_state["loaded_html"] = state.get("html", "") # 初期値用
+        
+        if "css_editor" not in st.session_state:
+            st.session_state["css_editor"] = state.get("css", "")
+            st.session_state["loaded_css"] = state.get("css", "") # 初期値用
+
+        # モード
+        if "show_section_mode" not in st.session_state:
+            st.session_state["show_section_mode"] = state.get("show_section_mode", False)
+        
+        if "show_analysis_mode" not in st.session_state:
+            st.session_state["show_analysis_mode"] = state.get("show_analysis_mode", False)
+
+        # 画像
+        if state.get("image_bytes_b64") and not st.session_state.code_learning.get("image_bytes"):
+            try:
+                img_bytes = base64.b64decode(state["image_bytes_b64"])
+                st.session_state.code_learning["image_bytes"] = img_bytes
+                st.session_state.code_learning["image_ext"] = state.get("image_ext", "")
+            except Exception as e:
+                logger.error(f"画像復元エラー: {e}")
+                
+        # 復元通知 (初回のみ)
+        if "session_restored" not in st.session_state:
+            st.session_state.session_restored = True
+            if state.get("html") or state.get("css"):
+                st.toast("🔄 前回の続きから開始しました")
+
+    except Exception as e:
+        logger.error(f"セッション復元エラー: {e}")
+
+# アプリ起動時にロード
+if "session_restored" not in st.session_state:
+    load_last_session()
 
 # Monaco Editor (VSCode風エディタ)
 try:
@@ -37,13 +114,18 @@ except ImportError:
 # 1. ページ設定
 st.set_page_config(page_title="コード学習", page_icon="📖", layout="wide", initial_sidebar_state="collapsed")
 
+# ダークモード初期化
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
 # 2. カスタムCSS（サイドバー非表示等）- 共通モジュール使用
 from modules.ui_styles import inject_common_styles, get_compact_title_styles
 
 st.markdown(inject_common_styles(
     include_headings=True,
     sidebar_mode="hidden",
-    include_compact_title=True
+    include_compact_title=True,
+    dark_mode=st.session_state.dark_mode
 ), unsafe_allow_html=True)
 
 st.markdown('<div class="compact-title">📖 コード学習</div>', unsafe_allow_html=True)
@@ -483,8 +565,9 @@ if st.session_state.get("show_section_mode", False):
                                 try:
                                     if "chroma_manager" in st.session_state:
                                         # 設定値の類似度で検索
+                                        # 文脈を含めて検索（セクション違いの画像ヒットを防ぐ）
                                         visual_results = st.session_state.chroma_manager.search_visuals(
-                                            f_question, 
+                                            f"{f_question} {f_code_context[:300]}", 
                                             min_score=st.session_state.get("related_visual_threshold", 0.70), 
                                             top_k=1
                                         )
@@ -526,7 +609,7 @@ if st.session_state.get("show_section_mode", False):
                         # 関連図解の表示
                         if h.get("related_visuals"):
                             for vis in h["related_visuals"]:
-                                with st.expander(f"💡 関連図解: {vis.get('title', '図解')} - 一致度{vis.get('score', 0):.0%}", expanded=True):
+                                with st.expander(f"💡 関連図解: {vis.get('title', '図解')} - 一致度{vis.get('score', 0):.0%}", expanded=False):
                                     import urllib.parse
                                     svg_encoded = urllib.parse.quote(vis["svg"], safe='')
                                     svg_html = f"""
@@ -628,7 +711,7 @@ if st.session_state.get("show_section_mode", False):
 if not st.session_state.get("show_analysis_mode", False) and not st.session_state.get("show_section_mode", False):
     # プレビュー
     has_image = bool(st.session_state.code_learning.get("image_bytes"))
-    with st.expander("📷 参考画像", expanded=has_image):
+    with st.expander("📷 参考画像", expanded=False):
         prev_cols = st.columns([2, 1])
         with prev_cols[0]:
             img_data = st.session_state.code_learning.get("image_bytes")
@@ -708,6 +791,10 @@ if not st.session_state.get("show_analysis_mode", False) and not st.session_stat
     # 空文字列対策
     html_input = html_input if html_input else ""
     css_input = css_input if css_input else ""
+
+    # ステート同期 (フォーカスモードなどでウィジェットが消えても値を保持するため)
+    st.session_state["loaded_html"] = html_input
+    st.session_state["loaded_css"] = css_input
 
     # combined_codeは保存時のみ使う（毎回session_state更新しない）
     combined_code = html_input
@@ -825,8 +912,9 @@ if not st.session_state.get("show_analysis_mode", False) and not st.session_stat
                             related_visuals = []
                             try:
                                 if "chroma_manager" in st.session_state:
+                                    # 文脈を含めて検索
                                     visual_results = st.session_state.chroma_manager.search_visuals(
-                                        question, 
+                                        f"{question} {code_for_question[:300]}", 
                                         min_score=st.session_state.get("related_visual_threshold", 0.70), 
                                         top_k=1
                                     )
@@ -881,7 +969,7 @@ if not st.session_state.get("show_analysis_mode", False) and not st.session_stat
             # 関連図解の表示
             if h.get("related_visuals"):
                 for vis in h["related_visuals"]:
-                    with st.expander(f"💡 関連図解: {vis.get('title', '図解')} - 一致度{vis.get('score', 0):.0%}", expanded=True):
+                    with st.expander(f"💡 関連図解: {vis.get('title', '図解')} - 一致度{vis.get('score', 0):.0%}", expanded=False):
                         import urllib.parse
                         svg_encoded = urllib.parse.quote(vis["svg"], safe='')
                         svg_html = f"""
@@ -936,6 +1024,11 @@ if not st.session_state.get("show_analysis_mode", False) and not st.session_stat
                     </div>
                 """
                 components.html(svg_display_html, height=350, scrolling=True)
+
+# --------------------------------------------------------------------------------
+# セッション状態の自動保存 (実行サイクルの最後に実行)
+# --------------------------------------------------------------------------------
+save_last_session()
 
 
 

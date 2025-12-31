@@ -6,7 +6,10 @@ import streamlit as st
 from pathlib import Path
 from config.settings import CATEGORIES, CONTENT_TYPES, logger
 from modules.data_manager import DataManager
+from modules.llm import generate_simple_response
 import base64
+import re
+import uuid
 
 # プロジェクトルート
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -16,13 +19,18 @@ st.set_page_config(page_title="一覧 - RAG", page_icon="📋", layout="wide")
 
 logger.info("=== 一覧ページ表示 ===")
 
-# 共通スタイル適用
+# ダークモード初期化
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+# 共通スタイル適用 + ダークモード
 from modules.ui_styles import inject_common_styles, get_compact_title_styles, get_list_page_styles
 
 st.markdown(inject_common_styles(
     include_headings=True,
-    sidebar_mode="narrow",  # サイドバーを狭く
-    include_compact_title=True
+    sidebar_mode="narrow",
+    include_compact_title=True,
+    dark_mode=st.session_state.dark_mode
 ), unsafe_allow_html=True)
 st.markdown(get_list_page_styles(), unsafe_allow_html=True)
 
@@ -43,6 +51,16 @@ with col_head1:
     st.markdown('<div class="compact-title">📋 登録データ一覧</div>', unsafe_allow_html=True)
 with col_head2:
     st.markdown(f"<div style='text-align: right; font-size: 0.9rem; padding-top: 5px;'>全 <b>{len(all_practices)}</b> 件</div>", unsafe_allow_html=True)
+
+# 整理メニュー
+with st.expander("⚙️ データ整理（AI自動分類）", expanded=False):
+    st.caption("AIが全データの「中カテゴリ」を自動生成します。")
+    overwrite_cat = st.checkbox("既存のカテゴリも全て再判定する（上書き）", value=False)
+    if st.button("全データを自動分類する"):
+        with st.spinner("AIが分類中...（数十秒かかる場合があります）"):
+            count = st.session_state.data_manager.auto_categorize_all(overwrite=overwrite_cat)
+            st.success(f"{count}件の分類が完了しました！")
+            st.rerun()
 
 # フィルタ（目立たない場所に格納）
 with st.expander("🔍 検索条件を変更する", expanded=False):
@@ -156,504 +174,405 @@ else:
             # 第1階層: カテゴリ（Expander、初期は開く）
             with st.expander(f"📂 {cat_name} ({len(practices)})", expanded=True):
                 
-                # タグごとにさらにグループ化
-                grouped_by_tag = {}
-                no_tag_practices = []
-                
+                # サブカテゴリごとにグループ化
+                grouped_by_sub = {}
                 for p in practices:
-                    tags = p.get("tags", [])
-                    if tags:
-                        # 最初のタグを代表タグ（中カテゴリ）とするが、表記揺れを防ぐためタイトルケースに統一
-                        # 例: "flexbox" -> "Flexbox", "css" -> "Css" (または手動マッピングも検討余地あり)
-                        # ここでは単純に capitalize を使用
-                        raw_tag = tags[0]
-                        # 英字のみの場合はTitle Case、それ以外はそのまま
-                        main_tag = raw_tag.title() if raw_tag.isascii() else raw_tag
-                        
-                        if main_tag not in grouped_by_tag:
-                            grouped_by_tag[main_tag] = []
-                        grouped_by_tag[main_tag].append(p)
-                    else:
-                        no_tag_practices.append(p)
+                    sub = p.get("sub_category", "未分類")
+                    if sub not in grouped_by_sub:
+                        grouped_by_sub[sub] = []
+                    grouped_by_sub[sub].append(p)
                 
-                # タググループ表示
-                for tag, items in grouped_by_tag.items():
-                    # 第2階層: タグ（見出し）- カスタムCSSクラス適用
-                    st.markdown(f'<div class="tag-header">🏷️ {tag}</div>', unsafe_allow_html=True)
+                # 表示順ソート（未分類は最後）
+                sorted_subs = sorted(list(grouped_by_sub.keys()), key=lambda x: (x == "未分類", x))
+
+                # サブカテゴリ表示
+                for sub_cat in sorted_subs:
+                    items = grouped_by_sub[sub_cat]
                     
-                    # 第3階層: アイテム（3列グリッド表示 + 詳細フル幅表示）
-                    # 3つずつチャンクに分割して処理
-                    chunk_size = 3
-                    for i in range(0, len(items), chunk_size):
-                        chunk = items[i:i + chunk_size]
+                    # 第2階層: サブカテゴリ（Expander）
+                    with st.expander(f"📂 {sub_cat} ({len(items)})", expanded=False):
                         
-                        # 1行分の列を作成
-                        cols = st.columns(3)
-                        
-                        # この行で詳細が開かれているアイテムを特定
-                        opened_item = None
-                        
-                        for j, p in enumerate(chunk):
-                            with cols[j]:
-                                with st.container(border=True):
-                                    # ヘッダー（アイコン+タイトル | チェックボックス）
-                                    col_icon, col_chk = st.columns([4, 1.5])
-                                    with col_icon:
-                                        icon = "💻" if p.get("content_type") == "code" else "📄"
-                                        title_display = p['title']
-                                        if p.get("is_completed"):
-                                            title_display = f"~~{title_display}~~"
-                                            icon = "✅"
-                                        st.markdown(f"**{icon} {title_display}**")
-                                    with col_chk:
-                                        # 完了チェックボックス（ラベルなし）
-                                        is_done = st.checkbox(" ", value=p.get("is_completed", False), key=f"done_{p['id']}", label_visibility="collapsed")
-                                        if is_done != p.get("is_completed", False):
-                                            p["is_completed"] = is_done
-                                            st.session_state.data_manager.update(p["id"], {"is_completed": is_done})
-                                            st.rerun()
+                        # 第3階層: アイテム（3列グリッド表示 + 詳細フル幅表示）
+                        chunk_size = 3
+                        for i in range(0, len(items), chunk_size):
+                            chunk = items[i:i + chunk_size]
+                            
+                            # 1行分の列を作成
+                            cols = st.columns(3)
+                            
+                            # この行で詳細が開かれているアイテムを特定
+                            opened_item = None
+                            
+                            for j, p in enumerate(chunk):
+                                with cols[j]:
+                                    with st.container(border=True):
+                                        # ヘッダー（アイコン+タイトル | チェックボックス）
+                                        col_icon, col_chk = st.columns([4, 1.5])
+                                        with col_icon:
+                                            icon = "💻" if p.get("content_type") == "code" else "📄"
+                                            title_display = p['title']
+                                            if p.get("is_completed"):
+                                                title_display = f"~~{title_display}~~"
+                                                icon = "✅"
+                                            st.markdown(f"**{icon} {title_display}**")
+                                        with col_chk:
+                                            # 完了チェックボックス（ラベルなし）
+                                            is_done = st.checkbox(" ", value=p.get("is_completed", False), key=f"done_{p['id']}", label_visibility="collapsed")
+                                            if is_done != p.get("is_completed", False):
+                                                p["is_completed"] = is_done
+                                                st.session_state.data_manager.update(p["id"], {"is_completed": is_done})
+                                                st.rerun()
 
-                                    # 更新日
-                                    st.caption(f"更新: {p.get('updated_at', '')[:10]}")
+                                        # 更新日
+                                        st.caption(f"更新: {p.get('updated_at', '')[:10]}")
+                                        
+                                        # 画像がある場合（詳細が閉じてるときのみ）
+                                        detail_key = f"detail_view_{p['id']}"
+                                        is_opened = st.session_state.get(detail_key, False)
+                                        
+                                        if p.get("image_path") and not is_opened:
+                                            img_path = PROJECT_ROOT / p["image_path"]
+                                            if img_path.exists():
+                                                st.image(str(img_path), use_container_width=True)
+
+                                        # 図解サムネイル（詳細が閉じてるときのみ）
+                                        if p.get("generated_svg") and not is_opened:
+                                            try:
+                                                b64 = base64.b64encode(p["generated_svg"].encode('utf-8')).decode("utf-8")
+                                                st.image(f"data:image/svg+xml;base64,{b64}", use_container_width=True)
+                                            except Exception:
+                                                pass
+
+                                        # 詳細ボタン
+                                        key_suffix = f"list_{p['id']}"
+                                        btn_label = "▼ 詳細を開く" if not is_opened else "▲ 閉じる"
+                                        if st.button(btn_label, key=f"btn_{key_suffix}", use_container_width=True):
+                                            st.session_state[detail_key] = not is_opened
+                                            st.rerun() # リランして表示を更新
+
+                                        if st.session_state.get(detail_key):
+                                            opened_item = p
+                            
+                            # 行の下に詳細ビューを表示（フル幅）
+                            if opened_item:
+                                st.markdown(f"### 📖 {opened_item['title']} の詳細")
+                                with st.container(border=True):
+                                    p = opened_item
+                                    # 編集・削除ボタンと説明の間にビジュアルを表示
                                     
-                                    # 画像がある場合（詳細が閉じてるときのみ）
-                                    detail_key = f"detail_view_{p['id']}"
-                                    is_opened = st.session_state.get(detail_key, False)
-                                    
-                                    if p.get("image_path") and not is_opened:
+                                    # 画像（大きく表示）
+                                    if p.get("image_path"):
                                         img_path = PROJECT_ROOT / p["image_path"]
                                         if img_path.exists():
                                             st.image(str(img_path), use_container_width=True)
-
-                                    # 図解サムネイル（詳細が閉じてるときのみ）
-                                    if p.get("generated_svg") and not is_opened:
-                                        try:
-                                            b64 = base64.b64encode(p["generated_svg"].encode('utf-8')).decode("utf-8")
-                                            st.image(f"data:image/svg+xml;base64,{b64}", use_container_width=True)
-                                        except Exception:
-                                            pass
-
-                                    # 詳細ボタン
-                                    key_suffix = f"list_{p['id']}"
-                                    btn_label = "▼ 詳細を開く" if not is_opened else "▲ 閉じる"
-                                    if st.button(btn_label, key=f"btn_{key_suffix}", use_container_width=True):
-                                        st.session_state[detail_key] = not is_opened
-                                        st.rerun() # リランして表示を更新
-
-                                    if st.session_state.get(detail_key):
-                                        opened_item = p
-                        
-                        # 行の下に詳細ビューを表示（フル幅）
-                        if opened_item:
-                            st.markdown(f"### 📖 {opened_item['title']} の詳細")
-                            with st.container(border=True):
-                                p = opened_item
-                                # 編集・削除ボタンと説明の間にビジュアルを表示
-                                
-                                # 画像（大きく表示）
-                                if p.get("image_path"):
-                                    img_path = PROJECT_ROOT / p["image_path"]
-                                    if img_path.exists():
-                                        st.image(str(img_path), use_container_width=True)
-                                        # 画像削除ボタン
-                                        if st.button("🗑️ 画像を削除", key=f"del_img_list_{p['id']}"):
-                                            st.session_state[f"confirm_del_img_{p['id']}"] = True
-                                            st.rerun()
-                                        
-                                        if st.session_state.get(f"confirm_del_img_{p['id']}"):
-                                            st.warning("この画像を削除しますか？")
-                                            col_y, col_n = st.columns(2)
-                                            with col_y:
-                                                if st.button("はい", key=f"y_del_img_{p['id']}"):
-                                                    st.session_state.data_manager.update(p["id"], {"image_path": ""})
-                                                    st.success("画像を削除しました")
-                                                    del st.session_state[f"confirm_del_img_{p['id']}"]
-                                                    st.rerun()
-                                            with col_n:
-                                                if st.button("キャンセル", key=f"n_del_img_{p['id']}"):
-                                                    del st.session_state[f"confirm_del_img_{p['id']}"]
-                                                    st.rerun()
-                                
-                                # 図解（SVG）
-                                generated_svg = p.get("generated_svg")
-                                if generated_svg:
-                                    st.subheader("📐 図解")
-                                    # フルスクリーン対応のSVG表示
-                                    import urllib.parse
-                                    svg_encoded = urllib.parse.quote(generated_svg, safe='')
-                                    fullscreen_html = f"""
-                                    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: #ffffff; position: relative;">
-                                        <button onclick="var w=window.open('','_blank','width=1000,height=700');w.document.write('<html><head><title>図解</title></head><body style=\\'background:#fff;margin:20px;\\'>' + decodeURIComponent('{svg_encoded}') + '</body></html>');w.document.close();"
-                                           style="position: absolute; top: 5px; right: 10px; background: #1976d2; color: white; 
-                                                  padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 12px; z-index: 100;">
-                                           🔍 拡大表示
-                                        </button>
-                                        {generated_svg}
-                                    </div>
-                                    """
-                                    import streamlit.components.v1 as components
-                                    components.html(fullscreen_html, height=600, scrolling=True)
+                                            # 画像削除ボタン
+                                            if st.button("🗑️ 画像を削除", key=f"del_img_list_{p['id']}"):
+                                                st.session_state[f"confirm_del_img_{p['id']}"] = True
+                                                st.rerun()
+                                            
+                                            if st.session_state.get(f"confirm_del_img_{p['id']}"):
+                                                st.warning("この画像を削除しますか？")
+                                                col_y, col_n = st.columns(2)
+                                                with col_y:
+                                                    if st.button("はい", key=f"y_del_img_{p['id']}"):
+                                                        st.session_state.data_manager.update(p["id"], {"image_path": ""})
+                                                        st.success("画像を削除しました")
+                                                        del st.session_state[f"confirm_del_img_{p['id']}"]
+                                                        st.rerun()
+                                                with col_n:
+                                                    if st.button("キャンセル", key=f"n_del_img_{p['id']}"):
+                                                        del st.session_state[f"confirm_del_img_{p['id']}"]
+                                                        st.rerun()
                                     
-                                    # 図解削除ボタン
-                                    if st.button("🗑️ 図解を削除", key=f"del_svg_list_{p['id']}"):
-                                        st.session_state[f"confirm_del_svg_{p['id']}"] = True
-                                        st.rerun()
+                                    # 図解（SVG）
+                                    generated_svg = p.get("generated_svg")
+                                    if generated_svg:
+                                        st.subheader("📐 図解")
+                                        # フルスクリーン対応のSVG表示
+                                        import urllib.parse
+                                        svg_encoded = urllib.parse.quote(generated_svg, safe='')
+                                        fullscreen_html = f"""
+                                        <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: #ffffff; position: relative;">
+                                            <button onclick="var w=window.open('','_blank','width=1000,height=700');w.document.write('<html><head><title>図解</title></head><body style=\\'background:#fff;margin:20px;\\'>' + decodeURIComponent('{svg_encoded}') + '</body></html>');w.document.close();"
+                                               style="position: absolute; top: 5px; right: 10px; background: #1976d2; color: white; 
+                                                      padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 12px; z-index: 100;">
+                                               🔍 拡大表示
+                                            </button>
+                                            {generated_svg}
+                                        </div>
+                                        """
+                                        import streamlit.components.v1 as components
+                                        components.html(fullscreen_html, height=600, scrolling=True)
                                         
-                                    if st.session_state.get(f"confirm_del_svg_{p['id']}"):
-                                        st.warning("この図解を削除しますか？")
-                                        col_ys, col_ns = st.columns(2)
-                                        with col_ys:
-                                            if st.button("はい", key=f"y_del_svg_{p['id']}"):
-                                                st.session_state.data_manager.update(p["id"], {"generated_svg": ""})
-                                                st.success("図解を削除しました")
-                                                del st.session_state[f"confirm_del_svg_{p['id']}"]
+                                        # 図解削除ボタン
+                                        if st.button("🗑️ 図解を削除", key=f"del_svg_list_{p['id']}"):
+                                            st.session_state[f"confirm_del_svg_{p['id']}"] = True
+                                            st.rerun()
+                                            
+                                        if st.session_state.get(f"confirm_del_svg_{p['id']}"):
+                                            st.warning("この図解を削除しますか？")
+                                            col_ys, col_ns = st.columns(2)
+                                            with col_ys:
+                                                if st.button("はい", key=f"y_del_svg_{p['id']}"):
+                                                    st.session_state.data_manager.update(p["id"], {"generated_svg": ""})
+                                                    st.success("図解を削除しました")
+                                                    del st.session_state[f"confirm_del_svg_{p['id']}"]
+                                                    st.rerun()
+                                            with col_ns:
+                                                if st.button("キャンセル", key=f"n_del_svg_{p['id']}"):
+                                                    del st.session_state[f"confirm_del_svg_{p['id']}"]
+                                                    st.rerun()
+                                    else:
+                                        # 図解生成ボタン
+                                        if st.button("📐 図解を生成する", key=f"gen_svg_list_{p['id']}"):
+                                            from modules.llm import generate_preview_svg # ここでインポート
+                                            with st.spinner("AIが図解を生成中..."):
+                                                svg = generate_preview_svg(
+                                                    p.get("description", "") + "\n" + p.get("title", ""),
+                                                    p.get("title", "")
+                                                )
+                                                if svg:
+                                                    # 保存（自動保存）
+                                                    st.session_state.data_manager.update(p["id"], {"generated_svg": svg})
+                                                    updated_p = st.session_state.data_manager.get_by_id(p["id"])
+                                                    if updated_p:
+                                                        st.session_state.chroma_manager.add_practice(updated_p)
+                                                    
+                                                    st.success("図解を生成しました！（自動保存されました）")
+                                                    st.rerun()
+                                                else:
+                                                    st.error("生成に失敗しました")
+
+                                    # 説明（ビジュアルの下に移動）
+                                    if p.get("description"):
+                                        st.markdown(p["description"])
+                                    
+                                    # コード
+                                    if p.get("content_type") == "code":
+                                        if p.get("code_html"):
+                                            st.subheader("HTML")
+                                            st.code(p["code_html"], language="html")
+                                        if p.get("code_css"):
+                                            st.subheader("CSS")
+                                            st.code(p["code_css"], language="css")
+                                        if p.get("code_js"):
+                                            st.subheader("JavaScript")
+                                            st.code(p["code_js"], language="javascript")
+                                        
+                                        # プレビュー
+                                        if p.get("code_html") or p.get("code_css"):
+                                            html = p.get("code_html", "")
+                                            css = p.get("code_css", "")
+                                            js = p.get("code_js", "")
+                                            
+                                            with st.expander("👁️ プレビューを実行"):
+                                                import streamlit.components.v1 as components
+                                                preview_src = f"""
+                                                <html>
+                                                <head>
+                                                    <style>
+                                                        body {{ margin: 0; padding: 10px; font-family: sans-serif; }}
+                                                        {css}
+                                                    </style>
+                                                </head>
+                                                <body>
+                                                    {html}
+                                                    <script>{js}</script>
+                                                </body>
+                                                </html>
+                                                """
+                                                components.html(preview_src, height=200, scrolling=True)
+
+                                    # 補足
+                                    if p.get("notes"):
+                                        st.info(f"💡 **Note:** {p['notes']}")
+                                    
+                                    # 編集・削除エリア
+                                    st.markdown("---")
+                                    col_btns = st.columns([1, 1, 4])
+                                    
+                                    # 編集モード切り替え
+                                    is_editing_key = f"editing_{p['id']}"
+                                    is_editing = st.session_state.get(is_editing_key, False)
+                                    
+                                    with col_btns[0]:
+                                        if st.button("✏️ 編集", key=f"edit_list_{p['id']}"):
+                                            st.session_state[is_editing_key] = not is_editing
+                                            st.rerun()
+                                    
+                                    with col_btns[1]:
+                                        if st.button("🗑️ 削除", key=f"del_list_{p['id']}"):
+                                            st.session_state[f"confirm_del_{p['id']}"] = True
+                                            st.rerun()
+                                    
+                                    # スマート分割機能 (asideタグが含まれる場合のみ表示)
+                                    if "<aside>" in p.get("description", ""):
+                                        with col_btns[2]:
+                                            if st.button("✂️ AI分割", key=f"split_list_{p['id']}", help="<aside>タグで自動分割して、AIで整理します"):
+                                                st.session_state[f"splitting_{p['id']}"] = True
                                                 st.rerun()
-                                        with col_ns:
-                                            if st.button("キャンセル", key=f"n_del_svg_{p['id']}"):
-                                                del st.session_state[f"confirm_del_svg_{p['id']}"]
+
+                                    # 分割モード実行中
+                                    if st.session_state.get(f"splitting_{p['id']}"):
+                                        st.info("✂️ AI自動分割プレビューモード")
+                                        
+                                        if f"split_results_{p['id']}" not in st.session_state:
+                                            with st.spinner("AIが内容を解析・分割しています..."):
+                                                try:
+                                                    description = p.get("description", "")
+                                                    # asideタグを区切りとして分割（空要素は除外）
+                                                    chunks = re.split(r'(?=<aside>)', description)
+                                                    chunks = [c for c in chunks if c.strip()]
+                                                    
+                                                    results = []
+                                                    for i, chunk in enumerate(chunks):
+                                                        # AIプロンプト作成
+                                                        prompt = f"""
+                                                        あなたは技術ドキュメントの編集者です。
+                                                        以下のテキストはNotionからエクスポートされた技術メモの一部です（HTMLタグが含まれています）。
+                                                        
+                                                        タスク：
+                                                        1. 内容を理解し、適切な「タイトル」を付けてください。
+                                                        2. 本文から不要なHTMLタグ（特にasideなど）を取り除き、読みやすいMarkdown形式の「本文」に整形してください。
+                                                        3. コードブロックがある場合は保持してください。
+                                                        
+                                                        元のテキスト:
+                                                        {chunk}
+                                                        
+                                                        出力フォーマット:
+                                                        タイトル: [ここにタイトル]
+                                                        本文:
+                                                        [ここにMarkdown整形された本文]
+                                                        """
+                                                        response = generate_simple_response(prompt)
+                                                        
+                                                        # 応答のパース
+                                                        title_match = re.search(r'タイトル:\s*(.*)', response)
+                                                        body_match = re.search(r'本文:\s*(.*)', response, re.DOTALL)
+                                                        
+                                                        title = title_match.group(1).strip() if title_match else f"{p['title']} ({i+1})"
+                                                        body = body_match.group(1).strip() if body_match else chunk
+                                                        
+                                                        # タイトルから余計な装飾を除去
+                                                        title = re.sub(r'^[*#\s]+', '', title)
+                                                        
+                                                        results.append({
+                                                            "title": title,
+                                                            "description": body,
+                                                            "category": p.get("category", "other"),
+                                                            "content_type": p.get("content_type", "manual"),
+                                                            "code_css": p.get("code_css", ""), # 元のCSSなどは一旦引き継ぐ
+                                                            "code_html": p.get("code_html", ""),
+                                                            "code_js": p.get("code_js", "")
+                                                        })
+                                                    
+                                                    st.session_state[f"split_results_{p['id']}"] = results
+                                                except Exception as e:
+                                                    st.error(f"解析中にエラーが発生しました: {e}")
+                                        
+                                        # プレビューと操作
+                                        results = st.session_state.get(f"split_results_{p['id']}", [])
+                                        
+                                        if results:
+                                            st.write(f"計 {len(results)} 件に分割されました。内容を確認してください。")
+                                            
+                                            # 編集可能プレビュー
+                                            new_items = []
+                                            for i, res in enumerate(results):
+                                                with st.expander(f"No.{i+1}: {res['title']}", expanded=True):
+                                                    n_title = st.text_input(f"タイトル #{i+1}", res['title'], key=f"split_title_{p['id']}_{i}")
+                                                    n_desc = st.text_area(f"本文 #{i+1}", res['description'], key=f"split_desc_{p['id']}_{i}", height=150)
+                                                    new_items.append({**res, "title": n_title, "description": n_desc})
+                                            
+                                            st.warning("⚠️ 「実行」を押すと、元のデータは削除され、上記の内容で新規登録されます。")
+                                            
+                                            col_split_exe, col_split_can = st.columns(2)
+                                            with col_split_exe:
+                                                if st.button("実行して分割登録", key=f"do_split_{p['id']}"):
+                                                    # 一括登録
+                                                    for item in new_items:
+                                                        new_data = item.copy()
+                                                        new_data["id"] = str(uuid.uuid4())
+                                                        # 元画像などはここで引き継ぐと不整合が出る可能性があるので、テキスト中心の分割とする
+                                                        # ただしコード系は引き継ぎ済み
+                                                        st.session_state.data_manager.add(new_data)
+                                                    
+                                                    # 元データ削除
+                                                    st.session_state.data_manager.delete(p["id"])
+                                                    st.session_state.chroma_manager.delete(p["id"])
+                                                    
+                                                    # クリーンアップ
+                                                    del st.session_state[f"splitting_{p['id']}"]
+                                                    del st.session_state[f"split_results_{p['id']}"]
+                                                    
+                                                    st.success("分割登録が完了しました！")
+                                                    st.rerun()
+                                            
+                                            with col_split_can:
+                                                if st.button("キャンセル", key=f"cancel_split_{p['id']}"):
+                                                    del st.session_state[f"splitting_{p['id']}"]
+                                                    if f"split_results_{p['id']}" in st.session_state:
+                                                        del st.session_state[f"split_results_{p['id']}"]
+                                                    st.rerun()
+                                    
+                                    # 削除確認
+                                    if st.session_state.get(f"confirm_del_{p['id']}"):
+                                        st.warning(f"本当に「{p['title']}」を削除しますか？")
+                                        col_yes, col_no = st.columns(2)
+                                        with col_yes:
+                                            if st.button("はい、削除します", key=f"yes_del_{p['id']}"):
+                                                st.session_state.data_manager.delete(p["id"])
+                                                st.session_state.chroma_manager.delete(p["id"])
+                                                st.success("削除しました")
                                                 st.rerun()
-                                else:
-                                    # 図解生成ボタン
-                                    if st.button("📐 図解を生成する", key=f"gen_svg_list_{p['id']}"):
-                                        from modules.llm import generate_preview_svg # ここでインポート
-                                        with st.spinner("AIが図解を生成中..."):
-                                            svg = generate_preview_svg(
-                                                p.get("description", "") + "\n" + p.get("title", ""),
-                                                p.get("title", "")
-                                            )
-                                            if svg:
-                                                # 保存（自動保存）
-                                                st.session_state.data_manager.update(p["id"], {"generated_svg": svg})
+                                        with col_no:
+                                            if st.button("キャンセル", key=f"no_del_{p['id']}"):
+                                                del st.session_state[f"confirm_del_{p['id']}"]
+                                                st.rerun()
+    
+                                    # 編集フォーム
+                                    if is_editing:
+                                        with st.form(key=f"form_edit_{p['id']}"):
+                                            new_title = st.text_input("タイトル", p.get("title", ""))
+                                            new_desc = st.text_area("説明", p.get("description", ""))
+                                            
+                                            # コード編集
+                                            new_html = p.get("code_html", "")
+                                            new_css = p.get("code_css", "")
+                                            new_js = p.get("code_js", "")
+                                            
+                                            if p.get("content_type") == "code":
+                                                if new_html or new_css or new_js: # 既存があれば表示
+                                                    st.subheader("コード編集")
+                                                    new_html = st.text_area("HTML", new_html)
+                                                    new_css = st.text_area("CSS", new_css)
+                                                    new_js = st.text_area("JavaScript", new_js)
+    
+                                            new_notes = st.text_area("補足", p.get("notes", ""))
+                                            
+                                            if st.form_submit_button("保存する"):
+                                                update_data = {
+                                                    "title": new_title,
+                                                    "description": new_desc,
+                                                    "code_html": new_html,
+                                                    "code_css": new_css,
+                                                    "code_js": new_js,
+                                                    "notes": new_notes
+                                                }
+                                                st.session_state.data_manager.update(p["id"], update_data)
+                                                # Chroma更新
                                                 updated_p = st.session_state.data_manager.get_by_id(p["id"])
                                                 if updated_p:
                                                     st.session_state.chroma_manager.add_practice(updated_p)
                                                 
-                                                st.success("図解を生成しました！（自動保存されました）")
+                                                st.session_state[is_editing_key] = False
+                                                st.success("保存しました！")
                                                 st.rerun()
-                                            else:
-                                                st.error("生成に失敗しました")
-
-                                # 説明（ビジュアルの下に移動）
-                                if p.get("description"):
-                                    st.markdown(p["description"])
-                                
-                                # コード
-                                if p.get("content_type") == "code":
-                                    if p.get("code_html"):
-                                        st.subheader("HTML")
-                                        st.code(p["code_html"], language="html")
-                                    if p.get("code_css"):
-                                        st.subheader("CSS")
-                                        st.code(p["code_css"], language="css")
-                                    if p.get("code_js"):
-                                        st.subheader("JavaScript")
-                                        st.code(p["code_js"], language="javascript")
-                                    
-                                    # プレビュー
-                                    if p.get("code_html") or p.get("code_css"):
-                                        html = p.get("code_html", "")
-                                        css = p.get("code_css", "")
-                                        js = p.get("code_js", "")
-                                        
-                                        with st.expander("👁️ プレビューを実行"):
-                                            import streamlit.components.v1 as components
-                                            preview_src = f"""
-                                            <html>
-                                            <head>
-                                                <style>
-                                                    body {{ margin: 0; padding: 10px; font-family: sans-serif; }}
-                                                    {css}
-                                                </style>
-                                            </head>
-                                            <body>
-                                                {html}
-                                                <script>{js}</script>
-                                            </body>
-                                            </html>
-                                            """
-                                            components.html(preview_src, height=200, scrolling=True)
-
-                                # 補足
-                                if p.get("notes"):
-                                    st.info(f"💡 **Note:** {p['notes']}")
-                                
-                                # 編集・削除エリア
-                                st.markdown("---")
-                                col_btns = st.columns([1, 1, 4])
-                                
-                                # 編集モード切り替え
-                                is_editing_key = f"editing_{p['id']}"
-                                is_editing = st.session_state.get(is_editing_key, False)
-                                
-                                with col_btns[0]:
-                                    if st.button("✏️ 編集", key=f"edit_list_{p['id']}"):
-                                        st.session_state[is_editing_key] = not is_editing
-                                        st.rerun()
-                                
-                                with col_btns[1]:
-                                    if st.button("🗑️ 削除", key=f"del_list_{p['id']}"):
-                                        st.session_state[f"confirm_del_{p['id']}"] = True
-                                        st.rerun()
-                                
-                                # 削除確認
-                                if st.session_state.get(f"confirm_del_{p['id']}"):
-                                    st.warning(f"本当に「{p['title']}」を削除しますか？")
-                                    col_yes, col_no = st.columns(2)
-                                    with col_yes:
-                                        if st.button("はい、削除します", key=f"yes_del_{p['id']}"):
-                                            st.session_state.data_manager.delete(p["id"])
-                                            st.session_state.chroma_manager.delete(p["id"])
-                                            st.success("削除しました")
-                                            st.rerun()
-                                    with col_no:
-                                        if st.button("キャンセル", key=f"no_del_{p['id']}"):
-                                            del st.session_state[f"confirm_del_{p['id']}"]
-                                            st.rerun()
-
-                                # 編集フォーム
-                                if is_editing:
-                                    with st.form(key=f"form_edit_{p['id']}"):
-                                        new_title = st.text_input("タイトル", p.get("title", ""))
-                                        new_desc = st.text_area("説明", p.get("description", ""))
-                                        
-                                        # コード編集
-                                        new_html = p.get("code_html", "")
-                                        new_css = p.get("code_css", "")
-                                        new_js = p.get("code_js", "")
-                                        
-                                        if p.get("content_type") == "code":
-                                            if new_html or new_css or new_js: # 既存があれば表示
-                                                st.subheader("コード編集")
-                                                new_html = st.text_area("HTML", new_html)
-                                                new_css = st.text_area("CSS", new_css)
-                                                new_js = st.text_area("JavaScript", new_js)
-
-                                        new_notes = st.text_area("補足", p.get("notes", ""))
-                                        
-                                        if st.form_submit_button("保存する"):
-                                            update_data = {
-                                                "title": new_title,
-                                                "description": new_desc,
-                                                "code_html": new_html,
-                                                "code_css": new_css,
-                                                "code_js": new_js,
-                                                "notes": new_notes
-                                            }
-                                            st.session_state.data_manager.update(p["id"], update_data)
-                                            # Chroma更新
-                                            updated_p = st.session_state.data_manager.get_by_id(p["id"])
-                                            if updated_p:
-                                                st.session_state.chroma_manager.add_practice(updated_p)
-                                            
-                                            st.session_state[is_editing_key] = False
-                                            st.success("保存しました！")
-                                            st.rerun()
-
-                    st.markdown("") # スペース
-
-                # タグなしグループ
-                if no_tag_practices:
-                    st.markdown('<div class="tag-header">📂 その他</div>', unsafe_allow_html=True)
-                    chunk_size = 3
-                    for i in range(0, len(no_tag_practices), chunk_size):
-                        chunk = no_tag_practices[i:i + chunk_size]
-                        cols = st.columns(3)
-                        opened_item_nt = None
-                        
-                        for j, p in enumerate(chunk):
-                            with cols[j]:
-                                with st.container(border=True):
-                                    icon = "💻" if p.get("content_type") == "code" else "📄"
-                                    st.markdown(f"**{icon} {p['title']}**")
-                                    st.caption(f"更新: {p.get('updated_at', '')[:10]}")
-                                    
-                                    detail_key_nt = f"detail_view_{p['id']}"
-                                    is_opened_nt = st.session_state.get(detail_key_nt, False)
-
-                                    if p.get("image_path") and not is_opened_nt:
-                                        img_path = PROJECT_ROOT / p["image_path"]
-                                        if img_path.exists():
-                                            st.image(str(img_path), use_container_width=True)
-
-                                    # 図解サムネイル（詳細が閉じてるときのみ）
-                                    if p.get("generated_svg") and not is_opened_nt:
-                                        try:
-                                            b64 = base64.b64encode(p["generated_svg"].encode('utf-8')).decode("utf-8")
-                                            st.image(f"data:image/svg+xml;base64,{b64}", use_container_width=True)
-                                        except Exception:
-                                            pass
-
-                                    btn_label = "▼ 詳細" if not is_opened_nt else "▲ 閉じる"
-                                    if st.button(btn_label, key=f"btn_nt_{p['id']}", use_container_width=True):
-                                        st.session_state[detail_key_nt] = not is_opened_nt
-                                        st.rerun()
-                                    
-                                    if st.session_state.get(detail_key_nt):
-                                        opened_item_nt = p
-
-                        # フル幅詳細表示（その他カテゴリ）
-                        if opened_item_nt:
-                            st.markdown(f"### 📖 {opened_item_nt['title']} の詳細")
-                            with st.container(border=True):
-                                # 編集・削除ボタンと説明の間にビジュアルを表示
-
-                                # 画像（大きく表示）
-                                if p.get("image_path"):
-                                    img_path = PROJECT_ROOT / p["image_path"]
-                                    if img_path.exists():
-                                        st.image(str(img_path), use_container_width=True)
-                                        # 画像削除ボタン
-                                        if st.button("🗑️ 画像を削除", key=f"del_img_nt_{p['id']}"):
-                                            st.session_state[f"confirm_del_img_nt_{p['id']}"] = True
-                                            st.rerun()
-                                        
-                                        if st.session_state.get(f"confirm_del_img_nt_{p['id']}"):
-                                            st.warning("この画像を削除しますか？")
-                                            col_y, col_n = st.columns(2)
-                                            with col_y:
-                                                if st.button("はい", key=f"y_del_img_nt_{p['id']}"):
-                                                    st.session_state.data_manager.update(p["id"], {"image_path": ""})
-                                                    st.success("画像を削除しました")
-                                                    del st.session_state[f"confirm_del_img_nt_{p['id']}"]
-                                                    st.rerun()
-                                            with col_n:
-                                                if st.button("キャンセル", key=f"n_del_img_nt_{p['id']}"):
-                                                    del st.session_state[f"confirm_del_img_nt_{p['id']}"]
-                                                    st.rerun()
-
-                                # 図解（SVG）
-                                generated_svg = p.get("generated_svg")
-                                if generated_svg:
-                                    st.subheader("📐 図解")
-                                    # フルスクリーン対応のSVG表示
-                                    import urllib.parse
-                                    svg_encoded = urllib.parse.quote(generated_svg, safe='')
-                                    fullscreen_html = f"""
-                                    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: #ffffff; position: relative;">
-                                        <button onclick="var w=window.open('','_blank','width=1000,height=700');w.document.write('<html><head><title>図解</title></head><body style=\\'background:#fff;margin:20px;\\'>' + decodeURIComponent('{svg_encoded}') + '</body></html>');w.document.close();"
-                                           style="position: absolute; top: 5px; right: 10px; background: #1976d2; color: white; 
-                                                  padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 12px; z-index: 100;">
-                                           🔍 拡大表示
-                                        </button>
-                                        {generated_svg}
-                                    </div>
-                                    """
-                                    import streamlit.components.v1 as components
-                                    components.html(fullscreen_html, height=600, scrolling=True)
-                                    
-                                    # 図解削除ボタン
-                                    if st.button("🗑️ 図解を削除", key=f"del_svg_nt_{p['id']}"):
-                                        st.session_state[f"confirm_del_svg_nt_{p['id']}"] = True
-                                        st.rerun()
-                                        
-                                    if st.session_state.get(f"confirm_del_svg_nt_{p['id']}"):
-                                        st.warning("この図解を削除しますか？")
-                                        col_ys, col_ns = st.columns(2)
-                                        with col_ys:
-                                            if st.button("はい", key=f"y_del_svg_nt_{p['id']}"):
-                                                st.session_state.data_manager.update(p["id"], {"generated_svg": ""})
-                                                st.success("図解を削除しました")
-                                                del st.session_state[f"confirm_del_svg_nt_{p['id']}"]
-                                                st.rerun()
-                                        with col_ns:
-                                            if st.button("キャンセル", key=f"n_del_svg_nt_{p['id']}"):
-                                                del st.session_state[f"confirm_del_svg_nt_{p['id']}"]
-                                                st.rerun()
-                                else:
-                                    # 図解生成ボタン
-                                    if st.button("📐 図解を生成する", key=f"gen_svg_nt_{p['id']}"):
-                                        from modules.llm import generate_preview_svg
-                                        with st.spinner("AIが図解を生成中..."):
-                                            svg = generate_preview_svg(
-                                                p.get("description", "") + "\n" + p.get("title", ""),
-                                                p.get("title", "")
-                                            )
-                                            if svg:
-                                                st.session_state.data_manager.update(p["id"], {"generated_svg": svg})
-                                                updated_p = st.session_state.data_manager.get_by_id(p["id"])
-                                                if updated_p:
-                                                    st.session_state.chroma_manager.add_practice(updated_p)
-                                                
-                                                st.success("図解を生成しました！（自動保存されました）")
-                                                st.rerun()
-
-                                # 説明（ビジュアルの下に移動）
-                                if p.get("description"):
-                                    st.markdown(p["description"])
-
-                                # 編集・削除エリア
-                                st.markdown("---")
-                                col_btns = st.columns([1, 1, 4])
-                                
-                                # 編集モード切り替え
-                                is_editing_key = f"editing_{p['id']}"
-                                is_editing = st.session_state.get(is_editing_key, False)
-                                
-                                with col_btns[0]:
-                                    if st.button("✏️ 編集", key=f"edit_list_{p['id']}"):
-                                        st.session_state[is_editing_key] = not is_editing
-                                        st.rerun()
-                                
-                                with col_btns[1]:
-                                    if st.button("🗑️ 削除", key=f"del_list_{p['id']}"):
-                                        st.session_state[f"confirm_del_{p['id']}"] = True
-                                        st.rerun()
-                                
-                                # 削除確認
-                                if st.session_state.get(f"confirm_del_{p['id']}"):
-                                    st.warning(f"本当に「{p['title']}」を削除しますか？")
-                                    col_yes, col_no = st.columns(2)
-                                    with col_yes:
-                                        if st.button("はい、削除します", key=f"yes_del_{p['id']}"):
-                                            st.session_state.data_manager.delete(p["id"])
-                                            st.session_state.chroma_manager.delete(p["id"])
-                                            st.success("削除しました")
-                                            st.rerun()
-                                    with col_no:
-                                        if st.button("キャンセル", key=f"no_del_{p['id']}"):
-                                            del st.session_state[f"confirm_del_{p['id']}"]
-                                            st.rerun()
-
-                                # 編集フォーム
-                                if is_editing:
-                                    with st.form(key=f"form_edit_{p['id']}"):
-                                        new_title = st.text_input("タイトル", p.get("title", ""))
-                                        new_desc = st.text_area("説明", p.get("description", ""))
-                                        
-                                        # コード編集
-                                        new_html = p.get("code_html", "")
-                                        new_css = p.get("code_css", "")
-                                        new_js = p.get("code_js", "")
-                                        
-                                        if p.get("content_type") == "code":
-                                            if new_html or new_css or new_js: # 既存があれば表示
-                                                st.subheader("コード編集")
-                                                new_html = st.text_area("HTML", new_html)
-                                                new_css = st.text_area("CSS", new_css)
-                                                new_js = st.text_area("JavaScript", new_js)
-
-                                        new_notes = st.text_area("補足", p.get("notes", ""))
-                                        
-                                        if st.form_submit_button("保存する"):
-                                            update_data = {
-                                                "title": new_title,
-                                                "description": new_desc,
-                                                "code_html": new_html,
-                                                "code_css": new_css,
-                                                "code_js": new_js,
-                                                "notes": new_notes
-                                            }
-                                            st.session_state.data_manager.update(p["id"], update_data)
-                                            # Chroma更新
-                                            updated_p = st.session_state.data_manager.get_by_id(p["id"])
-                                            if updated_p:
-                                                st.session_state.chroma_manager.add_practice(updated_p)
-                                            
-                                            st.session_state[is_editing_key] = False
-                                            st.success("保存しました！")
-                                            st.rerun()
+    
+                        st.markdown("") # スペース
 
 
     else:
         st.info("📭 データがありません。「登録」ページから追加してください。")
+
 logger.info(f"[一覧] 表示完了: {len(filtered_practices)}件")

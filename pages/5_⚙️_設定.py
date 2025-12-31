@@ -2,6 +2,7 @@
 設定ページ
 - 使用モデル一覧
 - API使用量・料金表示
+- ダークモード設定
 """
 import streamlit as st
 from config.settings import GEMINI_MODELS, EMBEDDING_DIMENSIONS, logger
@@ -10,14 +11,39 @@ from modules.usage_tracker import get_current_month_usage, get_all_usage, reset_
 # ページ設定
 st.set_page_config(page_title="設定", page_icon="⚙️", layout="wide")
 
-# 共通スタイル適用（サイドバー統一）
-from modules.ui_styles import inject_common_styles
-st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+# ダークモード初期化
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+# 共通スタイル適用（サイドバー統一 + ダークモード）
+from modules.ui_styles import inject_common_styles, apply_dark_mode_script
+st.markdown(inject_common_styles(
+    include_headings=True, 
+    sidebar_mode="narrow",
+    dark_mode=st.session_state.dark_mode
+), unsafe_allow_html=True)
 
 logger.info("=== 設定ページ表示 ===")
 
 # ヘッダー
 st.markdown("#### ⚙️ 設定")
+
+# ダークモード設定
+st.markdown("### 🌙 表示設定")
+
+col_dark, col_space = st.columns([1, 3])
+with col_dark:
+    dark_mode = st.toggle("ダークモード", value=st.session_state.dark_mode, key="dark_mode_toggle")
+    if dark_mode != st.session_state.dark_mode:
+        st.session_state.dark_mode = dark_mode
+        st.rerun()
+
+if st.session_state.dark_mode:
+    st.caption("🌙 ダークモードが有効です")
+else:
+    st.caption("☀️ ライトモードが有効です")
+
+st.markdown("---")
 
 # プレビュー生成設定
 st.markdown("### 🎨 プレビュー生成")

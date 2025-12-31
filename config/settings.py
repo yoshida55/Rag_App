@@ -36,6 +36,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 IMAGES_DIR = PROJECT_ROOT / "images"
 CHROMA_DB_DIR = DATA_DIR / "chroma_db"
 PRACTICES_JSON = DATA_DIR / "practices.json"
+ANSWER_CACHE_JSON = DATA_DIR / "answer_cache.json"
 USAGE_LOG_JSON = DATA_DIR / "usage_log.json"
 
 # ディレクトリ作成
@@ -62,7 +63,7 @@ CONTENT_TYPES = {
 GEMINI_MODELS = {
     "embedding": "gemini-embedding-001",      # 最新Embedding（3072次元）
     "answer": "gemini-3-pro-preview",         # 検索回答用（最新Pro）
-    "format": "gemini-2.5-flash",             # AI整形・タイトル生成用
+    "format": "gemini-3-pro-preview",         # AI整形・タイトル生成用（Proに変更）
     "check": "gemini-2.5-flash"               # AIチェック用
 }
 

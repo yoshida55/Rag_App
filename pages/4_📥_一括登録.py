@@ -19,9 +19,17 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 # ページ設定
 st.set_page_config(page_title="一括登録", page_icon="📥", layout="wide")
 
-# 共通スタイル適用（サイドバー統一）
+# ダークモード初期化
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+# 共通スタイル適用（サイドバー統一 + ダークモード）
 from modules.ui_styles import inject_common_styles
-st.markdown(inject_common_styles(include_headings=True, sidebar_mode="narrow"), unsafe_allow_html=True)
+st.markdown(inject_common_styles(
+    include_headings=True, 
+    sidebar_mode="narrow",
+    dark_mode=st.session_state.dark_mode
+), unsafe_allow_html=True)
 
 logger.info("=== 一括登録ページ表示 ===")
 

@@ -10,6 +10,7 @@ from typing import Optional
 
 from config.settings import PRACTICES_JSON, DATA_DIR, logger
 from modules.drive_manager import DriveManager
+from modules.llm import generate_category_tag
 
 
 class DataManager:
@@ -89,12 +90,55 @@ class DataManager:
         practice["created_at"] = practice.get("created_at") or now
         practice["updated_at"] = now
 
+        # サブカテゴリ自動生成（なければ）
+        if not practice.get("sub_category"):
+            try:
+                practice["sub_category"] = generate_category_tag(
+                    practice.get("title", ""),
+                    practice.get("description", ""),
+                    practice.get("tags", [])
+                )
+            except Exception as e:
+                logger.error(f"[DataManager] 自動カテゴリ生成失敗: {e}")
+                practice["sub_category"] = "未分類"
+
         practices.append(practice)
         data["practices"] = practices
         self._save_data(data)
 
         logger.debug(f"[DataManager] 追加: {practice['id']} - {practice.get('title', '')[:30]}")
+        
+        # 関連キャッシュを無効化
+        self._invalidate_related_cache(practice)
+        
         return practice["id"]
+
+    def _invalidate_related_cache(self, practice: dict):
+        """登録データに関連するキャッシュを無効化"""
+        try:
+            from modules.answer_cache import AnswerCache
+            
+            # 検索テキスト生成（タイトル + 説明 + タグ）
+            search_text = " ".join([
+                practice.get("title", ""),
+                practice.get("description", "")[:500],
+                " ".join(practice.get("tags", []))
+            ])
+            
+            if not search_text.strip():
+                return
+            
+            cache = AnswerCache()
+            deleted = cache.invalidate_related(
+                text=search_text,
+                category=practice.get("category"),
+                threshold=0.60
+            )
+            
+            if deleted > 0:
+                logger.info(f"[DataManager] 関連キャッシュ {deleted}件を無効化")
+        except Exception as e:
+            logger.warning(f"[DataManager] キャッシュ無効化エラー（処理継続）: {e}")
 
     def update(self, practice_id: str, updates: dict) -> bool:
         """
@@ -173,6 +217,34 @@ class DataManager:
 
         logger.debug(f"[DataManager] テキスト検索: '{keyword}' -> {len(results)}件")
         return results
+
+
+    def auto_categorize_all(self, overwrite: bool = False):
+        """全データのサブカテゴリを自動生成
+        
+        Args:
+            overwrite: Trueなら既に設定済みのものも再生成する
+        """
+        data = self._load_data()
+        practices = data.get("practices", [])
+        updated_count = 0
+        
+        for p in practices:
+            if not p.get("sub_category") or overwrite:
+                p["sub_category"] = generate_category_tag(
+                    p.get("title", ""),
+                    p.get("description", ""),
+                    p.get("tags", [])
+                )
+                updated_count += 1
+                logger.info(f"[AutoTag] {p.get('title')} -> {p['sub_category']}")
+        
+        if updated_count > 0:
+            data["practices"] = practices
+            self._save_data(data)
+            logger.info(f"[DataManager] {updated_count}件のサブカテゴリを一括生成しました")
+        
+        return updated_count
 
 
 if __name__ == "__main__":

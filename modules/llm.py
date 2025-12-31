@@ -643,7 +643,71 @@ def generate_preview_html(description: str, title: str = "") -> str:
         return ""
 
 
-if __name__ == "__main__":
+    except Exception as e:
+        logger.error(f"[LLM] HTML生成エラー: {e}")
+        return ""
+
+
+def generate_category_tag(title: str, description: str, tags: list[str] = None) -> str:
+    """
+    内容から中カテゴリ（サブカテゴリ）を自動生成
+    
+    Args:
+        title: タイトル
+        description: 説明文
+        tags: 既存タグリスト
+    
+    Returns:
+        中カテゴリ名（例: "レイアウト", "文字装飾"）
+    """
+    logger.debug(f"[LLM] カテゴリ生成開始: {title}")
+    
+    model = genai.GenerativeModel(GEMINI_MODELS["format"])
+    
+    tags_str = ", ".join(tags) if tags else "なし"
+    
+    prompt = f"""
+    以下の技術やコードのトピックを分類する「中カテゴリ名」を1つだけ決定してください。
+    
+    【重要：HTML/CSSのレイアウト系は細分化してください】
+    「レイアウト」という広すぎる言葉はなるべく避け、以下のように具体的にしてください：
+    - Flexbox
+    - Grid
+    - 配置・余白 (margin, padding, position, z-index, 揃え)
+    - サイズ・構造 (width, height, box-sizing, display)
+    - レスポンシブ (media query, ブレークポイント)
+    
+    【その他のカテゴリ例】
+    文字装飾, 配色, フォーム, アニメーション, 画像・メディア, 基礎知識, 環境構築, ツール
+    
+    【ルール】
+    - 出力は中カテゴリ名のみ（カッコや余計な文字は無し）
+    - なるべく短い言葉（2〜6文字推奨、「...について」などは不要）
+    
+    タイトル: {title}
+    説明: {description[:500]}
+    タグ: {tags_str}
+    
+    中カテゴリ名:
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        category = response.text.strip().replace("「", "").replace("」", "").replace('"', "").replace("'", "")
+        # 改行など削除
+        category = category.split("\n")[0].strip()
+        
+        # 使用量記録
+        input_tokens = estimate_tokens(prompt)
+        output_tokens = estimate_tokens(category)
+        record_usage(GEMINI_MODELS["format"], input_tokens, output_tokens)
+        
+        logger.debug(f"[LLM] カテゴリ決定: {category}")
+        return category
+        
+    except Exception as e:
+        logger.error(f"[LLM] カテゴリ生成エラー: {e}")
+        return "その他"
     # テスト実行
     print("=== LLM テスト ===")
 

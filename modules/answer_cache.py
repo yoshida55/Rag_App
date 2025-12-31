@@ -10,6 +10,7 @@ from pathlib import Path
 
 from config.settings import DATA_DIR, logger
 from .embedding import get_embedding
+from modules.drive_manager import DriveManager
 
 # キャッシュファイルパス
 CACHE_FILE = DATA_DIR / "answer_cache.json"
@@ -23,6 +24,12 @@ class AnswerCache:
 
     def __init__(self):
         """キャッシュ初期化"""
+        self.drive_manager = DriveManager()
+        
+        # 起動時にDriveから最新キャッシュを取得
+        if not self.drive_manager.download_cache():
+             logger.info("[Cache] Driveにキャッシュなし（または失敗）、ローカル優先")
+
         self.cache = self._load_cache()
         logger.info(f"[Cache] 初期化完了: {len(self.cache.get('entries', []))}件のキャッシュ")
 
@@ -42,6 +49,9 @@ class AnswerCache:
             with open(CACHE_FILE, 'w', encoding='utf-8') as f:
                 json.dump(self.cache, f, ensure_ascii=False, indent=2)
             logger.debug("[Cache] 保存完了")
+            
+            # Drive同期（アップロード）
+            self.drive_manager.upload_cache()
         except Exception as e:
             logger.error(f"[Cache] 保存エラー: {e}")
 
@@ -146,3 +156,59 @@ class AnswerCache:
             "count": len(entries),
             "categories": list(set(e.get("category") for e in entries if e.get("category")))
         }
+
+    def invalidate_related(self, text: str, category: str = None, threshold: float = 0.60) -> int:
+        """
+        指定テキストと関連性の高いキャッシュを無効化
+
+        Args:
+            text: 新規登録データのテキスト（タイトル+説明+タグ）
+            category: カテゴリ（指定あれば同カテゴリのみ対象）
+            threshold: 無効化の類似度閾値（デフォルト60%）
+
+        Returns:
+            削除したエントリ数
+        """
+        if not self.cache.get("entries") or not text.strip():
+            return 0
+
+        # 新規データのテキストをembedding
+        try:
+            text_embedding = get_embedding(text[:2000])  # 最大2000文字
+        except Exception as e:
+            logger.error(f"[Cache] Embedding生成エラー: {e}")
+            return 0
+
+        # 削除対象を収集
+        entries_to_keep = []
+        deleted_count = 0
+
+        for entry in self.cache["entries"]:
+            # カテゴリフィルタ（指定あれば）
+            if category and entry.get("category") and entry.get("category") != category:
+                entries_to_keep.append(entry)
+                continue
+
+            # 類似度計算
+            try:
+                score = self._cosine_similarity(text_embedding, entry["embedding"])
+                
+                if score >= threshold:
+                    # 閾値以上 → 削除対象
+                    deleted_count += 1
+                    logger.debug(f"[Cache] 無効化: '{entry['query'][:30]}...' (類似度: {score:.1%})")
+                else:
+                    entries_to_keep.append(entry)
+            except Exception as e:
+                # エラー時は保持
+                entries_to_keep.append(entry)
+                logger.warning(f"[Cache] 類似度計算エラー: {e}")
+
+        # 更新
+        if deleted_count > 0:
+            self.cache["entries"] = entries_to_keep
+            self._save_cache()
+            logger.info(f"[Cache] 関連キャッシュ {deleted_count}件を無効化（閾値: {threshold:.0%}）")
+
+        return deleted_count
+

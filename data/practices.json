@@ -20,7 +20,8 @@
       "notes": "IE非対応。古いブラウザではmarginで代用。",
       "created_at": "2025-12-27T10:00:00",
       "updated_at": "2025-12-30T08:54:06.513955",
-      "is_completed": true
+      "is_completed": true,
+      "sub_category": "Flexbox"
     },
     {
       "id": "demo-002",
@@ -40,7 +41,8 @@
       "image_path": null,
       "notes": "モバイルでは1カラムに自動切り替え。",
       "created_at": "2025-12-27T11:00:00",
-      "updated_at": "2025-12-27T11:00:00"
+      "updated_at": "2025-12-27T11:00:00",
+      "sub_category": "Grid"
     },
     {
       "id": "demo-003",
@@ -60,7 +62,8 @@
       "image_path": null,
       "notes": "transform使用でGPUアクセラレーション有効。",
       "created_at": "2025-12-27T12:00:00",
-      "updated_at": "2025-12-27T12:00:00"
+      "updated_at": "2025-12-27T12:00:00",
+      "sub_category": "アニメーション"
     },
     {
       "id": "demo-005",
@@ -80,7 +83,8 @@
       "image_path": null,
       "notes": "可読性を保つため、複雑すぎる場合は通常のループを使用。",
       "created_at": "2025-12-27T14:00:00",
-      "updated_at": "2025-12-27T14:00:00"
+      "updated_at": "2025-12-27T14:00:00",
+      "sub_category": "基礎文法"
     },
     {
       "title": "CSS背景画像のパスとPC/SP",
@@ -103,7 +107,8 @@
       "image_path": null,
       "id": "503cc8af-4616-4fac-8c6d-84a483c0dd91",
       "created_at": "2025-12-28T13:06:17.049371",
-      "updated_at": "2025-12-28T13:06:17.049371"
+      "updated_at": "2025-12-28T13:06:17.049371",
+      "sub_category": "画像・メディア"
     },
     {
       "title": "背景画像の出し分けCSS設定",
@@ -122,7 +127,8 @@
       "image_path": null,
       "id": "82e2af5f-7813-42f3-9c80-90a8fd8646cf",
       "created_at": "2025-12-28T13:06:31.921703",
-      "updated_at": "2025-12-28T13:06:31.921703"
+      "updated_at": "2025-12-28T13:06:31.921703",
+      "sub_category": "画像・メディア"
     },
     {
       "title": "☑　ポジションアブソリュートの使い方",
@@ -144,7 +150,8 @@
       "image_path": null,
       "id": "a0a598a9-7bfe-47bb-b122-58717b37ae4b",
       "created_at": "2025-12-28T13:06:49.569340",
-      "updated_at": "2025-12-30T00:42:30.921091"
+      "updated_at": "2025-12-30T00:42:30.921091",
+      "sub_category": "配置・余白"
     },
     {
       "title": "aタグの縦書きCSS設定",
@@ -164,7 +171,8 @@
       "image_path": null,
       "id": "127d24aa-3a4b-400b-b71e-feb077ef210b",
       "created_at": "2025-12-28T13:06:57.495479",
-      "updated_at": "2025-12-28T13:06:57.495479"
+      "updated_at": "2025-12-28T13:06:57.495479",
+      "sub_category": "文字装飾"
     },
     {
       "title": "Prettierエラー、Copilotでタグ修正",
@@ -185,7 +193,8 @@
       "image_path": null,
       "id": "6bf2237d-3458-4233-b8b0-a7769d7a0528",
       "created_at": "2025-12-28T13:07:16.807657",
-      "updated_at": "2025-12-28T13:07:16.807657"
+      "updated_at": "2025-12-28T13:07:16.807657",
+      "sub_category": "ツール"
     },
     {
       "title": "フレックスの並び順序",
@@ -205,7 +214,8 @@
       "image_path": null,
       "id": "5685edcc-9929-4f74-baf6-532a2a51443c",
       "created_at": "2025-12-28T13:07:26.613368",
-      "updated_at": "2025-12-28T13:07:26.613368"
+      "updated_at": "2025-12-28T13:07:26.613368",
+      "sub_category": "Flexbox"
     },
     {
       "title": "Flexboxで縦書き要素を横並びにする",
@@ -228,7 +238,8 @@
       "id": "09c31d04-38c2-4c0a-b92d-6384886195ce",
       "created_at": "2025-12-28T13:07:40.604774",
       "updated_at": "2025-12-30T00:21:28.764376",
-      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\"/>\n\n  <!-- 全体タイトル -->\n  <text x=\"450\" y=\"30\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#333\" text-anchor=\"middle\">\n    Flexboxで縦書き要素を横並びにする\n  </text>\n\n  <!-- 左側: 問題点 (Before) -->\n  <g>\n    <!-- セクション枠 -->\n    <rect x=\"20\" y=\"60\" width=\"430\" height=\"470\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"8\" ry=\"8\"/>\n    <text x=\"235\" y=\"90\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\" fill=\"#f44336\" text-anchor=\"middle\">\n      問題: nav-itemが縦書きにならない\n    </text>\n\n    <!-- HTML構造 -->\n    <text x=\"40\" y=\"120\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      HTML構造:\n    </text>\n    <rect x=\"40\" y=\"135\" width=\"390\" height=\"90\" fill=\"#f5f5f5\" stroke=\"#9e9e9e\" stroke-width=\"1\"/>\n    <text x=\"50\" y=\"155\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;ul class=\"footer_location\"&gt;\n    </text>\n    <rect x=\"70\" y=\"165\" width=\"170\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"80\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <rect x=\"250\" y=\"165\" width=\"170\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"260\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <text x=\"50\" y=\"215\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;/ul&gt;\n    </text>\n\n    <!-- CSSコード -->\n    <text x=\"40\" y=\"250\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      適用されているCSS:\n    </text>\n    <rect x=\"40\" y=\"265\" width=\"390\" height=\"80\" fill=\"#fff3e0\" stroke=\"#ff9800\" stroke-width=\"1\"/>\n    <text x=\"50\" y=\"285\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      .footer_location {\n    </text>\n    <text x=\"65\" y=\"300\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  display: flex;</tspan>\n    </text>\n    <text x=\"65\" y=\"315\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  gap: 3rem;</tspan>\n    </text>\n    <text x=\"65\" y=\"330\" font-family=\"monospace\" font-size=\"12\" fill=\"#f44336\">\n      <tspan font-weight=\"bold\">  writing-mode: horizontal-tb;</tspan>\n    </text>\n    <text x=\"50\" y=\"345\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      }\n    </text>\n\n    <!-- 結果表示 (before) -->\n    <text x=\"40\" y=\"375\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      表示結果:\n    </text>\n    <rect x=\"50\" y=\"390\" width=\"370\" height=\"120\" fill=\"#ffffff\" stroke=\"#9e9e9e\" stroke-width=\"1\" rx=\"5\" ry=\"5\"/>\n    <g transform=\"translate(60,410)\">\n      <rect x=\"0\" y=\"0\" width=\"150\" height=\"30\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"5\" y=\"20\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        03|XXXX|XXXX\n      </text>\n    </g>\n    <g transform=\"translate(220,410)\">\n      <rect x=\"0\" y=\"0\" width=\"180\" height=\"30\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"5\" y=\"20\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        〒106-0032 東京都港区...\n      </text>\n    </g>\n    <text x=\"235\" y=\"465\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\" text-anchor=\"middle\">\n      (横書きのまま横並びになっている)\n    </text>\n  </g>\n\n  <!-- 右側: 解決策 (After) -->\n  <g>\n    <!-- セクション枠 -->\n    <rect x=\"470\" y=\"60\" width=\"410\" height=\"470\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"8\" ry=\"8\"/>\n    <text x=\"675\" y=\"90\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\" fill=\"#4caf50\" text-anchor=\"middle\">\n      解決策: 縦書きで横並びにする\n    </text>\n\n    <!-- HTML構造 (Beforeと同じ) -->\n    <text x=\"490\" y=\"120\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      HTML構造: (変更なし)\n    </text>\n    <rect x=\"490\" y=\"135\" width=\"370\" height=\"90\" fill=\"#f5f5f5\" stroke=\"#9e9e9e\" stroke-width=\"1\"/>\n    <text x=\"500\" y=\"155\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;ul class=\"footer_location\"&gt;\n    </text>\n    <rect x=\"520\" y=\"165\" width=\"160\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"530\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <rect x=\"690\" y=\"165\" width=\"160\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"700\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <text x=\"500\" y=\"215\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;/ul&gt;\n    </text>\n\n    <!-- CSSコード -->\n    <text x=\"490\" y=\"250\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      解決策のCSS (.footer_locationに適用):\n    </text>\n    <rect x=\"490\" y=\"265\" width=\"370\" height=\"100\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"1\"/>\n    <text x=\"500\" y=\"285\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      .target {\n    </text>\n    <text x=\"515\" y=\"300\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  display: flex;</tspan>\n    </text>\n    <text x=\"515\" y=\"315\" font-family=\"monospace\" font-size=\"12\" fill=\"#4caf50\">\n      <tspan font-weight=\"bold\">  writing-mode: vertical-rl;</tspan>\n      <tspan dx=\"5\" fill=\"#66bb6a\">/* 縦書きにする */</tspan>\n    </text>\n    <text x=\"515\" y=\"330\" font-family=\"monospace\" font-size=\"12\" fill=\"#4caf50\">\n      <tspan font-weight=\"bold\">  flex-direction: column;</tspan>\n      <tspan dx=\"5\" fill=\"#66bb6a\">/* 横に並べるための必須スイッチ */</tspan>\n    </text>\n    <text x=\"500\" y=\"345\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      }\n    </text>\n\n    <!-- 結果表示 (after) -->\n    <text x=\"490\" y=\"375\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      表示結果:\n    </text>\n    <rect x=\"500\" y=\"390\" width=\"350\" height=\"120\" fill=\"#ffffff\" stroke=\"#9e9e9e\" stroke-width=\"1\" rx=\"5\" ry=\"5\"/>\n    <g transform=\"translate(540,400)\">\n      <rect x=\"0\" y=\"0\" width=\"30\" height=\"100\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"15\" y=\"10\" writing-mode=\"vertical-rl\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        03|XXXX|XXXX\n      </text>\n    </g>\n    <g transform=\"translate(620,400)\">\n      <rect x=\"0\" y=\"0\" width=\"30\" height=\"100\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"15\" y=\"10\" writing-mode=\"vertical-rl\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        〒106-0032 東京都港区...\n      </text>\n    </g>\n    <text x=\"675\" y=\"465\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\" text-anchor=\"middle\">\n      (縦書きで横並びになっている)\n    </text>\n  </g>\n</svg>"
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\"/>\n\n  <!-- 全体タイトル -->\n  <text x=\"450\" y=\"30\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#333\" text-anchor=\"middle\">\n    Flexboxで縦書き要素を横並びにする\n  </text>\n\n  <!-- 左側: 問題点 (Before) -->\n  <g>\n    <!-- セクション枠 -->\n    <rect x=\"20\" y=\"60\" width=\"430\" height=\"470\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"8\" ry=\"8\"/>\n    <text x=\"235\" y=\"90\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\" fill=\"#f44336\" text-anchor=\"middle\">\n      問題: nav-itemが縦書きにならない\n    </text>\n\n    <!-- HTML構造 -->\n    <text x=\"40\" y=\"120\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      HTML構造:\n    </text>\n    <rect x=\"40\" y=\"135\" width=\"390\" height=\"90\" fill=\"#f5f5f5\" stroke=\"#9e9e9e\" stroke-width=\"1\"/>\n    <text x=\"50\" y=\"155\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;ul class=\"footer_location\"&gt;\n    </text>\n    <rect x=\"70\" y=\"165\" width=\"170\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"80\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <rect x=\"250\" y=\"165\" width=\"170\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"260\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <text x=\"50\" y=\"215\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;/ul&gt;\n    </text>\n\n    <!-- CSSコード -->\n    <text x=\"40\" y=\"250\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      適用されているCSS:\n    </text>\n    <rect x=\"40\" y=\"265\" width=\"390\" height=\"80\" fill=\"#fff3e0\" stroke=\"#ff9800\" stroke-width=\"1\"/>\n    <text x=\"50\" y=\"285\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      .footer_location {\n    </text>\n    <text x=\"65\" y=\"300\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  display: flex;</tspan>\n    </text>\n    <text x=\"65\" y=\"315\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  gap: 3rem;</tspan>\n    </text>\n    <text x=\"65\" y=\"330\" font-family=\"monospace\" font-size=\"12\" fill=\"#f44336\">\n      <tspan font-weight=\"bold\">  writing-mode: horizontal-tb;</tspan>\n    </text>\n    <text x=\"50\" y=\"345\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      }\n    </text>\n\n    <!-- 結果表示 (before) -->\n    <text x=\"40\" y=\"375\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      表示結果:\n    </text>\n    <rect x=\"50\" y=\"390\" width=\"370\" height=\"120\" fill=\"#ffffff\" stroke=\"#9e9e9e\" stroke-width=\"1\" rx=\"5\" ry=\"5\"/>\n    <g transform=\"translate(60,410)\">\n      <rect x=\"0\" y=\"0\" width=\"150\" height=\"30\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"5\" y=\"20\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        03|XXXX|XXXX\n      </text>\n    </g>\n    <g transform=\"translate(220,410)\">\n      <rect x=\"0\" y=\"0\" width=\"180\" height=\"30\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"5\" y=\"20\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        〒106-0032 東京都港区...\n      </text>\n    </g>\n    <text x=\"235\" y=\"465\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\" text-anchor=\"middle\">\n      (横書きのまま横並びになっている)\n    </text>\n  </g>\n\n  <!-- 右側: 解決策 (After) -->\n  <g>\n    <!-- セクション枠 -->\n    <rect x=\"470\" y=\"60\" width=\"410\" height=\"470\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"8\" ry=\"8\"/>\n    <text x=\"675\" y=\"90\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\" fill=\"#4caf50\" text-anchor=\"middle\">\n      解決策: 縦書きで横並びにする\n    </text>\n\n    <!-- HTML構造 (Beforeと同じ) -->\n    <text x=\"490\" y=\"120\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      HTML構造: (変更なし)\n    </text>\n    <rect x=\"490\" y=\"135\" width=\"370\" height=\"90\" fill=\"#f5f5f5\" stroke=\"#9e9e9e\" stroke-width=\"1\"/>\n    <text x=\"500\" y=\"155\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;ul class=\"footer_location\"&gt;\n    </text>\n    <rect x=\"520\" y=\"165\" width=\"160\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"530\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <rect x=\"690\" y=\"165\" width=\"160\" height=\"40\" fill=\"#ffffff\" stroke=\"#ccc\" stroke-width=\"1\"/>\n    <text x=\"700\" y=\"185\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;li class=\"nav-item\"&gt;...&lt;/li&gt;\n    </text>\n    <text x=\"500\" y=\"215\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      &lt;/ul&gt;\n    </text>\n\n    <!-- CSSコード -->\n    <text x=\"490\" y=\"250\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      解決策のCSS (.footer_locationに適用):\n    </text>\n    <rect x=\"490\" y=\"265\" width=\"370\" height=\"100\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"1\"/>\n    <text x=\"500\" y=\"285\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      .target {\n    </text>\n    <text x=\"515\" y=\"300\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      <tspan fill=\"#333\">  display: flex;</tspan>\n    </text>\n    <text x=\"515\" y=\"315\" font-family=\"monospace\" font-size=\"12\" fill=\"#4caf50\">\n      <tspan font-weight=\"bold\">  writing-mode: vertical-rl;</tspan>\n      <tspan dx=\"5\" fill=\"#66bb6a\">/* 縦書きにする */</tspan>\n    </text>\n    <text x=\"515\" y=\"330\" font-family=\"monospace\" font-size=\"12\" fill=\"#4caf50\">\n      <tspan font-weight=\"bold\">  flex-direction: column;</tspan>\n      <tspan dx=\"5\" fill=\"#66bb6a\">/* 横に並べるための必須スイッチ */</tspan>\n    </text>\n    <text x=\"500\" y=\"345\" font-family=\"monospace\" font-size=\"12\" fill=\"#333\">\n      }\n    </text>\n\n    <!-- 結果表示 (after) -->\n    <text x=\"490\" y=\"375\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">\n      表示結果:\n    </text>\n    <rect x=\"500\" y=\"390\" width=\"350\" height=\"120\" fill=\"#ffffff\" stroke=\"#9e9e9e\" stroke-width=\"1\" rx=\"5\" ry=\"5\"/>\n    <g transform=\"translate(540,400)\">\n      <rect x=\"0\" y=\"0\" width=\"30\" height=\"100\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"15\" y=\"10\" writing-mode=\"vertical-rl\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        03|XXXX|XXXX\n      </text>\n    </g>\n    <g transform=\"translate(620,400)\">\n      <rect x=\"0\" y=\"0\" width=\"30\" height=\"100\" fill=\"#e0e0e0\" stroke=\"#757575\" stroke-width=\"1\"/>\n      <text x=\"15\" y=\"10\" writing-mode=\"vertical-rl\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#333\">\n        〒106-0032 東京都港区...\n      </text>\n    </g>\n    <text x=\"675\" y=\"465\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\" text-anchor=\"middle\">\n      (縦書きで横並びになっている)\n    </text>\n  </g>\n</svg>",
+      "sub_category": "Flexbox"
     },
     {
       "title": "Flexの子要素とwidthの優先順位",
@@ -249,7 +260,8 @@
       "id": "b4d8f2e3-4606-4699-8a74-836d38139f22",
       "created_at": "2025-12-28T13:07:48.061091",
       "updated_at": "2025-12-30T09:15:18.924080",
-      "is_completed": true
+      "is_completed": true,
+      "sub_category": "Flexbox"
     },
     {
       "title": "CSSレイアウト：Absoluteを減らす理由",
@@ -271,7 +283,8 @@
       "image_path": null,
       "id": "e963e86d-ac09-4a1b-9526-00d464a2a461",
       "created_at": "2025-12-28T13:08:03.656206",
-      "updated_at": "2025-12-28T13:08:03.656206"
+      "updated_at": "2025-12-28T13:08:03.656206",
+      "sub_category": "配置・余白"
     },
     {
       "title": "クラスを直接指定する方法",
@@ -290,7 +303,8 @@
       "image_path": null,
       "id": "b4ced560-4190-4385-997c-3cae00c18f37",
       "created_at": "2025-12-28T13:08:15.310674",
-      "updated_at": "2025-12-28T13:08:15.310674"
+      "updated_at": "2025-12-28T13:08:15.310674",
+      "sub_category": "基礎知識"
     },
     {
       "title": "全体像把握とパディング処理",
@@ -310,7 +324,8 @@
       "id": "afab391c-df5e-477e-b57c-362fa01d0fb2",
       "created_at": "2025-12-28T13:08:26.686298",
       "updated_at": "2025-12-30T00:50:00.675483",
-      "generated_svg": ""
+      "generated_svg": "",
+      "sub_category": "配置・余白"
     },
     {
       "title": "HTMLナビとリストの使い分け",
@@ -332,7 +347,8 @@
       "image_path": null,
       "id": "2b26fca5-1217-48d7-b8a7-95e5b2f572a8",
       "created_at": "2025-12-28T13:08:45.340874",
-      "updated_at": "2025-12-28T13:08:45.340874"
+      "updated_at": "2025-12-28T13:08:45.340874",
+      "sub_category": "文書構造"
     },
     {
       "title": "多言語対応h2タグ構造",
@@ -354,7 +370,8 @@
       "image_path": null,
       "id": "55cfe2ac-d6ca-4f52-9e38-eef3d034f8aa",
       "created_at": "2025-12-28T13:08:52.714692",
-      "updated_at": "2025-12-28T13:08:52.714692"
+      "updated_at": "2025-12-28T13:08:52.714692",
+      "sub_category": "見出し"
     },
     {
       "title": "BODY背景色設定のヒント",
@@ -375,7 +392,8 @@
       "image_path": null,
       "id": "83c0d70f-3d4b-4165-ab3b-02a3ad565a46",
       "created_at": "2025-12-28T13:09:03.478460",
-      "updated_at": "2025-12-28T13:09:03.478460"
+      "updated_at": "2025-12-28T13:09:03.478460",
+      "sub_category": "配色"
     },
     {
       "title": "URLハッシュで特定位置表示",
@@ -394,7 +412,8 @@
       "image_path": null,
       "id": "7fe5c9f1-382e-4d83-a0ff-4219b4a11367",
       "created_at": "2025-12-28T13:09:14.506765",
-      "updated_at": "2025-12-28T13:09:14.506765"
+      "updated_at": "2025-12-28T13:09:14.506765",
+      "sub_category": "ページ内リンク"
     },
     {
       "title": "Flexとabsolute配置のずれ",
@@ -415,7 +434,8 @@
       "image_path": null,
       "id": "6610c48c-5e1e-4a11-95eb-1c4619055005",
       "created_at": "2025-12-28T13:09:27.683275",
-      "updated_at": "2025-12-28T13:09:27.683275"
+      "updated_at": "2025-12-28T13:09:27.683275",
+      "sub_category": "Flexbox"
     },
     {
       "title": "CSS指定忘れとレイアウト技術",
@@ -437,22 +457,8 @@
       "image_path": null,
       "id": "b87be40b-29e6-47e9-aa2c-635dad45ec38",
       "created_at": "2025-12-28T13:09:39.492577",
-      "updated_at": "2025-12-28T13:09:39.492577"
-    },
-    {
-      "title": "無題",
-      "category": "html_css",
-      "content_type": "manual",
-      "description": "# flex\n\n[02_HTML・CSS](https://www.notion.so/02_HTML-CSS-2b21be94f11180dbbad7de773ff737f4?pvs=21) \n\n　\n\n<aside>\n💡\n\n### 両サイドに画像と、文章をならべる。\n\n### 画像はサイズ指定でびっしり\n\n### 文章エリアは左右にパディング\n\n</aside>\n\n- 詳細\n    \n    ```css\n    .recipe_row {\n      display: flex;\n    }\n    \n    /* ===============================================\n      メインビジュアル\n     =============================================== */\n    .recipe_detail_image_item {\n      height: 70rem;\n      width: 60rem;\n      display: block;\n      object-fit: cover;\n    }\n    \n    /* ===============================================\n     タイトル、説明文、材料 \n     =============================================== */\n    .recipe_detail_main_item {\n      flex: 1;\n      height : 70rem;\n      padding : 3.5rem 6rem 0 6rem;\n    }\n    \n    ```\n    \n\n　\n\n<aside>\n💡\n\n### **親要素のwidthを指定せず、子要素の内容に合わせて自動計算させる　ナビとか、**\n\n### あえてwidthを指定せず、子要素にゆだねる\n\n</aside>\n\n- 基本原則\n    \n    **親要素のwidthを指定せず、子要素の内容に合わせて自動計算させる**\n    \n    ---\n    \n    ### 具体例：ナビゲーション\n    \n    **❌ 従来の書き方（固定幅）**\n    \n    css\n    \n    ```css\n    .navi_row {\n      width: 30rem;  /* 親を固定 */\n    }\n    \n    　└ flex 子要素　　 \n    .navi_items_list {\n      width: 19.2rem;  /* 子も固定 */\n    }\n    /* → 計算が合わない、柔軟性がない */\n    \n    　　　└ この下にメニュー項目が三つある\n    ```\n    \n    **✅ 推奨の書き方（自動計算）　→WIDTHを指定しない**\n    \n    css\n    \n    ```css\n    .navi_row {\n      display: flex;\n      gap: 5rem;\n      /* widthを指定しない */\n    }\n    \n     └ flex 子要素　　 \n    .navi_items_list {\n      display: flex;\n      gap: 3rem;\n      /* widthを指定しない */\n    }\n    　　　└ この下にメニュー項目が三つある\n    ```\n    \n    ---\n    \n    ### 幅の決まり方（内側→外側）\n    \n    **1. 一番内側の要素**（テキストや画像）のサイズが決まる\n    \n    - `Concept` = 5.2rem\n    - `Work` = 3.2rem\n    - `Contact` = 4.8rem\n    \n    **2. その親要素**が自動計算される\n    \n    - `.navi_items_list` = 5.2 + 3(gap) + 3.2 + 3(gap) + 4.8 = **19.2rem**\n    \n    **3. さらにその親要素**も自動計算される\n    \n    - `.navi_row` = 12.1(logo) + 5(gap) + 19.2(navi) = **36.3rem**\n    \n    ---\n    \n    ### メリット\n    \n    - テキストが長くなっても自動で調整される\n    - 計算ミスがない\n    - コードがシンプル\n    - レスポンシブ対応が楽\n    \n    ---\n    \n    ### 例外：固定すべきもの\n    \n    **画像は固定幅を指定する**（アスペクト比を保つため）\n    \n    例：`.logo_item { width: 12.1rem; }`\n    \n\n![image.png](image.png)\n\n<aside>\n💡\n\nflex-wrap　で複数の要素を改行させる　例）　４枚カード　上 2枚　下２枚\n\n</aside>\n\n- **1. なぜ「50%」なのか？**\n    \n    \n    **1列に2枚並べたいから**です。\n    　　• 全体を100%としたとき、半分（100 ÷ 2）は **50%** です。\n    　　• もし3枚並べたいなら、100 ÷ 3 で **33.33%** になります。\n    **2. なぜ「-3.2rem」なのか？**\n    **隙間（gap）の分だけカードを細くしないと、はみ出るから**です。\n    　　• 設定した `gap` は **6.4rem** です。\n    　　• この隙間は「2枚の間」に1つだけ存在します。\n    　　• この **6.4rem** という「余計な幅」を、2枚のカードで半分ずつ（6.4 ÷ 2 = **3.2**）負担して削ります。\n    **図解で見る合計幅**\n    　　計算式：**(カード1) + (隙間) + (カード2) = 合計項目計算式合計計算前**50% + 6.4rem + 50%**100% + 6.4rem**（はみ出る ❌）**3.2ずつ引く**(　　50% - 3.2rem) + 6.4rem + (50% - 3.2rem)**100%**（ピッタリ ✅）\n    \n    ```css\n    /* ▼ Flex親（4件のカードを横並び＋折り返し） */\n    .business_row {\n      width: 80rem;\n      display: flex;\n      flex-wrap: wrap;　★ここで折り返す\n    \n      row-gap: 1.7rem;\n      column-gap: 6.4rem;\n      margin: 0 auto;\n    }\n    \n    /* └ Flex子要素（カード1枚分） */\n    .business_item {\n      width: calc(50% - 3.2rem);　★この計算式だと固定で折り返す\n    }\n    ```\n    \n\n![image.png](image%201.png)\n\n<aside>\n💡\n\nFlexで画像を折り返して表示する。　横幅、縦幅調整\n\n</aside>\n\n`.business_row {\n  display: flex;\n  flex-wrap: wrap;\n  row-gap: 10rem;    /* 行間（縦方向） */\n  column-gap: 6.4rem; /* 列間（横方向） */\n}`\n\n<aside>\n💡\n\nFlex指定されたwidthに対して、子要素がおさまりきらない場合　－マージンをつかうとおきることがある\n\n</aside>\n\n![image.png](image%202.png)\n\n```css\n/* ▼ Flex親（左：会社情報、右：画像） */\n.company_area {\n  display: flex;\n  margin: 0 auto;\n  align-items: center;\n  justify-content: center;\n  background-color: #0ff394;\n}\n\n/* └ Flex子要素（左側：情報まとめ） */\n.company_info {\n  flex: 1;　　　　★これが大事\n  /* width: 56.7rem; */\n  height: 64rem;\n}\n\n/* └ Flex子要素（右側：画像） */\n.company_img {\n  width: 54.7rem;\n  height: 40rem;\n  margin-left: -12rem;　★内側にいれることができる\n}\n```\n\n<aside>\n💡\n\nflexで指定した画像にabsoluteで文字を配置しようとすると、\n\ntop botomなどと指定した位置と、表示があわなくなる\n\n</aside>\n\nFlexだと画像の高さが隣のタイトルに合わせられてしまうので、（犯人は `stretch` です。）\n\nalign-items: flex-startをかけて高さを画像に合わせる必要がある。\n\n![image.png](image%203.png)\n\n```css\n.concept_area {\n  margin-left: 10rem;\n  display: flex;\n  margin-bottom: 20rem;\n\n  align-items: flex-start; ★これがあることによって、画像の高さがひきしまる。\n\n}\n\n.img {\n  width: 65%;\n  position: relative;\n}\n\n.text_box {\n  position: absolute;　　\n  \n  ★イメージrelativeに対して、指定しているはずなのに、align-items: flex-start;を\n  指定していないととなり、imgがフレックスで隣のタイトルの高さにあわせておかしくなる\n\n  width: 36rem;\n  height: 15rem;\n  \n}\n\n.product1_format {\n  bottom: 10rem;\n  left: 3rem;\n  background-color: #952a2699;\n}\n```\n\n【自分で見抜く方法】\n\n画面上に**「Flexboxが確保している領域」が網掛け（斜線）**で表示されます。 「画像はここだけど、Flexboxとしてのエリアはここまであるよ！」というのが紫色の斜線で見えるので、「うわ、こんなに伸びてる！」と一瞬で気づけます。",
-      "tags": [],
-      "code_html": null,
-      "code_css": null,
-      "code_js": null,
-      "notes": "",
-      "image_path": null,
-      "id": "3d01c5b7-767f-431b-b001-dcd88c1e212b",
-      "created_at": "2025-12-28T13:46:54.874096",
-      "updated_at": "2025-12-28T13:46:54.874096"
+      "updated_at": "2025-12-28T13:09:39.492577",
+      "sub_category": "Flexbox"
     },
     {
       "title": "Flexbox",
@@ -473,7 +479,8 @@
       "image_path": "data/images/fd9a0e086d72.png",
       "id": "ccb08c59-c67c-4c66-b1a8-b7feaef016a5",
       "created_at": "2025-12-28T13:47:07.642142",
-      "updated_at": "2025-12-28T13:47:07.642142"
+      "updated_at": "2025-12-28T13:47:07.642142",
+      "sub_category": "Flexbox"
     },
     {
       "title": "Flexbox",
@@ -494,7 +501,8 @@
       "image_path": "data/images/3618731a789e.png",
       "id": "fb2900b1-1e9f-445a-bdb6-626554ea7a02",
       "created_at": "2025-12-28T13:47:17.199200",
-      "updated_at": "2025-12-28T13:47:17.199200"
+      "updated_at": "2025-12-28T13:47:17.199200",
+      "sub_category": "Flexbox"
     },
     {
       "title": "CSS Flexbox",
@@ -515,7 +523,8 @@
       "image_path": "data/images/1a903c6d1bfb.png",
       "id": "0a02399c-7990-4963-9a12-7354722efafa",
       "created_at": "2025-12-28T13:47:26.187255",
-      "updated_at": "2025-12-28T13:47:26.187255"
+      "updated_at": "2025-12-28T13:47:26.187255",
+      "sub_category": "Flexbox"
     },
     {
       "title": "Flexbox",
@@ -537,7 +546,8 @@
       "id": "ba0fa002-1cbe-4370-8b6d-445f6ea264ef",
       "created_at": "2025-12-28T13:47:36.640465",
       "updated_at": "2025-12-30T09:30:19.382379",
-      "is_completed": true
+      "is_completed": true,
+      "sub_category": "Flexbox"
     },
     {
       "title": "図解: 「Flexboxをコーディングした際のrelativeの位置",
@@ -558,7 +568,8 @@
       "image_path": null,
       "id": "387ea3f6-fc72-407a-bedd-f0f08280cf4e",
       "created_at": "2025-12-28T23:22:20.790809",
-      "updated_at": "2025-12-29T00:37:14.097565"
+      "updated_at": "2025-12-29T00:37:14.097565",
+      "sub_category": "Flexbox"
     },
     {
       "title": "図解: 「Flexboxをコーディングした際のrelativeの位置",
@@ -579,7 +590,8 @@
       "image_path": null,
       "id": "4efcbcf2-0838-46dc-a139-0e9148ee4a6e",
       "created_at": "2025-12-28T23:38:07.536323",
-      "updated_at": "2025-12-29T00:36:36.194247"
+      "updated_at": "2025-12-29T00:36:36.194247",
+      "sub_category": "Flexbox"
     },
     {
       "title": "図解: 「Flexboxをコーディングした際のrelativeの位置",
@@ -600,7 +612,8 @@
       "image_path": null,
       "id": "1b6f794c-da1b-46e9-bcdb-3aec8fe12656",
       "created_at": "2025-12-28T23:50:35.910664",
-      "updated_at": "2025-12-28T23:50:35.910664"
+      "updated_at": "2025-12-28T23:50:35.910664",
+      "sub_category": "Flexbox"
     },
     {
       "title": "JavaScript実践テクニック集：ループ、配列、問題解決",
@@ -621,7 +634,8 @@
       "image_path": null,
       "id": "fd804fac-b84c-440e-99a1-d5f075324751",
       "created_at": "2025-12-29T00:23:38.041079",
-      "updated_at": "2025-12-29T00:23:38.041079"
+      "updated_at": "2025-12-29T00:23:38.041079",
+      "sub_category": "基礎知識"
     },
     {
       "title": "図解: 3. 幅（Width）計算によるずれと解決策",
@@ -641,7 +655,8 @@
       "image_path": null,
       "id": "0e3a3edf-f170-41bd-901f-1c0982a56e4d",
       "created_at": "2025-12-29T02:13:12.136409",
-      "updated_at": "2025-12-29T02:13:12.136409"
+      "updated_at": "2025-12-29T02:13:12.136409",
+      "sub_category": "Flexbox"
     },
     {
       "title": "図解: 3. 幅（Width）計算によるずれと解決策",
@@ -661,26 +676,8 @@
       "image_path": null,
       "id": "58df3d24-afc7-4f41-a92f-3cf2ee5bddc8",
       "created_at": "2025-12-29T02:26:51.106102",
-      "updated_at": "2025-12-29T02:26:51.106102"
-    },
-    {
-      "title": "あああああああああああああ",
-      "category": "html_css",
-      "content_type": "code",
-      "description": "## コード学習\n\n### 1. 全体\nコード全体\n\n",
-      "tags": [
-        "コード学習"
-      ],
-      "code_html": "<!DOCTYPE html>\n<html lang=\"ja\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>創作</title>\n    <meta name=\"description\" content=\"テキストテキストテキストテキストテキストテキストテキストテキスト\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"icon\" href=\"img/favicon.ico\">\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/ress/dist/ress.min.css\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap\" rel=\"stylesheet\">\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n  </head>\n\n  <body>\n    <header id=\"header\">\n      <h1 class=\"site-title\">\n        <a href=\"#\"><img src=\"img/logo.svg\" alt=\"創作\"></a>\n      </h1>\n\n      <nav id=\"nav\">\n        <ul>\n          <li><a href=\"#news\">お知らせ</a></li>\n          <li><a href=\"#products1\">商品のご紹介</a></li>\n          <li><a href=\"#shop\">店舗のご案内</a></li>\n        </ul>\n      </nav>\n\n      <div class=\"onlinestore\">\n        <a href=\"#\" target=\"_blank\">オンラインストアを見る</a>\n      </div>\n    </header>\n\n    <main>\n      <section id=\"news\" class=\"wrapper\">\n        <h2 class=\"section-title\">\n          <span class=\"en\">News</span>\n          <span class=\"ja\">お知らせ</span>\n        </h2>\n\n        <dl class=\"list\">\n          <dt>2021.01.01</dt>\n          <dd>タイトルタイトルタイトルタイトル</dd>\n          <dt>2021.01.01</dt>\n          <dd>タイトルタイトルタイトルタイトル</dd>\n          <dt>2021.01.01</dt>\n          <dd>タイトルタイトルタイトルタイトル</dd>\n          <dt>2021.01.01</dt>\n          <dd>タイトルタイトルタイトルタイトル</dd>\n          <dt>2021.01.01</dt>\n          <dd>タイトルタイトルタイトルタイトル</dd>\n        </dl>\n      </section>\n\n      <section id=\"products1\" class=\"products wrapper\">\n        <h2 class=\"section-title\">\n          <span class=\"ja\">新しい価値の創造</span>\n          <span class=\"en\">Create New Values</span>\n        </h2>\n        <div class=\"img\">\n          <img src=\"img/products1.jpg\" alt=\"\">\n          <p class=\"text\">テキストテキスト<br>テキストテキスト</p>\n        </div>\n      </section>\n\n      <section id=\"products2\" class=\"products wrapper\">\n        <h2 class=\"section-title\">\n          <span class=\"ja\">科学と技術の調和</span>\n          <span class=\"en\">Science & Technology</span>\n        </h2>\n        <div class=\"img\">\n          <img src=\"img/products2.jpg\" alt=\"\">\n          <p class=\"text\">テキストテキスト<br>テキストテキスト</p>\n        </div>\n      </section>\n\n      <div id=\"shop\">\n        <iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.6831613967106!2d139.73286700102722!3d35.66017708010212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b9c2ef8e6c3%3A0xff8de5eeddcd1e17!2z44CSMTA2LTAwMzIg5p2x5Lqs6YO95riv5Yy65YWt5pys5pyo77yV5LiB55uu!5e0!3m2!1sja!2sjp!4v1622980739129!5m2!1sja!2sjp\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>\n      </div>\n    </main>\n\n    <footer id=\"footer\">\n      <div class=\"inner\">\n        <div class=\"left\">\n          <p><a href=\"#\" target=\"_blank\">オンラインストアを見る</a>｜<a href=\"mailto:xxxxx@xxx.xxx\">お問い合わせ</a></p>\n        </div>\n\n        <div class=\"right\">\n          <div class=\"logo\"><img src=\"img/logo.svg\" alt=\"創作\"></div>\n          <p class=\"info\">\n            〒１０６-００３２　東京都港区六本木５丁目×××××<br>\n            電話：<a href=\"tel:03-xxxx-xxxx\">０３-ＸＸＸＸ-ＸＸＸＸ</a>\n          </p>\n          <ul class=\"menu\">\n            <li><a href=\"#news\">お知らせ</a></li>\n            <li><a href=\"#products1\">商品のご紹介</a></li>\n            <li><a href=\"#shop\">店舗のご案内</a></li>\n          </ul>\n        </div>\n      </div>\n      <p class=\"copyright\">&copy; SOUSAKU</p>\n    </footer>\n  </body>\n</html>",
-      "code_css": "@charset \"UTF-8\";\n\nhtml {\n  font-size: 100%;\n}\nbody {\n  background-color: #e6e2d7;\n  color: #000;\n  font-family: 'Noto Serif JP', serif;\n}\na {\n  color: #fff;\n  text-decoration: none;\n}\nimg {\n  max-width: 100%;\n  vertical-align: bottom;\n}\nli {\n  list-style: none;\n}\n\n.site-title {\n  line-height: 1px;\n  margin-left: 60px;\n}\n.site-title a {\n  display: block;\n}\n.site-title img {\n  width: 40px;\n}\n.wrapper {\n  width: 100%;\n  max-width: 1024px;\n  margin: 0 auto;\n  padding: 0 20px;\n}\n\n/*-------------------------------------------\nヘッダー\n-------------------------------------------*/\n#header {\n  width: 100%;\n  /* 背景を画面下まで設定 */\n  height: 100vh;\n  background-image: url(../img/mainvisual-pc.jpg);\n  background-size: cover;\n  background-position: center top;\n  background-repeat: no-repeat;\n  padding: 60px 80px;\n  margin-bottom: 180px;\n  /* 「オンラインストアを見る」ボタンを配置するためのposition */\n  position: relative;\n  writing-mode: vertical-rl;\n}\n\n/*\n「オンラインストアを見る」ボタン\npositionで左下に配置\nbackgroundのrgbaで透過設定\n*/\n#header .onlinestore {\n  background: rgba(255,255,255,0.2);\n  padding: 8px;\n  position: absolute;\n  left: 40px;\n  bottom: 30px;\n}\n#header .onlinestore a {\n  display: block;\n  border: solid 1px #ccc;\n  padding: 30px 18px;\n}\n#header .onlinestore a:hover {\n  opacity: 0.7;\n}\n#nav li {\n  margin-left: 25px;\n}\n\n/*-------------------------------------------\nNews\n-------------------------------------------*/\n/*\n「display: flex」で横並びに配置\nそのままではタイトルが左にくるため、「row-reverse」で順序を入れ替える。\n*/\n#news {\n  margin-bottom: 180px;\n  display: flex;\n  flex-direction: row-reverse;\n}\n#news .section-title {\n  font-weight: normal;\n  line-height: 1;\n  writing-mode: vertical-rl;\n}\n#news .section-title .en {\n  display: block;\n  font-size: 0.875rem;\n  margin-left: 15px;\n}\n#news .section-title .ja {\n  display: block;\n  font-size: 2.25rem;\n  letter-spacing: 0.1em;\n}\n#news .list {\n  padding: 80px 100px 0 0;\n  writing-mode: vertical-rl;\n}\n#news .list dt {\n  border-right: solid 1px #000;\n  font-size: 0.75rem;\n  padding: 15px 30px 15px 5px;\n}\n#news .list dd {\n  padding: 15px 0 15px 30px;\n}\n/*\n最後だけ左側に罫線を引く\n*/\n#news .list dd:last-child {\n  border-left: solid 1px #000;\n}\n\n/*-------------------------------------------\nProducts（共通）\n-------------------------------------------*/\n.products {\n  display: flex;\n  margin-bottom: 180px;\n}\n.products .section-title {\n  font-weight: normal;\n  line-height: 1;\n}\n.products .section-title .ja {\n  font-size: 2rem;\n  letter-spacing: 0.1em;\n  margin-bottom: 18px;\n}\n.products .section-title .en {\n  font-size: 0.875rem;\n}\n/*\n画像の上にテキストを重ねるためのpositionを設定\n*/\n.products .img {\n  width: 65%;\n  margin-top: 100px;\n  position: relative;\n}\n/*\n「position: absolute;」でテキストを画像の上に配置\n左右の配置位置は「#products1」と「#products2」で個別に指定\n*/\n.products .text {\n  width: 56%;\n  color: #fff;\n  padding: 50px 0;\n  text-align: center;\n  position: absolute;\n  bottom: -20px;\n}\n\n/*\nproductsの共通定義以外は、idを指定（#products1、#products2）して個別に設定\n*/\n/*-------------------------------------------\nProducts1\n-------------------------------------------*/\n/*\nそのままではタイトルが左にくるため、「row-reverse」で順序を入れ替える。\n*/\n#products1 {\n  flex-direction: row-reverse;\n}\n#products1 .section-title {\n  margin-left: 20px;\n  writing-mode: vertical-lr;\n}\n#products1 .text {\n  background: rgba(249, 233, 6, 0.6);\n  left: -20px;\n}\n\n/*-------------------------------------------\nProducts2\n-------------------------------------------*/\n#products2 .section-title {\n  margin-right: 20px;\n  writing-mode: vertical-rl;\n}\n#products2 .text {\n  background: rgba(149, 42, 38, 0.6);\n  right: -20px;\n}\n\n/*-------------------------------------------\nShop\n-------------------------------------------*/\n/*\niframeのwidthに100%を指定して全幅で表示する\n「vertical-align: bottom;」を指定することで、Google Mapの下にできる隙間を消す\n*/\n#shop iframe {\n  width: 100%;\n  vertical-align: bottom;\n}\n\n/*-------------------------------------------\nフッター\n-------------------------------------------*/\n#footer {\n  background-color: #000;\n  color: #fff;\n  padding: 80px 80px 30px 30px;\n}\n#footer .inner {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  font-size: 0.875rem;\n  margin-bottom: 10px;\n}\n#footer .inner .left,\n#footer .inner .right {\n  writing-mode: vertical-rl;\n}\n#footer .inner .logo {\n  width: 40px;\n  margin-left: 60px;\n}\n#footer .inner .info {\n  line-height: 2;\n}\n#footer .menu {\n  font-size: 1rem;\n  margin-right: 60px;\n}\n#footer .menu li {\n  margin-left: 25px;\n}\n#footer .copyright {\n  font-size: 0.625rem;\n  text-align: center;\n}\n\n/*-------------------------------------------\nSP\n-------------------------------------------*/\n@media screen and (max-width: 768px) {\n  .wrapper {\n    max-width: 100%;\n  }\n\n  /*-------------------------------------------\n  ヘッダー\n  -------------------------------------------*/\n  #header {\n    /* スマホの場合は背景画像を切り替える */\n    background-image: url(../img/mainvisual-sp.jpg);\n    padding: 20px;\n    margin-bottom: 80px;\n  }\n  #header .onlinestore {\n    left: 20px;\n    bottom: 20px;\n  }\n\n  /*-------------------------------------------\n  News\n  -------------------------------------------*/\n  #news {\n    margin-bottom: 80px;\n  }\n  #news .section-title .ja {\n    font-size: 1.75rem;\n  }\n  #news .list {\n    padding: 20px 30px 0 0;\n  }\n  #news .list dt {\n    padding: 15px 12px 15px 5px;\n  }\n  /*\n  スマホの場合は4つ目以降を非表示にする\n  */\n  #news .list dt:nth-of-type(n + 4) {\n    display: none;\n  }\n  #news .list dd {\n    padding: 15px 0 15px 12px;\n  }\n  /*\n  3つ目の左側に罫線を引く\n  */\n  #news .list dd:nth-of-type(3) {\n    border-left: solid 1px #000;\n  }\n  /*\n  スマホの場合は4つ目以降を非表示にする\n  */\n  #news .list dd:nth-of-type(n + 4) {\n    display: none;\n  }\n\n  /*-------------------------------------------\n  Products\n  -------------------------------------------*/\n  .products {\n    margin-bottom: 100px;\n  }\n  .products .section-title .ja {\n    font-size: 1.5rem;\n  }\n  /*\n  スマホの場合は英語タイトルを非表示\n  */\n  .products .section-title .en {\n    display: none;\n  }\n  .products .img {\n    width: 90%;\n    margin-top: 70px;\n  }\n  .products .text {\n    width: 64%;\n    font-size: 0.875rem;\n    padding: 30px 0;\n  }\n\n  /*-------------------------------------------\n  Products1\n  -------------------------------------------*/\n  #products1 .section-title {\n    margin-left: 10px;\n  }\n\n  /*-------------------------------------------\n  Products2\n  -------------------------------------------*/\n  #products2 .section-title {\n    margin-right: 10px;\n  }\n\n  /*-------------------------------------------\n  フッター\n  -------------------------------------------*/\n  #footer {\n    padding: 40px 20px 30px 20px;\n  }\n  #footer .inner .logo {\n    margin-left: 25px;\n  }\n  #footer .menu li {\n    margin-left: 10px;\n  }\n  #footer .menu {\n    font-size: 0.875rem;\n    margin-right: 25px;\n  }\n}",
-      "code_js": null,
-      "image_path": null,
-      "notes": "[{\"title\": \"全体\", \"start_line\": 1, \"end_line\": 104, \"description\": \"コード全体\", \"content\": \"<!DOCTYPE html>\\n<html lang=\\\"ja\\\">\\n  <head>\\n    <meta charset=\\\"utf-8\\\">\\n    <title>創作</title>\\n    <meta name=\\\"description\\\" content=\\\"テキストテキストテキストテキストテキストテキストテキストテキスト\\\">\\n    <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\">\\n    <link rel=\\\"icon\\\" href=\\\"img/favicon.ico\\\">\\n    <link rel=\\\"stylesheet\\\" href=\\\"https://unpkg.com/ress/dist/ress.min.css\\\">\\n    <link rel=\\\"preconnect\\\" href=\\\"https://fonts.gstatic.com\\\">\\n    <link href=\\\"https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap\\\" rel=\\\"stylesheet\\\">\\n    <link rel=\\\"stylesheet\\\" href=\\\"css/style.css\\\">\\n  </head>\\n\\n  <body>\\n    <header id=\\\"header\\\">\\n      <h1 class=\\\"site-title\\\">\\n        <a href=\\\"#\\\"><img src=\\\"img/logo.svg\\\" alt=\\\"創作\\\"></a>\\n      </h1>\\n\\n      <nav id=\\\"nav\\\">\\n        <ul>\\n          <li><a href=\\\"#news\\\">お知らせ</a></li>\\n          <li><a href=\\\"#products1\\\">商品のご紹介</a></li>\\n          <li><a href=\\\"#shop\\\">店舗のご案内</a></li>\\n        </ul>\\n      </nav>\\n\\n      <div class=\\\"onlinestore\\\">\\n        <a href=\\\"#\\\" target=\\\"_blank\\\">オンラインストアを見る</a>\\n      </div>\\n    </header>\\n\\n    <main>\\n      <section id=\\\"news\\\" class=\\\"wrapper\\\">\\n        <h2 class=\\\"section-title\\\">\\n          <span class=\\\"en\\\">News</span>\\n          <span class=\\\"ja\\\">お知らせ</span>\\n        </h2>\\n\\n        <dl class=\\\"list\\\">\\n          <dt>2021.01.01</dt>\\n          <dd>タイトルタイトルタイトルタイトル</dd>\\n          <dt>2021.01.01</dt>\\n          <dd>タイトルタイトルタイトルタイトル</dd>\\n          <dt>2021.01.01</dt>\\n          <dd>タイトルタイトルタイトルタイトル</dd>\\n          <dt>2021.01.01</dt>\\n          <dd>タイトルタイトルタイトルタイトル</dd>\\n          <dt>2021.01.01</dt>\\n          <dd>タイトルタイトルタイトルタイトル</dd>\\n        </dl>\\n      </section>\\n\\n      <section id=\\\"products1\\\" class=\\\"products wrapper\\\">\\n        <h2 class=\\\"section-title\\\">\\n          <span class=\\\"ja\\\">新しい価値の創造</span>\\n          <span class=\\\"en\\\">Create New Values</span>\\n        </h2>\\n        <div class=\\\"img\\\">\\n          <img src=\\\"img/products1.jpg\\\" alt=\\\"\\\">\\n          <p class=\\\"text\\\">テキストテキスト<br>テキストテキスト</p>\\n        </div>\\n      </section>\\n\\n      <section id=\\\"products2\\\" class=\\\"products wrapper\\\">\\n        <h2 class=\\\"section-title\\\">\\n          <span class=\\\"ja\\\">科学と技術の調和</span>\\n          <span class=\\\"en\\\">Science & Technology</span>\\n        </h2>\\n        <div class=\\\"img\\\">\\n          <img src=\\\"img/products2.jpg\\\" alt=\\\"\\\">\\n          <p class=\\\"text\\\">テキストテキスト<br>テキストテキスト</p>\\n        </div>\\n      </section>\\n\\n      <div id=\\\"shop\\\">\\n        <iframe src=\\\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.6831613967106!2d139.73286700102722!3d35.66017708010212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b9c2ef8e6c3%3A0xff8de5eeddcd1e17!2z44CSMTA2LTAwMzIg5p2x5Lqs6YO95riv5Yy65YWt5pys5pyo77yV5LiB55uu!5e0!3m2!1sja!2sjp!4v1622980739129!5m2!1sja!2sjp\\\" width=\\\"600\\\" height=\\\"450\\\" style=\\\"border:0;\\\" allowfullscreen=\\\"\\\" loading=\\\"lazy\\\"></iframe>\\n      </div>\\n    </main>\\n\\n    <footer id=\\\"footer\\\">\\n      <div class=\\\"inner\\\">\\n        <div class=\\\"left\\\">\\n          <p><a href=\\\"#\\\" target=\\\"_blank\\\">オンラインストアを見る</a>｜<a href=\\\"mailto:xxxxx@xxx.xxx\\\">お問い合わせ</a></p>\\n        </div>\\n\\n        <div class=\\\"right\\\">\\n          <div class=\\\"logo\\\"><img src=\\\"img/logo.svg\\\" alt=\\\"創作\\\"></div>\\n          <p class=\\\"info\\\">\\n            〒１０６-００３２　東京都港区六本木５丁目×××××<br>\\n            電話：<a href=\\\"tel:03-xxxx-xxxx\\\">０３-ＸＸＸＸ-ＸＸＸＸ</a>\\n          </p>\\n          <ul class=\\\"menu\\\">\\n            <li><a href=\\\"#news\\\">お知らせ</a></li>\\n            <li><a href=\\\"#products1\\\">商品のご紹介</a></li>\\n            <li><a href=\\\"#shop\\\">店舗のご案内</a></li>\\n          </ul>\\n        </div>\\n      </div>\\n      <p class=\\\"copyright\\\">&copy; SOUSAKU</p>\\n    </footer>\\n  </body>\\n</html>\"}]",
-      "generated_svg": null,
-      "generated_html": null,
-      "id": "f83eae55-e7a7-474a-a109-b20ca405047d",
-      "created_at": "2025-12-29T21:46:40.033045",
-      "updated_at": "2025-12-29T21:46:40.033045"
+      "updated_at": "2025-12-29T02:26:51.106102",
+      "sub_category": "Flexbox"
     },
     {
       "title": "画像付き黒い画面",
@@ -699,7 +696,8 @@
       "generated_html": null,
       "id": "ee988340-6b90-44ff-9019-974456c7156e",
       "created_at": "2025-12-29T22:37:50.741146",
-      "updated_at": "2025-12-29T22:56:48.197253"
+      "updated_at": "2025-12-29T22:56:48.197253",
+      "sub_category": "画像・メディア"
     },
     {
       "title": "図解: 2-1. 対処法",
@@ -719,7 +717,8 @@
       "image_path": null,
       "id": "e271d6aa-8cdf-4b24-a782-0f83b4932149",
       "created_at": "2025-12-29T23:23:38.060124",
-      "updated_at": "2025-12-29T23:23:38.060124"
+      "updated_at": "2025-12-29T23:23:38.060124",
+      "sub_category": "Flexbox"
     },
     {
       "title": "頭の回転を速くする実践ルーティンとコツ",
@@ -740,7 +739,8 @@
       "image_path": null,
       "id": "61944165-8f59-4a48-82e3-cc8264c70adf",
       "created_at": "2025-12-30T00:46:15.214946",
-      "updated_at": "2025-12-30T00:46:15.214946"
+      "updated_at": "2025-12-30T00:46:15.214946",
+      "sub_category": "思考法"
     },
     {
       "title": "図解: ホバーした時の動作を変えたい。",
@@ -761,7 +761,8 @@
       "image_path": null,
       "id": "fdaaf023-9f8b-412b-8e58-20c398183b15",
       "created_at": "2025-12-30T01:15:48.337582",
-      "updated_at": "2025-12-30T01:15:48.337582"
+      "updated_at": "2025-12-30T01:15:48.337582",
+      "sub_category": "アニメーション"
     },
     {
       "title": "CSS共通ルールとセクション作成の注意点",
@@ -782,7 +783,8 @@
       "image_path": null,
       "id": "b243eb91-479f-471e-b62f-37d642cc6fba",
       "created_at": "2025-12-30T01:20:30.324188",
-      "updated_at": "2025-12-30T01:20:30.324188"
+      "updated_at": "2025-12-30T01:20:30.324188",
+      "sub_category": "サイズ・構造"
     },
     {
       "title": "Git/GitHub基本操作ガイド：新規登録とプロジェクト取得",
@@ -802,7 +804,8 @@
       "image_path": null,
       "id": "19dd6f04-1cc4-407a-9693-47c408b41912",
       "created_at": "2025-12-29T21:26:15.287312",
-      "updated_at": "2025-12-29T21:26:15.287312"
+      "updated_at": "2025-12-29T21:26:15.287312",
+      "sub_category": "Git"
     },
     {
       "title": "Git",
@@ -823,7 +826,8 @@
       "image_path": "data/images/709bdd61d37a.png",
       "id": "674b91e7-272b-413d-8063-5b1ad275477b",
       "created_at": "2025-12-29T21:26:36.880579",
-      "updated_at": "2025-12-29T21:26:36.880579"
+      "updated_at": "2025-12-29T21:26:36.880579",
+      "sub_category": "ツール"
     },
     {
       "title": "Git",
@@ -844,7 +848,8 @@
       "image_path": "data/images/214219fa0583.png",
       "id": "16acc731-5b9c-4826-9fce-e92615e770c4",
       "created_at": "2025-12-29T21:26:47.673916",
-      "updated_at": "2025-12-29T21:26:47.673916"
+      "updated_at": "2025-12-29T21:26:47.673916",
+      "sub_category": "ツール"
     },
     {
       "title": "GitHub基本操作：新規登録と既存プロジェクトの取得",
@@ -863,28 +868,8 @@
       "image_path": null,
       "id": "eb8b122e-d0ce-4d5c-b17b-d17d8bdaaa20",
       "created_at": "2025-12-29T21:27:21.566261",
-      "updated_at": "2025-12-29T21:27:21.566261"
-    },
-    {
-      "title": "Git",
-      "category": "other",
-      "content_type": "manual",
-      "description": "この画像は、ダークテーマが適用されたプログラミング関連のUIの一部を示すスクリーンショットです。\n上部にはツールバーのような要素が配置されており、「グラフ」や「自動」といった日本語テキストとともに、ブランチ、ターゲット、プル/フェッチ、プッシュ、リフレッシュといったGit操作に関連すると思われるアイコンが並んでいます。\n中央にはハイライトされた項目があり、左側に青い円形のアイコン、中央に「新しい環境でのコミット git...」というテキストが表示されています。このテキストはGitのコミットメッセージの一部を示唆しています。右端には青い背景に「main」と書かれた楕円形のラベルがあり、その中にターゲットのようなアイコンが含まれています。これはGitリポジトリの「main」ブランチを指していると考えられます。\n画面の上下には白いマウスポインタのカーソルが見えており、UIの特定の領域を切り取ったものであることを示唆しています。全体として、Gitクライアントソフトウェアのコミット履歴表示やブランチ管理画面の一部であると推測されます。\n\n**キーワード**: Git クライアント コミット ブランチ main UI 開発 ツール スクリーンショット ダークテーマ バージョン管理 プログラミング",
-      "tags": [
-        "Git",
-        "バージョン管理",
-        "UI",
-        "スクリーンショット",
-        "開発ツール"
-      ],
-      "code_html": null,
-      "code_css": null,
-      "code_js": null,
-      "notes": "",
-      "image_path": "data/images/903c8dc0935b.png",
-      "id": "6ddc5c24-5e3c-46f7-abb8-f89854fc9ef6",
-      "created_at": "2025-12-29T21:27:29.998554",
-      "updated_at": "2025-12-29T21:27:29.998554"
+      "updated_at": "2025-12-29T21:27:21.566261",
+      "sub_category": "Git"
     },
     {
       "title": "【図解】このセクションについて詳しく解析して。分...",
@@ -908,7 +893,8 @@
       ],
       "id": "604b83f9-c23a-4ccf-8cef-c5fd8c51e052",
       "created_at": "2025-12-30T08:41:30.136792",
-      "updated_at": "2025-12-30T08:41:30.136792"
+      "updated_at": "2025-12-30T08:41:30.136792",
+      "sub_category": "Flexbox"
     },
     {
       "title": "【図解】このセクションについて詳しく解析して。分...",
@@ -932,7 +918,8 @@
       ],
       "id": "180590d8-b91c-4b2a-bf07-ebb445cae54c",
       "created_at": "2025-12-30T08:41:31.700523",
-      "updated_at": "2025-12-30T08:41:31.700523"
+      "updated_at": "2025-12-30T08:41:31.700523",
+      "sub_category": "Flexbox"
     },
     {
       "title": "CSSマージン相殺の挙動と効果的な対策",
@@ -953,7 +940,8 @@
       "image_path": null,
       "id": "33e19586-038f-4914-b558-e840585f64a1",
       "created_at": "2025-12-30T11:59:23.412968",
-      "updated_at": "2025-12-30T11:59:23.412968"
+      "updated_at": "2025-12-30T11:59:23.412968",
+      "sub_category": "配置・余白"
     },
     {
       "title": "`margin: 0 auto;` の重要性",
@@ -974,7 +962,8 @@
       "image_path": null,
       "id": "38801cbc-3f3d-4f93-9aa3-3125af0f7e4f",
       "created_at": "2025-12-30T12:00:25.875795",
-      "updated_at": "2025-12-30T12:00:25.875795"
+      "updated_at": "2025-12-30T12:00:25.875795",
+      "sub_category": "配置・余白"
     },
     {
       "title": "無題",
@@ -989,7 +978,8 @@
       "image_path": "data/images/ab838b536188.svg",
       "id": "b72c66f8-dbd7-4543-958c-f851c7eaba79",
       "created_at": "2025-12-30T13:01:22.690892",
-      "updated_at": "2025-12-30T13:01:22.690892"
+      "updated_at": "2025-12-30T13:01:22.690892",
+      "sub_category": "未分類"
     },
     {
       "title": "【図解】このロジックの構造を説明して",
@@ -1013,7 +1003,8 @@
       ],
       "id": "2fce6c0f-d7dd-4ac0-b1ac-b7c3ec9b6000",
       "created_at": "2025-12-30T13:10:05.598920",
-      "updated_at": "2025-12-30T13:10:05.598920"
+      "updated_at": "2025-12-30T13:10:05.598920",
+      "sub_category": "Flexbox"
     },
     {
       "title": "【図解】このヘッダーの構造を分析して。",
@@ -1038,7 +1029,280 @@
       ],
       "id": "3020a072-0808-4faf-bbb0-4d096cc0ecd4",
       "created_at": "2025-12-30T16:07:09.543539",
-      "updated_at": "2025-12-30T16:07:09.543539"
+      "updated_at": "2025-12-30T16:07:09.543539",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "CSS Flexboxの基本",
+      "description": "# Flexbox\n\n[02_HTML・CSS](https://www.notion.so/02_HTML-CSS-2b21be94f11180dbbad7de773ff737f4?pvs=21)\n\n---\n\n## Flexbox\n\nCSSのレイアウトモジュールの一つで、アイテムの配置や整列、順序などを柔軟に制御できる。\n\n**親要素（Flexコンテナ）**に`display: flex;`を設定することで、子要素（Flexアイテム）がフレキシブルなボックスとして扱われるようになる。\n\nアイテムを水平方向（主軸）または垂直方向（交差軸）に配置し、余白を適切に分配することで、複雑なレイアウトも簡単に実現できる。\n\n---\n\n### Flexコンテナのプロパティ\n\n```css\ndisplay: flex; /* Flexコンテナを作成 */\nflex-direction: row | row-reverse | column | column-reverse; /* 主軸の方向を設定 */\nflex-wrap: nowrap | wrap | wrap-reverse; /* アイテムの折り返しを設定 */\njustify-content: flex-start | flex-end | center | space-between | space-around | space-evenly; /* 主軸方向のアイテムの配置 */\nalign-items: flex-start | flex-end | center | baseline | stretch; /* 交差軸方向のアイテムの配置（単一行） */\nalign-content: flex-start | flex-end | center | space-between | space-around | stretch; /* 交差軸方向の複数行のアイテムの配置 */\ngap: 10px; /* アイテム間の隙間 */\n```\nFlexコンテナの主なプロパティ\n\n各プロパティの詳細については、別のページで解説。\n\n---\n\n### Flexアイテムのプロパティ\n\n```css\norder: 0; /* アイテムの表示順序（初期値0） */\nflex-grow: 0; /* アイテムの伸び率（初期値0） */\nflex-shrink: 1; /* アイテムの縮み率（初期値1） */\nflex-basis: auto; /* アイテムの初期サイズ（初期値auto） */\nflex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]; /* flex-grow, flex-shrink, flex-basisの一括指定 */\nalign-self: auto | flex-start | flex-end | center | baseline | stretch; /* 個別アイテムの交差軸方向の配置 */\n```\nFlexアイテムの主なプロパティ\n\n各プロパティの詳細については、別のページで解説。\n\n> 💡 **補足: Flexboxは一次元レイアウト（行または列）に最適化されている。**\n>\n> 二次元レイアウト（行と列の両方）には[CSS Grid](https://www.notion.so/CSS-Grid-3221b65e9ee24a18a598c0b93e8006e0?pvs=21)の使用が適している。",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "9991c035-91a0-4d97-9ae2-3f305bf1fa5a",
+      "created_at": "2025-12-30T22:29:00.804564",
+      "updated_at": "2025-12-30T22:29:00.804564",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "両サイドに画像と文章を並べるCSSレイアウト",
+      "description": "以下のレイアウトコンセプトに基づくCSS実装です。\n\n*   両サイドに画像と文章を並べる。\n*   画像はサイズ指定でびっしり表示する。\n*   文章エリアは左右にパディングを設ける。\n\n- 詳細\n  ```css\n  .recipe_row {\n    display: flex;\n  }\n  \n  /* ===============================================\n    メインビジュアル\n   =============================================== */\n  .recipe_detail_image_item {\n    height: 70rem;\n    width: 60rem;\n    display: block;\n    object-fit: cover;\n  }\n  \n  /* ===============================================\n   タイトル、説明文、材料 \n   =============================================== */\n  .recipe_detail_main_item {\n    flex: 1;\n    height : 70rem;\n    padding : 3.5rem 6rem 0 6rem;\n  }\n  ```",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "3fac3525-4ff6-4328-89de-5a3869659731",
+      "created_at": "2025-12-30T22:29:04.389548",
+      "updated_at": "2025-12-30T22:29:04.389548",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "CSS: 親要素の幅を子要素に合わせて自動調整する",
+      "description": "親要素の`width`を指定せず、子要素の内容に合わせて自動計算させる方法は、特にナビゲーションなどで有効です。あえて`width`を指定せず、子要素に幅の決定をゆだねることで、柔軟なレイアウトを実現できます。\n\n---\n\n### 基本原則\n\n**親要素のwidthを指定せず、子要素の内容に合わせて自動計算させる**\n\n---\n\n### 具体例：ナビゲーション\n\n**❌ 従来の書き方（固定幅）**\n\n```css\n.navi_row {\n  width: 30rem;  /* 親を固定 */\n}\n\n　└ flex 子要素　　 \n.navi_items_list {\n  width: 19.2rem;  /* 子も固定 */\n}\n/* → 計算が合わない、柔軟性がない */\n\n　　　└ この下にメニュー項目が三つある\n```\n\n**✅ 推奨の書き方（自動計算）　→WIDTHを指定しない**\n\n```css\n.navi_row {\n  display: flex;\n  gap: 5rem;\n  /* widthを指定しない */\n}\n\n └ flex 子要素　　 \n.navi_items_list {\n  display: flex;\n  gap: 3rem;\n  /* widthを指定しない */\n}\n　　　└ この下にメニュー項目が三つある\n```\n\n---\n\n### 幅の決まり方（内側→外側）\n\n1.  **一番内側の要素**（テキストや画像）のサイズが決まる\n    -   `Concept` = 5.2rem\n    -   `Work` = 3.2rem\n    -   `Contact` = 4.8rem\n2.  **その親要素**が自動計算される\n    -   `.navi_items_list` = 5.2 + 3(gap) + 3.2 + 3(gap) + 4.8 = **19.2rem**\n3.  **さらにその親要素**も自動計算される\n    -   `.navi_row` = 12.1(logo) + 5(gap) + 19.2(navi) = **36.3rem**\n\n---\n\n### メリット\n\n-   テキストが長くなっても自動で調整される\n-   計算ミスがない\n-   コードがシンプル\n-   レスポンシブ対応が楽\n\n---\n\n### 例外：固定すべきもの\n\n**画像は固定幅を指定する**（アスペクト比を保つため）\n\n例：`.logo_item { width: 12.1rem; }`\n\n![image.png](image.png)",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "089f98b7-51f0-442b-ad76-7c24c8ca109b",
+      "created_at": "2025-12-30T22:29:07.830299",
+      "updated_at": "2025-12-30T22:29:07.830299",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "CSS Flexboxの基本",
+      "description": "# Flexbox\n\n[02_HTML・CSS](https://www.notion.so/02_HTML-CSS-2b21be94f11180dbbad7de773ff737f4?pvs=21)\n\n---\n\n## Flexbox\n\nCSSのレイアウトモジュールの一つで、アイテムの配置や整列、順序などを柔軟に制御できる。\n\n**親要素（Flexコンテナ）**に`display: flex;`を設定することで、子要素（Flexアイテム）がフレキシブルなボックスとして扱われるようになる。\n\nアイテムを水平方向（主軸）または垂直方向（交差軸）に配置し、余白を適切に分配することで、複雑なレイアウトも簡単に実現できる。\n\n---\n\n### Flexコンテナのプロパティ\n\n```css\ndisplay: flex; /* Flexコンテナを作成 */\nflex-direction: row | row-reverse | column | column-reverse; /* 主軸の方向を設定 */\nflex-wrap: nowrap | wrap | wrap-reverse; /* アイテムの折り返しを設定 */\njustify-content: flex-start | flex-end | center | space-between | space-around | space-evenly; /* 主軸方向のアイテムの配置 */\nalign-items: flex-start | flex-end | center | baseline | stretch; /* 交差軸方向のアイテムの配置（単一行） */\nalign-content: flex-start | flex-end | center | space-between | space-around | stretch; /* 交差軸方向の複数行のアイテムの配置 */\ngap: 10px; /* アイテム間の隙間 */\n```\nFlexコンテナの主なプロパティ\n\n各プロパティの詳細については、別のページで解説。\n\n---\n\n### Flexアイテムのプロパティ\n\n```css\norder: 0; /* アイテムの表示順序（初期値0） */\nflex-grow: 0; /* アイテムの伸び率（初期値0） */\nflex-shrink: 1; /* アイテムの縮み率（初期値1） */\nflex-basis: auto; /* アイテムの初期サイズ（初期値auto） */\nflex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]; /* flex-grow, flex-shrink, flex-basisの一括指定 */\nalign-self: auto | flex-start | flex-end | center | baseline | stretch; /* 個別アイテムの交差軸方向の配置 */\n```\nFlexアイテムの主なプロパティ\n\n各プロパティの詳細については、別のページで解説。\n\n> 💡 **補足: Flexboxは一次元レイアウト（行または列）に最適化されている。**\n>\n> 二次元レイアウト（行と列の両方）には[CSS Grid](https://www.notion.so/CSS-Grid-3221b65e9ee24a18a598c0b93e8006e0?pvs=21)の使用が適している。",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "3e3ae1a4-2d34-460a-96e5-f9b93975295b",
+      "created_at": "2025-12-30T22:29:08.872181",
+      "updated_at": "2025-12-30T22:29:08.872181",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "両サイドに画像と文章を並べるCSSレイアウト",
+      "description": "以下のレイアウトコンセプトに基づくCSS実装です。\n\n*   両サイドに画像と文章を並べる。\n*   画像はサイズ指定でびっしり表示する。\n*   文章エリアは左右にパディングを設ける。\n\n- 詳細\n  ```css\n  .recipe_row {\n    display: flex;\n  }\n  \n  /* ===============================================\n    メインビジュアル\n   =============================================== */\n  .recipe_detail_image_item {\n    height: 70rem;\n    width: 60rem;\n    display: block;\n    object-fit: cover;\n  }\n  \n  /* ===============================================\n   タイトル、説明文、材料 \n   =============================================== */\n  .recipe_detail_main_item {\n    flex: 1;\n    height : 70rem;\n    padding : 3.5rem 6rem 0 6rem;\n  }\n  ```",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "db4ad423-fbf6-4d9a-a208-72ba9b28c605",
+      "created_at": "2025-12-30T22:29:11.267879",
+      "updated_at": "2025-12-30T22:29:11.267879",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "CSS: 親要素の幅を子要素に合わせて自動調整する",
+      "description": "親要素の`width`を指定せず、子要素の内容に合わせて自動計算させる方法は、特にナビゲーションなどで有効です。あえて`width`を指定せず、子要素に幅の決定をゆだねることで、柔軟なレイアウトを実現できます。\n\n---\n\n### 基本原則\n\n**親要素のwidthを指定せず、子要素の内容に合わせて自動計算させる**\n\n---\n\n### 具体例：ナビゲーション\n\n**❌ 従来の書き方（固定幅）**\n\n```css\n.navi_row {\n  width: 30rem;  /* 親を固定 */\n}\n\n　└ flex 子要素　　 \n.navi_items_list {\n  width: 19.2rem;  /* 子も固定 */\n}\n/* → 計算が合わない、柔軟性がない */\n\n　　　└ この下にメニュー項目が三つある\n```\n\n**✅ 推奨の書き方（自動計算）　→WIDTHを指定しない**\n\n```css\n.navi_row {\n  display: flex;\n  gap: 5rem;\n  /* widthを指定しない */\n}\n\n └ flex 子要素　　 \n.navi_items_list {\n  display: flex;\n  gap: 3rem;\n  /* widthを指定しない */\n}\n　　　└ この下にメニュー項目が三つある\n```\n\n---\n\n### 幅の決まり方（内側→外側）\n\n1.  **一番内側の要素**（テキストや画像）のサイズが決まる\n    -   `Concept` = 5.2rem\n    -   `Work` = 3.2rem\n    -   `Contact` = 4.8rem\n2.  **その親要素**が自動計算される\n    -   `.navi_items_list` = 5.2 + 3(gap) + 3.2 + 3(gap) + 4.8 = **19.2rem**\n3.  **さらにその親要素**も自動計算される\n    -   `.navi_row` = 12.1(logo) + 5(gap) + 19.2(navi) = **36.3rem**\n\n---\n\n### メリット\n\n-   テキストが長くなっても自動で調整される\n-   計算ミスがない\n-   コードがシンプル\n-   レスポンシブ対応が楽\n\n---\n\n### 例外：固定すべきもの\n\n**画像は固定幅を指定する**（アスペクト比を保つため）\n\n例：`.logo_item { width: 12.1rem; }`\n\n![image.png](image.png)",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "a6ebcdb5-0835-4c59-9ad8-951da696531b",
+      "created_at": "2025-12-30T22:29:14.428565",
+      "updated_at": "2025-12-30T22:29:14.428565",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "CSS Flexbox: `gap`を考慮した2列レイアウトの幅計算（`calc()`の活用）",
+      "description": "💡 Flexboxの`flex-wrap`プロパティを使って、複数の要素を改行させる方法（例：4枚のカードを上2枚、下2枚のように）について解説します。\n\n## 1. なぜ「50%」なのか？\n\n**1列に2枚並べたいから**です。\n*   全体を100%としたとき、半分（100 ÷ 2）は **50%** です。\n*   もし3枚並べたいなら、100 ÷ 3 で **33.33%** になります。\n\n## 2. なぜ「-3.2rem」なのか？\n\n**隙間（gap）の分だけカードを細くしないと、はみ出るから**です。\n*   設定した `gap` は **6.4rem** です。\n*   この隙間は「2枚の間」に1つだけ存在します。\n*   この **6.4rem** という「余計な幅」を、2枚のカードで半分ずつ（6.4 ÷ 2 = **3.2**）負担して削ります。\n\n### 図解で見る合計幅\n\n計算式：**(カード1) + (隙間) + (カード2) = 合計**\n\n| 項目         | 計算式                                   | 合計             | 結果         |\n| :----------- | :--------------------------------------- | :--------------- | :----------- |\n| 計算前       | `50% + 6.4rem + 50%`                     | `100% + 6.4rem`  | はみ出る ❌  |\n| 3.2ずつ引く  | `(50% - 3.2rem) + 6.4rem + (50% - 3.2rem)` | `100%`           | ピッタリ ✅  |\n\n```css\n/* ▼ Flex親（4件のカードを横並び＋折り返し） */\n.business_row {\n  width: 80rem;\n  display: flex;\n  flex-wrap: wrap;　/* ★ここで折り返す */\n\n  row-gap: 1.7rem;\n  column-gap: 6.4rem;\n  margin: 0 auto;\n}\n\n/* └ Flex子要素（カード1枚分） */\n.business_item {\n  width: calc(50% - 3.2rem);　/* ★この計算式だと固定で折り返す */\n}\n```\n\n![イメージ](image%201.png)",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "30ac3b80-84e1-4d6b-b681-41af3dcf311a",
+      "created_at": "2025-12-30T22:29:17.987344",
+      "updated_at": "2025-12-30T22:29:17.987344",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "CSS Flexbox: 要素の折り返し表示と間隔調整",
+      "description": "💡 Flexで要素（例: 画像）を折り返して表示する際の横幅、縦幅調整に関するメモです。\n\n```css\n.business_row {\n  display: flex;\n  flex-wrap: wrap;\n  row-gap: 10rem;    /* 行間（縦方向） */\n  column-gap: 6.4rem; /* 列間（横方向） */\n}\n```",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "331d2ec8-6b0f-4984-8ac6-4b1f7dcc9026",
+      "created_at": "2025-12-30T22:29:21.824164",
+      "updated_at": "2025-12-30T22:29:21.824164",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "CSS Flexbox: `flex: 1`と負のマージンによる子要素のレイアウト調整",
+      "description": "💡 Flex指定されたwidthに対して、子要素がおさまりきらない場合　－マージンをつかうとおきることがある\n\n![image.png](image%202.png)\n\n```css\n/* ▼ Flex親（左：会社情報、右：画像） */\n.company_area {\n  display: flex;\n  margin: 0 auto;\n  align-items: center;\n  justify-content: center;\n  background-color: #0ff394;\n}\n\n/* └ Flex子要素（左側：情報まとめ） */\n.company_info {\n  flex: 1;　　　　★これが大事\n  /* width: 56.7rem; */\n  height: 64rem;\n}\n\n/* └ Flex子要素（右側：画像） */\n.company_img {\n  width: 54.7rem;\n  height: 40rem;\n  margin-left: -12rem;　★内側にいれることができる\n}\n```",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "00757fea-5aa0-4ce6-9156-9566ac2ceeaa",
+      "created_at": "2025-12-30T22:29:25.534031",
+      "updated_at": "2025-12-30T22:29:25.534031",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "Flexboxとabsolute配置：画像上の文字位置ずれを解決する`align-items: flex-start`",
+      "description": "💡 flexで指定した画像にabsoluteで文字を配置しようとすると、top bottomなどと指定した位置と、表示があわなくなる。\n\nFlexだと画像の高さが隣のタイトルに合わせられてしまうので、（犯人は `stretch` です。）`align-items: flex-start`をかけて高さを画像に合わせる必要がある。\n\n![image.png](image%203.png)\n\n```css\n.concept_area {\n  margin-left: 10rem;\n  display: flex;\n  margin-bottom: 20rem;\n\n  align-items: flex-start; /* ★これがあることによって、画像の高さがひきしまる。 */\n\n}\n\n.img {\n  width: 65%;\n  position: relative;\n}\n\n.text_box {\n  position: absolute;　　\n  \n  /* ★イメージrelativeに対して、指定しているはずなのに、align-items: flex-start;を\n  指定していないととなり、imgがフレックスで隣のタイトルの高さにあわせておかしくなる */\n\n  width: 36rem;\n  height: 15rem;\n  \n}\n\n.product1_format {\n  bottom: 10rem;\n  left: 3rem;\n  background-color: #952a2699;\n}\n```\n\n## 自分で見抜く方法\n\n画面上に**「Flexboxが確保している領域」が網掛け（斜線）**で表示されます。「画像はここだけど、Flexboxとしてのエリアはここまであるよ！」というのが紫色の斜線で見えるので、「うわ、こんなに伸びてる！」と一瞬で気づけます。",
+      "category": "html_css",
+      "content_type": "manual",
+      "code_css": null,
+      "code_html": null,
+      "code_js": null,
+      "id": "1dcf9718-6b0c-4a9f-91e7-33405227ff1d",
+      "created_at": "2025-12-30T22:29:29.690110",
+      "updated_at": "2025-12-30T22:29:29.690110",
+      "sub_category": "Flexbox"
+    },
+    {
+      "title": "図解: Max width 100%の使い方がわからない。",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## Max width 100%の使い方がわからない。\n\n## 原因\n### 1-1. 要素のはみ出しと画質劣化の回避\n主に画像（`img`）などのコンテンツにおいて、以下の2つの問題を防ぐために使用されます。\n\n1.  **親要素からの逸脱:**\n    コンテンツの本来のサイズ（例: 幅2000pxの画像）が、それを囲む親要素の幅（例: 幅500pxのボックス）より大きい場合、何もしなければコンテンツが親要素を突き抜けてはみ出し、レイアウト崩れや意図しない横スクロールが発生します。\n\n2.  **不要な引き伸ばし:**\n    はみ出しを防ぐために `width: 100%;`（固定幅）を指定すると、今度は「本来のサイズが小さい画像」までもが親要素の幅いっぱいに無理やり引き伸ばされ、画質が粗くなってしまいます。\n\n## 解決策\n### 2-1. 上限のみを制限する柔軟な挙動\n`max-width: 100%;` を指定することで、「最大でも親要素の幅（100%）まで」という上限を設定し、状況に応じた最適な表示を実現します。\n\n*   **コンテンツ > 親要素の場合:**\n    親要素の幅（100%）に合わせて自動的に縮小されます。これ\n\n\n\n以下のように覚えるといい。\n1. width: 100% は「強制」\nルール： 「必ず時速100kmで走れ」\n結果： 遅い車（小さな画像）も、無理やりエンジンを回して100km出さされます。\n\n2. max-width: 100% は「制限」\nルール： 「時速100km まで なら自由に走っていい（それ以上はダメ）」\n結果： * 時速200km出せる車（大きな画像）は、上限の100kmに抑えられます。\n\n時速50kmで走りたい車（小さな画像）は、そのまま50kmで走れます。",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "Max",
+        "width",
+        "100%の使い方がわからない。"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"bold\" fill=\"#333\" font-family=\"sans-serif\">回答: max-width: 100% の仕組みとメリット</text>\n\n  <!-- カラムヘッダー -->\n  <!-- 左側：問題 -->\n  <rect x=\"50\" y=\"70\" width=\"380\" height=\"40\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"240\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#d32f2f\">これまでの問題 (Before)</text>\n  \n  <!-- 右側：解決 -->\n  <rect x=\"470\" y=\"70\" width=\"380\" height=\"40\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"660\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#2e7d32\">max-width: 100% (After)</text>\n\n  <!-- シナリオ1: 親要素より画像が大きい場合 -->\n  <g transform=\"translate(0, 130)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース1：画像 ＞ 親要素 (大きな画像)</text>\n    \n    <!-- 左：問題 (はみ出し) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">対策なし (width指定なし)</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 150px</text>\n      \n      <!-- はみ出す画像 -->\n      <rect x=\"50\" y=\"50\" width=\"250\" height=\"60\" fill=\"#ffcdd2\" stroke=\"#d32f2f\" stroke-width=\"2\" opacity=\"0.9\" />\n      <text x=\"175\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#b71c1c\">はみ出し発生！</text>\n      <text x=\"175\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b71c1c\">画像幅: 250px</text>\n    </g>\n\n    <!-- 右：解決 (縮小) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 収まる画像 -->\n      <rect x=\"50\" y=\"50\" width=\"150\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"125\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">自動で縮小</text>\n      <text x=\"125\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">親に合わせて150pxに</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">レイアウト崩れ防止</text>\n    </g>\n  </g>\n\n  <!-- シナリオ2: 親要素より画像が小さい場合 -->\n  <g transform=\"translate(0, 300)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース2：画像 ＜ 親要素 (小さな画像)</text>\n    \n    <!-- 左：問題 (引き伸ばし) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">width: 100% (固定) の場合</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 200px</text>\n      \n      <!-- 引き伸ばされた画像 -->\n      <rect x=\"50\" y=\"50\" width=\"200\" height=\"60\" fill=\"#ffe0b2\" stroke=\"#ef6c00\" stroke-width=\"2\" />\n      \n      <!-- ピクセル荒れ表現 -->\n      <path d=\"M 60 60 L 80 60 M 90 60 L 110 60 M 60 70 L 80 70\" stroke=\"#ef6c00\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n      \n      <text x=\"150\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#e65100\">無理に引き伸ばし</text>\n      <text x=\"150\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#e65100\">画質が粗くなる</text>\n    </g>\n\n    <!-- 右：解決 (サイズ維持) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 元のサイズの画像 -->\n      <rect x=\"50\" y=\"50\" width=\"100\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"100\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">元サイズ維持</text>\n      <text x=\"100\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">画像幅: 100px</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">画質劣化なし</text>\n    </g>\n  </g>\n\n  <!-- コードブロック -->\n  <g transform=\"translate(50, 470)\">\n    <rect x=\"0\" y=\"0\" width=\"800\" height=\"60\" fill=\"#263238\" rx=\"5\" />\n    <text x=\"20\" y=\"25\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\">img {</text>\n    <text x=\"40\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#ffffff\">max-width: 100%; <tspan fill=\"#7ca453\">/* 上限のみ制限 */</tspan>  height: auto; <tspan fill=\"#7ca453\">/* 比率維持 */</tspan></text>\n    <text x=\"20\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\" dx=\"560\">}</text>\n  </g>\n\n  <!-- 矢印定義 -->\n  <defs>\n    <marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#2196f3\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: Max width 100%の使い方がわからない。",
+      "image_path": null,
+      "id": "e84d3ece-9744-44c7-ab8e-cceac1816fc3",
+      "created_at": "2025-12-30T23:07:01.524834",
+      "updated_at": "2025-12-30T23:21:21.566996",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "図解: Max width 100%の使い方がわからない。",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## Max width 100%の使い方がわからない。\n\n## 原因\n### 1-1. 要素のはみ出しと画質劣化の回避\n主に画像（`img`）などのコンテンツにおいて、以下の2つの問題を防ぐために使用されます。\n\n1.  **親要素からの逸脱:**\n    コンテンツの本来のサイズ（例: 幅2000pxの画像）が、それを囲む親要素の幅（例: 幅500pxのボックス）より大きい場合、何もしなければコンテンツが親要素を突き抜けてはみ出し、レイアウト崩れや意図しない横スクロールが発生します。\n\n2.  **不要な引き伸ばし:**\n    はみ出しを防ぐために `width: 100%;`（固定幅）を指定すると、今度は「本来のサイズが小さい画像」までもが親要素の幅いっぱいに無理やり引き伸ばされ、画質が粗くなってしまいます。\n\n## 解決策\n### 2-1. 上限のみを制限する柔軟な挙動\n`max-width: 100%;` を指定することで、「最大でも親要素の幅（100%）まで」という上限を設定し、状況に応じた最適な表示を実現します。\n\n*   **コンテンツ > 親要素の場合:**\n    親要素の幅（100%）に合わせて自動的に縮小されます。これ",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "Max",
+        "width",
+        "100%の使い方がわからない。"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"bold\" fill=\"#333\" font-family=\"sans-serif\">回答: max-width: 100% の仕組みとメリット</text>\n\n  <!-- カラムヘッダー -->\n  <!-- 左側：問題 -->\n  <rect x=\"50\" y=\"70\" width=\"380\" height=\"40\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"240\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#d32f2f\">これまでの問題 (Before)</text>\n  \n  <!-- 右側：解決 -->\n  <rect x=\"470\" y=\"70\" width=\"380\" height=\"40\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"660\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#2e7d32\">max-width: 100% (After)</text>\n\n  <!-- シナリオ1: 親要素より画像が大きい場合 -->\n  <g transform=\"translate(0, 130)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース1：画像 ＞ 親要素 (大きな画像)</text>\n    \n    <!-- 左：問題 (はみ出し) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">対策なし (width指定なし)</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 150px</text>\n      \n      <!-- はみ出す画像 -->\n      <rect x=\"50\" y=\"50\" width=\"250\" height=\"60\" fill=\"#ffcdd2\" stroke=\"#d32f2f\" stroke-width=\"2\" opacity=\"0.9\" />\n      <text x=\"175\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#b71c1c\">はみ出し発生！</text>\n      <text x=\"175\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b71c1c\">画像幅: 250px</text>\n    </g>\n\n    <!-- 右：解決 (縮小) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 収まる画像 -->\n      <rect x=\"50\" y=\"50\" width=\"150\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"125\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">自動で縮小</text>\n      <text x=\"125\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">親に合わせて150pxに</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">レイアウト崩れ防止</text>\n    </g>\n  </g>\n\n  <!-- シナリオ2: 親要素より画像が小さい場合 -->\n  <g transform=\"translate(0, 300)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース2：画像 ＜ 親要素 (小さな画像)</text>\n    \n    <!-- 左：問題 (引き伸ばし) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">width: 100% (固定) の場合</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 200px</text>\n      \n      <!-- 引き伸ばされた画像 -->\n      <rect x=\"50\" y=\"50\" width=\"200\" height=\"60\" fill=\"#ffe0b2\" stroke=\"#ef6c00\" stroke-width=\"2\" />\n      \n      <!-- ピクセル荒れ表現 -->\n      <path d=\"M 60 60 L 80 60 M 90 60 L 110 60 M 60 70 L 80 70\" stroke=\"#ef6c00\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n      \n      <text x=\"150\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#e65100\">無理に引き伸ばし</text>\n      <text x=\"150\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#e65100\">画質が粗くなる</text>\n    </g>\n\n    <!-- 右：解決 (サイズ維持) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 元のサイズの画像 -->\n      <rect x=\"50\" y=\"50\" width=\"100\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"100\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">元サイズ維持</text>\n      <text x=\"100\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">画像幅: 100px</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">画質劣化なし</text>\n    </g>\n  </g>\n\n  <!-- コードブロック -->\n  <g transform=\"translate(50, 470)\">\n    <rect x=\"0\" y=\"0\" width=\"800\" height=\"60\" fill=\"#263238\" rx=\"5\" />\n    <text x=\"20\" y=\"25\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\">img {</text>\n    <text x=\"40\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#ffffff\">max-width: 100%; <tspan fill=\"#7ca453\">/* 上限のみ制限 */</tspan>  height: auto; <tspan fill=\"#7ca453\">/* 比率維持 */</tspan></text>\n    <text x=\"20\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\" dx=\"560\">}</text>\n  </g>\n\n  <!-- 矢印定義 -->\n  <defs>\n    <marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#2196f3\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: Max width 100%の使い方がわからない。",
+      "image_path": null,
+      "id": "f3b23a25-3909-4016-9b6e-888e8b485245",
+      "created_at": "2025-12-30T23:07:03.749046",
+      "updated_at": "2025-12-30T23:07:03.749046",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "図解: Max width 100%の使い方がわからない。",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## Max width 100%の使い方がわからない。\n\n## 原因\n### 1-1. 要素のはみ出しと画質劣化の回避\n主に画像（`img`）などのコンテンツにおいて、以下の2つの問題を防ぐために使用されます。\n\n1.  **親要素からの逸脱:**\n    コンテンツの本来のサイズ（例: 幅2000pxの画像）が、それを囲む親要素の幅（例: 幅500pxのボックス）より大きい場合、何もしなければコンテンツが親要素を突き抜けてはみ出し、レイアウト崩れや意図しない横スクロールが発生します。\n\n2.  **不要な引き伸ばし:**\n    はみ出しを防ぐために `width: 100%;`（固定幅）を指定すると、今度は「本来のサイズが小さい画像」までもが親要素の幅いっぱいに無理やり引き伸ばされ、画質が粗くなってしまいます。\n\n## 解決策\n### 2-1. 上限のみを制限する柔軟な挙動\n`max-width: 100%;` を指定することで、「最大でも親要素の幅（100%）まで」という上限を設定し、状況に応じた最適な表示を実現します。\n\n*   **コンテンツ > 親要素の場合:**\n    親要素の幅（100%）に合わせて自動的に縮小されます。これ",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "Max",
+        "width",
+        "100%の使い方がわからない。"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"bold\" fill=\"#333\" font-family=\"sans-serif\">回答: max-width: 100% の仕組みとメリット</text>\n\n  <!-- カラムヘッダー -->\n  <!-- 左側：問題 -->\n  <rect x=\"50\" y=\"70\" width=\"380\" height=\"40\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"240\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#d32f2f\">これまでの問題 (Before)</text>\n  \n  <!-- 右側：解決 -->\n  <rect x=\"470\" y=\"70\" width=\"380\" height=\"40\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"660\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#2e7d32\">max-width: 100% (After)</text>\n\n  <!-- シナリオ1: 親要素より画像が大きい場合 -->\n  <g transform=\"translate(0, 130)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース1：画像 ＞ 親要素 (大きな画像)</text>\n    \n    <!-- 左：問題 (はみ出し) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">対策なし (width指定なし)</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 150px</text>\n      \n      <!-- はみ出す画像 -->\n      <rect x=\"50\" y=\"50\" width=\"250\" height=\"60\" fill=\"#ffcdd2\" stroke=\"#d32f2f\" stroke-width=\"2\" opacity=\"0.9\" />\n      <text x=\"175\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#b71c1c\">はみ出し発生！</text>\n      <text x=\"175\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b71c1c\">画像幅: 250px</text>\n    </g>\n\n    <!-- 右：解決 (縮小) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 収まる画像 -->\n      <rect x=\"50\" y=\"50\" width=\"150\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"125\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">自動で縮小</text>\n      <text x=\"125\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">親に合わせて150pxに</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">レイアウト崩れ防止</text>\n    </g>\n  </g>\n\n  <!-- シナリオ2: 親要素より画像が小さい場合 -->\n  <g transform=\"translate(0, 300)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース2：画像 ＜ 親要素 (小さな画像)</text>\n    \n    <!-- 左：問題 (引き伸ばし) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">width: 100% (固定) の場合</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 200px</text>\n      \n      <!-- 引き伸ばされた画像 -->\n      <rect x=\"50\" y=\"50\" width=\"200\" height=\"60\" fill=\"#ffe0b2\" stroke=\"#ef6c00\" stroke-width=\"2\" />\n      \n      <!-- ピクセル荒れ表現 -->\n      <path d=\"M 60 60 L 80 60 M 90 60 L 110 60 M 60 70 L 80 70\" stroke=\"#ef6c00\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n      \n      <text x=\"150\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#e65100\">無理に引き伸ばし</text>\n      <text x=\"150\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#e65100\">画質が粗くなる</text>\n    </g>\n\n    <!-- 右：解決 (サイズ維持) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 元のサイズの画像 -->\n      <rect x=\"50\" y=\"50\" width=\"100\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"100\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">元サイズ維持</text>\n      <text x=\"100\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">画像幅: 100px</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">画質劣化なし</text>\n    </g>\n  </g>\n\n  <!-- コードブロック -->\n  <g transform=\"translate(50, 470)\">\n    <rect x=\"0\" y=\"0\" width=\"800\" height=\"60\" fill=\"#263238\" rx=\"5\" />\n    <text x=\"20\" y=\"25\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\">img {</text>\n    <text x=\"40\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#ffffff\">max-width: 100%; <tspan fill=\"#7ca453\">/* 上限のみ制限 */</tspan>  height: auto; <tspan fill=\"#7ca453\">/* 比率維持 */</tspan></text>\n    <text x=\"20\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\" dx=\"560\">}</text>\n  </g>\n\n  <!-- 矢印定義 -->\n  <defs>\n    <marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#2196f3\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: Max width 100%の使い方がわからない。",
+      "image_path": null,
+      "id": "8f61760d-f65f-4d28-92bc-88c691d56d71",
+      "created_at": "2025-12-30T23:07:11.229205",
+      "updated_at": "2025-12-30T23:07:11.229205",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "図解: Max width 100%の使い方がわからない。",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## Max width 100%の使い方がわからない。\n\n## 原因\n### 1-1. 要素のはみ出しと画質劣化の回避\n主に画像（`img`）などのコンテンツにおいて、以下の2つの問題を防ぐために使用されます。\n\n1.  **親要素からの逸脱:**\n    コンテンツの本来のサイズ（例: 幅2000pxの画像）が、それを囲む親要素の幅（例: 幅500pxのボックス）より大きい場合、何もしなければコンテンツが親要素を突き抜けてはみ出し、レイアウト崩れや意図しない横スクロールが発生します。\n\n2.  **不要な引き伸ばし:**\n    はみ出しを防ぐために `width: 100%;`（固定幅）を指定すると、今度は「本来のサイズが小さい画像」までもが親要素の幅いっぱいに無理やり引き伸ばされ、画質が粗くなってしまいます。\n\n## 解決策\n### 2-1. 上限のみを制限する柔軟な挙動\n`max-width: 100%;` を指定することで、「最大でも親要素の幅（100%）まで」という上限を設定し、状況に応じた最適な表示を実現します。\n\n*   **コンテンツ > 親要素の場合:**\n    親要素の幅（100%）に合わせて自動的に縮小されます。これ",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "Max",
+        "width",
+        "100%の使い方がわからない。"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"bold\" fill=\"#333\" font-family=\"sans-serif\">回答: max-width: 100% の仕組みとメリット</text>\n\n  <!-- カラムヘッダー -->\n  <!-- 左側：問題 -->\n  <rect x=\"50\" y=\"70\" width=\"380\" height=\"40\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"240\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#d32f2f\">これまでの問題 (Before)</text>\n  \n  <!-- 右側：解決 -->\n  <rect x=\"470\" y=\"70\" width=\"380\" height=\"40\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"660\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#2e7d32\">max-width: 100% (After)</text>\n\n  <!-- シナリオ1: 親要素より画像が大きい場合 -->\n  <g transform=\"translate(0, 130)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース1：画像 ＞ 親要素 (大きな画像)</text>\n    \n    <!-- 左：問題 (はみ出し) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">対策なし (width指定なし)</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 150px</text>\n      \n      <!-- はみ出す画像 -->\n      <rect x=\"50\" y=\"50\" width=\"250\" height=\"60\" fill=\"#ffcdd2\" stroke=\"#d32f2f\" stroke-width=\"2\" opacity=\"0.9\" />\n      <text x=\"175\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#b71c1c\">はみ出し発生！</text>\n      <text x=\"175\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b71c1c\">画像幅: 250px</text>\n    </g>\n\n    <!-- 右：解決 (縮小) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 収まる画像 -->\n      <rect x=\"50\" y=\"50\" width=\"150\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"125\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">自動で縮小</text>\n      <text x=\"125\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">親に合わせて150pxに</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">レイアウト崩れ防止</text>\n    </g>\n  </g>\n\n  <!-- シナリオ2: 親要素より画像が小さい場合 -->\n  <g transform=\"translate(0, 300)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース2：画像 ＜ 親要素 (小さな画像)</text>\n    \n    <!-- 左：問題 (引き伸ばし) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">width: 100% (固定) の場合</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 200px</text>\n      \n      <!-- 引き伸ばされた画像 -->\n      <rect x=\"50\" y=\"50\" width=\"200\" height=\"60\" fill=\"#ffe0b2\" stroke=\"#ef6c00\" stroke-width=\"2\" />\n      \n      <!-- ピクセル荒れ表現 -->\n      <path d=\"M 60 60 L 80 60 M 90 60 L 110 60 M 60 70 L 80 70\" stroke=\"#ef6c00\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n      \n      <text x=\"150\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#e65100\">無理に引き伸ばし</text>\n      <text x=\"150\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#e65100\">画質が粗くなる</text>\n    </g>\n\n    <!-- 右：解決 (サイズ維持) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 元のサイズの画像 -->\n      <rect x=\"50\" y=\"50\" width=\"100\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"100\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">元サイズ維持</text>\n      <text x=\"100\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">画像幅: 100px</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">画質劣化なし</text>\n    </g>\n  </g>\n\n  <!-- コードブロック -->\n  <g transform=\"translate(50, 470)\">\n    <rect x=\"0\" y=\"0\" width=\"800\" height=\"60\" fill=\"#263238\" rx=\"5\" />\n    <text x=\"20\" y=\"25\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\">img {</text>\n    <text x=\"40\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#ffffff\">max-width: 100%; <tspan fill=\"#7ca453\">/* 上限のみ制限 */</tspan>  height: auto; <tspan fill=\"#7ca453\">/* 比率維持 */</tspan></text>\n    <text x=\"20\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\" dx=\"560\">}</text>\n  </g>\n\n  <!-- 矢印定義 -->\n  <defs>\n    <marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#2196f3\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: Max width 100%の使い方がわからない。",
+      "image_path": null,
+      "id": "adca4747-929b-4157-8f0f-1d0ecbdc5dcb",
+      "created_at": "2025-12-30T23:07:17.812398",
+      "updated_at": "2025-12-30T23:07:17.812398",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "図解: Max width 100%の使い方がわからない。",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## Max width 100%の使い方がわからない。\n\n## 原因\n### 1-1. 要素のはみ出しと画質劣化の回避\n主に画像（`img`）などのコンテンツにおいて、以下の2つの問題を防ぐために使用されます。\n\n1.  **親要素からの逸脱:**\n    コンテンツの本来のサイズ（例: 幅2000pxの画像）が、それを囲む親要素の幅（例: 幅500pxのボックス）より大きい場合、何もしなければコンテンツが親要素を突き抜けてはみ出し、レイアウト崩れや意図しない横スクロールが発生します。\n\n2.  **不要な引き伸ばし:**\n    はみ出しを防ぐために `width: 100%;`（固定幅）を指定すると、今度は「本来のサイズが小さい画像」までもが親要素の幅いっぱいに無理やり引き伸ばされ、画質が粗くなってしまいます。\n\n## 解決策\n### 2-1. 上限のみを制限する柔軟な挙動\n`max-width: 100%;` を指定することで、「最大でも親要素の幅（100%）まで」という上限を設定し、状況に応じた最適な表示を実現します。\n\n*   **コンテンツ > 親要素の場合:**\n    親要素の幅（100%）に合わせて自動的に縮小されます。\n\n\n★以下のように覚える★\n1. width: 100% は「強制」\nルール： 「必ず時速100kmで走れ」\n結果： 遅い車（小さな画像）も、無理やりエンジンを回して100km出さされます。\n\n2. max-width: 100% は「制限」\nルール： 「時速100km まで なら自由に走っていい（それ以上はダメ）」\n結果： * 時速200km出せる車（大きな画像）は、上限の100kmに抑えられます。\n\nしかし！時速50kmで走りたい車（小さな画像）は、そのまま50kmで走れます。",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "Max",
+        "width",
+        "100%の使い方がわからない。"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"bold\" fill=\"#333\" font-family=\"sans-serif\">回答: max-width: 100% の仕組みとメリット</text>\n\n  <!-- カラムヘッダー -->\n  <!-- 左側：問題 -->\n  <rect x=\"50\" y=\"70\" width=\"380\" height=\"40\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"240\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#d32f2f\">これまでの問題 (Before)</text>\n  \n  <!-- 右側：解決 -->\n  <rect x=\"470\" y=\"70\" width=\"380\" height=\"40\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" rx=\"5\" />\n  <text x=\"660\" y=\"96\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#2e7d32\">max-width: 100% (After)</text>\n\n  <!-- シナリオ1: 親要素より画像が大きい場合 -->\n  <g transform=\"translate(0, 130)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース1：画像 ＞ 親要素 (大きな画像)</text>\n    \n    <!-- 左：問題 (はみ出し) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">対策なし (width指定なし)</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 150px</text>\n      \n      <!-- はみ出す画像 -->\n      <rect x=\"50\" y=\"50\" width=\"250\" height=\"60\" fill=\"#ffcdd2\" stroke=\"#d32f2f\" stroke-width=\"2\" opacity=\"0.9\" />\n      <text x=\"175\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#b71c1c\">はみ出し発生！</text>\n      <text x=\"175\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#b71c1c\">画像幅: 250px</text>\n    </g>\n\n    <!-- 右：解決 (縮小) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"150\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 収まる画像 -->\n      <rect x=\"50\" y=\"50\" width=\"150\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"125\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">自動で縮小</text>\n      <text x=\"125\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">親に合わせて150pxに</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">レイアウト崩れ防止</text>\n    </g>\n  </g>\n\n  <!-- シナリオ2: 親要素より画像が小さい場合 -->\n  <g transform=\"translate(0, 300)\">\n    <text x=\"50\" y=\"0\" font-size=\"16\" font-weight=\"bold\" fill=\"#333\">ケース2：画像 ＜ 親要素 (小さな画像)</text>\n    \n    <!-- 左：問題 (引き伸ばし) -->\n    <g transform=\"translate(50, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">width: 100% (固定) の場合</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <text x=\"55\" y=\"115\" font-size=\"12\" fill=\"#666\">親幅: 200px</text>\n      \n      <!-- 引き伸ばされた画像 -->\n      <rect x=\"50\" y=\"50\" width=\"200\" height=\"60\" fill=\"#ffe0b2\" stroke=\"#ef6c00\" stroke-width=\"2\" />\n      \n      <!-- ピクセル荒れ表現 -->\n      <path d=\"M 60 60 L 80 60 M 90 60 L 110 60 M 60 70 L 80 70\" stroke=\"#ef6c00\" stroke-width=\"1\" stroke-dasharray=\"2,2\"/>\n      \n      <text x=\"150\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#e65100\">無理に引き伸ばし</text>\n      <text x=\"150\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#e65100\">画質が粗くなる</text>\n    </g>\n\n    <!-- 右：解決 (サイズ維持) -->\n    <g transform=\"translate(470, 20)\">\n      <rect x=\"0\" y=\"0\" width=\"380\" height=\"130\" fill=\"#f9f9f9\" stroke=\"#ddd\" rx=\"5\" />\n      <text x=\"10\" y=\"25\" font-size=\"14\" fill=\"#666\">max-width: 100% 適用</text>\n      \n      <!-- 親要素ボックス -->\n      <rect x=\"50\" y=\"40\" width=\"200\" height=\"80\" fill=\"#e0e0e0\" stroke=\"#999\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      \n      <!-- 元のサイズの画像 -->\n      <rect x=\"50\" y=\"50\" width=\"100\" height=\"60\" fill=\"#c8e6c9\" stroke=\"#2e7d32\" stroke-width=\"2\" />\n      <text x=\"100\" y=\"85\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"bold\" fill=\"#1b5e20\">元サイズ維持</text>\n      <text x=\"100\" y=\"105\" text-anchor=\"middle\" font-size=\"10\" fill=\"#1b5e20\">画像幅: 100px</text>\n      \n      <!-- 矢印 -->\n      <path d=\"M 210 80 L 250 80\" stroke=\"#2196f3\" stroke-width=\"2\" marker-end=\"url(#arrow)\" />\n      <text x=\"260\" y=\"85\" font-size=\"12\" fill=\"#2196f3\">画質劣化なし</text>\n    </g>\n  </g>\n\n  <!-- コードブロック -->\n  <g transform=\"translate(50, 470)\">\n    <rect x=\"0\" y=\"0\" width=\"800\" height=\"60\" fill=\"#263238\" rx=\"5\" />\n    <text x=\"20\" y=\"25\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\">img {</text>\n    <text x=\"40\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#ffffff\">max-width: 100%; <tspan fill=\"#7ca453\">/* 上限のみ制限 */</tspan>  height: auto; <tspan fill=\"#7ca453\">/* 比率維持 */</tspan></text>\n    <text x=\"20\" y=\"45\" font-family=\"monospace\" font-size=\"14\" fill=\"#80cbc4\" dx=\"560\">}</text>\n  </g>\n\n  <!-- 矢印定義 -->\n  <defs>\n    <marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#2196f3\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: Max width 100%の使い方がわからない。",
+      "image_path": null,
+      "id": "60002bdb-b84c-400b-a40e-49477de2b2a1",
+      "created_at": "2025-12-30T23:07:30.462888",
+      "updated_at": "2025-12-30T23:23:24.373991",
+      "sub_category": "サイズ・構造"
+    },
+    {
+      "title": "図解: githubで強制コミットしたい",
+      "category": "html_css",
+      "content_type": "manual",
+      "description": "## githubで強制コミットしたい\n\n## 原因\n### 1-1. なぜ起きるか\nGitはデータの損失や不整合を防ぐため、主に以下の状況で操作をブロックします。\n\n1.  **履歴の競合（Pushできない）**: GitHub上の履歴がローカルより進んでいる、または履歴が枝分かれしており、そのまま送るとGitHub側の更新分が消えてしまう状態（Non-fast-forwardエラー）。\n2.  **コミットの制限（Commitできない）**: プロジェクトに設定された自動チェック（Lintやテスト）によりエラーが出ている、または変更対象のファイルが存在しない状態。\n\n## 解決策\n### 2-1. 対処法\n目的に応じて「強制実行オプション」を追加してコマンドを実行します。**特に強制プッシュは、GitHub上の既存の履歴を上書きして消去する可能性があるため、チーム開発では慎重に行ってください。**\n\n*   **GitHubを強制上書きする場合**: `push` コマンドに `-f` (force) オプションを付けます。\n*   **チェックを無視して保存する場合**: `commit` コマンドに `--no-ver",
+      "tags": [
+        "図解",
+        "SVG",
+        "自動生成",
+        "githubで強制コミットしたい"
+      ],
+      "generated_svg": "<svg viewBox=\"0 0 900 550\" width=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n  <!-- 背景 -->\n  <rect x=\"0\" y=\"0\" width=\"900\" height=\"550\" fill=\"#ffffff\" />\n  \n  <!-- 外枠 -->\n  <rect x=\"5\" y=\"5\" width=\"890\" height=\"540\" rx=\"10\" fill=\"none\" stroke=\"#2196f3\" stroke-width=\"3\" />\n\n  <!-- タイトル -->\n  <text x=\"450\" y=\"40\" font-family=\"sans-serif\" font-size=\"22\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#333\">回答: githubで強制コミットしたい（解決策まとめ）</text>\n\n  <!-- ヘッダー行 -->\n  <g transform=\"translate(0, 60)\">\n    <text x=\"150\" y=\"20\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#555\">原因・状況 (Before)</text>\n    <text x=\"360\" y=\"20\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#555\">対処法</text>\n    <text x=\"650\" y=\"20\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#555\">実行コマンド (Code)</text>\n    <line x1=\"40\" y1=\"30\" x2=\"860\" y2=\"30\" stroke=\"#ccc\" stroke-width=\"1\" />\n  </g>\n\n  <!-- シナリオ1: 強制プッシュ -->\n  <g transform=\"translate(40, 100)\">\n    <!-- Before Box -->\n    <rect x=\"0\" y=\"0\" width=\"220\" height=\"110\" rx=\"5\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" />\n    <text x=\"110\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#d32f2f\">履歴の競合</text>\n    <text x=\"110\" y=\"55\" font-family=\"sans-serif\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">GitHubの方が進んでいる</text>\n    <text x=\"110\" y=\"75\" font-family=\"sans-serif\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">(Non-fast-forward)</text>\n    <text x=\"110\" y=\"95\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" fill=\"#d32f2f\">Pushエラー発生</text>\n\n    <!-- Arrow -->\n    <path d=\"M 230 55 L 280 55\" stroke=\"#555\" stroke-width=\"2\" marker-end=\"url(#arrowhead)\" />\n    \n    <!-- Strategy Circle -->\n    <circle cx=\"255\" cy=\"55\" r=\"15\" fill=\"#2196f3\" />\n    <text x=\"255\" y=\"60\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#fff\">1</text>\n\n    <!-- Solution Box -->\n    <rect x=\"290\" y=\"0\" width=\"570\" height=\"110\" rx=\"5\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" />\n    <text x=\"305\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#2e7d32\">強制上書き (Force Push)</text>\n    \n    <!-- Code Snippet -->\n    <rect x=\"305\" y=\"45\" width=\"540\" height=\"30\" rx=\"3\" fill=\"#333\" />\n    <text x=\"315\" y=\"65\" font-family=\"monospace\" font-size=\"14\" fill=\"#fff\">git push <tspan fill=\"#ff9800\">-f</tspan> origin main</text>\n    \n    <!-- Warning -->\n    <rect x=\"305\" y=\"80\" width=\"540\" height=\"24\" rx=\"3\" fill=\"#fff3e0\" stroke=\"#ff9800\" stroke-width=\"1\" />\n    <text x=\"575\" y=\"97\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" fill=\"#e65100\">⚠️ 注意: リモート(GitHub側)の更新分はすべて消えます</text>\n  </g>\n\n  <!-- シナリオ2: 強制コミット (No Verify) -->\n  <g transform=\"translate(40, 230)\">\n    <!-- Before Box -->\n    <rect x=\"0\" y=\"0\" width=\"220\" height=\"90\" rx=\"5\" fill=\"#ffebee\" stroke=\"#f44336\" stroke-width=\"2\" />\n    <text x=\"110\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#d32f2f\">コミット制限</text>\n    <text x=\"110\" y=\"55\" font-family=\"sans-serif\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">Lintエラー / テスト失敗</text>\n    <text x=\"110\" y=\"75\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" fill=\"#d32f2f\">Commitブロック</text>\n\n    <!-- Arrow -->\n    <path d=\"M 230 45 L 280 45\" stroke=\"#555\" stroke-width=\"2\" marker-end=\"url(#arrowhead)\" />\n    <!-- Strategy Circle -->\n    <circle cx=\"255\" cy=\"45\" r=\"15\" fill=\"#2196f3\" />\n    <text x=\"255\" y=\"50\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#fff\">2</text>\n\n    <!-- Solution Box -->\n    <rect x=\"290\" y=\"0\" width=\"570\" height=\"90\" rx=\"5\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" />\n    <text x=\"305\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#2e7d32\">チェックを無視 (No Verify)</text>\n    \n    <rect x=\"305\" y=\"45\" width=\"540\" height=\"30\" rx=\"3\" fill=\"#333\" />\n    <text x=\"315\" y=\"65\" font-family=\"monospace\" font-size=\"14\" fill=\"#fff\">git commit -m \"msg\" <tspan fill=\"#ff9800\">--no-verify</tspan></text>\n  </g>\n\n  <!-- シナリオ3: 空コミット -->\n  <g transform=\"translate(40, 340)\">\n    <!-- Before Box -->\n    <rect x=\"0\" y=\"0\" width=\"220\" height=\"90\" rx=\"5\" fill=\"#fff3e0\" stroke=\"#ff9800\" stroke-width=\"2\" />\n    <text x=\"110\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#e65100\">変更なし</text>\n    <text x=\"110\" y=\"55\" font-family=\"sans-serif\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">ファイル変更がない状態</text>\n    <text x=\"110\" y=\"75\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" fill=\"#e65100\">履歴だけ作りたい</text>\n\n    <!-- Arrow -->\n    <path d=\"M 230 45 L 280 45\" stroke=\"#555\" stroke-width=\"2\" marker-end=\"url(#arrowhead)\" />\n    <!-- Strategy Circle -->\n    <circle cx=\"255\" cy=\"45\" r=\"15\" fill=\"#2196f3\" />\n    <text x=\"255\" y=\"50\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#fff\">3</text>\n\n    <!-- Solution Box -->\n    <rect x=\"290\" y=\"0\" width=\"570\" height=\"90\" rx=\"5\" fill=\"#e8f5e9\" stroke=\"#4caf50\" stroke-width=\"2\" />\n    <text x=\"305\" y=\"30\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#2e7d32\">空のコミット許可 (Allow Empty)</text>\n    \n    <rect x=\"305\" y=\"45\" width=\"540\" height=\"30\" rx=\"3\" fill=\"#333\" />\n    <text x=\"315\" y=\"65\" font-family=\"monospace\" font-size=\"14\" fill=\"#fff\">git commit <tspan fill=\"#ff9800\">--allow-empty</tspan> -m \"空のコミット\"</text>\n  </g>\n\n  <!-- フッター的な補足 -->\n  <g transform=\"translate(40, 460)\">\n    <rect x=\"0\" y=\"0\" width=\"820\" height=\"60\" rx=\"5\" fill=\"#f5f5f5\" stroke=\"#9e9e9e\" stroke-width=\"1\" stroke-dasharray=\"5,5\" />\n    <text x=\"410\" y=\"25\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#333\">オプションの覚え方</text>\n    <text x=\"410\" y=\"45\" font-family=\"sans-serif\" font-size=\"13\" text-anchor=\"middle\" fill=\"#555\">\n      Pushなら <tspan font-weight=\"bold\" fill=\"#d32f2f\">-f</tspan> (Force) / Commitなら <tspan font-weight=\"bold\" fill=\"#2e7d32\">--no-verify</tspan> (検証なし) または <tspan font-weight=\"bold\" fill=\"#2e7d32\">--allow-empty</tspan> (空許可)\n    </text>\n  </g>\n\n  <!-- 矢印マーカー定義 -->\n  <defs>\n    <marker id=\"arrowhead\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#555\" />\n    </marker>\n  </defs>\n</svg>",
+      "code_html": null,
+      "code_css": null,
+      "code_js": null,
+      "notes": "元の検索: githubで強制コミットしたい",
+      "image_path": null,
+      "id": "57f33357-67f0-47ef-8e90-f32f3b092f4a",
+      "created_at": "2025-12-30T23:36:21.915588",
+      "updated_at": "2025-12-30T23:36:21.915588",
+      "sub_category": "Git"
     }
   ]
 }

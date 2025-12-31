@@ -9,9 +9,10 @@ from pathlib import Path
 from config.settings import CATEGORIES, logger
 from modules.database import ChromaManager
 from modules.data_manager import DataManager
-from modules.llm import generate_answer_stream, generate_preview_svg, generate_preview_html
+from modules.llm import generate_answer_stream, generate_preview_svg, generate_preview_html, generate_simple_response
 from modules.answer_cache import AnswerCache
 from modules.learning_manager import add_to_learning_list, is_in_learning_list
+import uuid
 
 # プロジェクトルート
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -28,6 +29,15 @@ def extract_code_from_text(text: str) -> dict:
         "css": "\n".join(css_codes).strip(),
         "js": "\n".join(js_codes).strip()
     }
+
+
+def strip_html_tags(text: str) -> str:
+    """HTMLタグを除去（マークダウン表示用）"""
+    if not text:
+        return ""
+    # HTMLタグを除去
+    clean = re.sub(r'<[^>]+>', '', text)
+    return clean.strip()
 
 
 def split_answer_into_sections(answer_text: str) -> list[dict]:
@@ -147,13 +157,18 @@ def render_preview(html_code: str, css_code: str, js_code: str, key: str):
 # ページ設定
 st.set_page_config(page_title="検索 - RAG", page_icon="🔍", layout="wide")
 
-# サイドバーを狭く + 共通スタイル適用
+# ダークモード初期化
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+# サイドバーを狭く + 共通スタイル適用 + ダークモード
 from modules.ui_styles import inject_common_styles
 
 st.markdown(inject_common_styles(
     include_headings=True,
     sidebar_mode="narrow",
-    include_compact_title=False
+    include_compact_title=False,
+    dark_mode=st.session_state.dark_mode
 ), unsafe_allow_html=True)
 
 logger.info("=== 検索ページ表示 ===")
@@ -342,13 +357,13 @@ if query:
 
                                 with col_desc:
                                     st.markdown("**内容:**")
-                                    st.markdown(opened_item.get("description", ""))
+                                    st.markdown(strip_html_tags(opened_item.get("description", "")))
                                     if opened_item.get("tags"):
                                         st.caption(f"タグ: {', '.join(opened_item['tags'])}")
                             else:
                                 # ビジュアルがない場合はフル幅で表示
                                 st.markdown("**内容:**")
-                                st.markdown(opened_item.get("description", ""))
+                                st.markdown(strip_html_tags(opened_item.get("description", "")))
                                 if opened_item.get("tags"):
                                     st.caption(f"タグ: {', '.join(opened_item['tags'])}")
                             
@@ -366,6 +381,104 @@ if query:
                                 with tab_js:
                                     if opened_item.get("code_js"):
                                         st.code(opened_item["code_js"], language="javascript")
+
+                            # スマート分割機能 (asideタグが含まれる場合のみ表示) - 検索ページ版
+                            if "<aside>" in opened_item.get("description", ""):
+                                st.markdown("---")
+                                if st.button("✂️ AI分割", key=f"search_split_list_{opened_item['id']}", help="<aside>タグで自動分割して、AIで整理します"):
+                                    st.session_state[f"search_splitting_{opened_item['id']}"] = True
+                                    st.rerun()
+
+                            # 分割モード実行中
+                            if st.session_state.get(f"search_splitting_{opened_item['id']}"):
+                                st.info("✂️ AI自動分割プレビューモード")
+                                
+                                if f"search_split_results_{opened_item['id']}" not in st.session_state:
+                                    with st.spinner("AIが内容を解析・分割しています..."):
+                                        try:
+                                            description = opened_item.get("description", "")
+                                            chunks = re.split(r'(?=<aside>)', description)
+                                            chunks = [c for c in chunks if c.strip()]
+                                            
+                                            results = []
+                                            for i, chunk in enumerate(chunks):
+                                                prompt = f"""
+                                                あなたは技術ドキュメントの編集者です。
+                                                以下のテキストはNotionからエクスポートされた技術メモの一部です（HTMLタグが含まれています）。
+                                                
+                                                タスク：
+                                                1. 内容を理解し、適切な「タイトル」を付けてください。
+                                                2. 本文から不要なHTMLタグ（特にasideなど）を取り除き、読みやすいMarkdown形式の「本文」に整形してください。
+                                                3. コードブロックがある場合は保持してください。
+                                                
+                                                元のテキスト:
+                                                {chunk}
+                                                
+                                                出力フォーマット:
+                                                タイトル: [ここにタイトル]
+                                                本文:
+                                                [ここにMarkdown整形された本文]
+                                                """
+                                                response = generate_simple_response(prompt)
+                                                
+                                                title_match = re.search(r'タイトル:\s*(.*)', response)
+                                                body_match = re.search(r'本文:\s*(.*)', response, re.DOTALL)
+                                                
+                                                title = title_match.group(1).strip() if title_match else f"{opened_item['title']} ({i+1})"
+                                                body = body_match.group(1).strip() if body_match else chunk
+                                                title = re.sub(r'^[*#\s]+', '', title)
+                                                
+                                                results.append({
+                                                    "title": title,
+                                                    "description": body,
+                                                    "category": opened_item.get("category", "other"),
+                                                    "content_type": opened_item.get("content_type", "manual"),
+                                                    "code_css": opened_item.get("code_css", ""),
+                                                    "code_html": opened_item.get("code_html", ""),
+                                                    "code_js": opened_item.get("code_js", "")
+                                                })
+                                            
+                                            st.session_state[f"search_split_results_{opened_item['id']}"] = results
+                                        except Exception as e:
+                                            st.error(f"解析中にエラーが発生しました: {e}")
+                                
+                                results = st.session_state.get(f"search_split_results_{opened_item['id']}", [])
+                                
+                                if results:
+                                    st.write(f"計 {len(results)} 件に分割されました。内容を確認してください。")
+                                    
+                                    new_items = []
+                                    for i, res in enumerate(results):
+                                        with st.expander(f"No.{i+1}: {res['title']}", expanded=True):
+                                            n_title = st.text_input(f"タイトル #{i+1}", res['title'], key=f"search_split_title_{opened_item['id']}_{i}")
+                                            n_desc = st.text_area(f"本文 #{i+1}", res['description'], key=f"search_split_desc_{opened_item['id']}_{i}", height=150)
+                                            new_items.append({**res, "title": n_title, "description": n_desc})
+                                    
+                                    st.warning("⚠️ 「実行」を押すと、元のデータは削除され、新規登録されます。")
+                                    
+                                    col_split_exe, col_split_can = st.columns(2)
+                                    with col_split_exe:
+                                        if st.button("実行して分割登録", key=f"search_do_split_{opened_item['id']}"):
+                                            for item in new_items:
+                                                new_data = item.copy()
+                                                new_data["id"] = str(uuid.uuid4())
+                                                st.session_state.data_manager.add(new_data)
+                                            
+                                            st.session_state.data_manager.delete(opened_item["id"])
+                                            st.session_state.chroma_manager.delete(opened_item["id"])
+                                            
+                                            del st.session_state[f"search_splitting_{opened_item['id']}"]
+                                            del st.session_state[f"search_split_results_{opened_item['id']}"]
+                                            
+                                            st.success("分割登録が完了しました！")
+                                            st.rerun()
+                                    
+                                    with col_split_can:
+                                        if st.button("キャンセル", key=f"search_cancel_split_{opened_item['id']}"):
+                                            del st.session_state[f"search_splitting_{opened_item['id']}"]
+                                            if f"search_split_results_{opened_item['id']}" in st.session_state:
+                                                del st.session_state[f"search_split_results_{opened_item['id']}"]
+                                            st.rerun()
 
 
 
@@ -602,130 +715,6 @@ if query:
                     # セクション分割できない場合は通常表示
                     st.markdown(answer_text)
 
-            # 🔹 セクション別図解生成（登録モードONのみ表示）
-            sections = split_answer_into_sections(answer_text or "")
-            logger.info(f"[検索] セクション分割結果: {len(sections)}セクション")
-
-            if registration_mode and len(sections) >= 2:
-                st.markdown("---")
-                st.caption("📚 セクション選択（学習リスト追加用）")
-
-                # 登録モード用：選択されたセクション
-                selected_sections = []
-
-                # メインセクション（##）をグループ化して表示
-                current_parent = None
-                for i, section in enumerate(sections):
-                    section_key = f"section_{i}_{hash(section['title'])}"
-                    level = section.get("level", 2)
-                    parent = section.get("parent")
-
-                    # メインセクション（##）の場合、新しいグループ開始
-                    if level == 2:
-                        if current_parent is not None:
-                            st.markdown("")  # 前のグループとの間隔
-                        current_parent = section["title"]
-
-                        # 登録モードの場合：チェックボックス付き
-                        if registration_mode:
-                            col_check, col_title, col_svg, col_html = st.columns([0.3, 2.7, 0.5, 0.5])
-                            with col_check:
-                                checked = st.checkbox("", key=f"sec_check_{section_key}", label_visibility="collapsed")
-                                if checked:
-                                    # このメインセクションに属するサブセクションも含めてコンテンツを収集
-                                    full_content = section['content']
-                                    for j, sub in enumerate(sections):
-                                        if sub.get("parent") == section["title"] and sub.get("level") == 3:
-                                            full_content += f"\n\n### {sub['title']}\n{sub['content']}"
-                                    selected_sections.append({
-                                        "title": section["title"],
-                                        "content": full_content
-                                    })
-                            with col_title:
-                                st.markdown(f"**📁 {section['title'][:25]}**")
-                            with col_svg:
-                                if st.button("📐", key=f"sec_svg_{section_key}", help=f"図解: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        svg = generate_preview_svg(section['content'], section['title'])
-                                        if svg:
-                                            st.session_state[f"inline_svg_{section_key}"] = svg
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-                            with col_html:
-                                if st.button("🌐", key=f"sec_html_{section_key}", help=f"HTML: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        html = generate_preview_html(section['content'], section['title'])
-                                        if html:
-                                            st.session_state[f"inline_html_{section_key}"] = html
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-                        else:
-                            # 登録モードOFF：従来通り
-                            col1, col2, col3 = st.columns([3, 1, 1])
-                            with col1:
-                                st.markdown(f"**📁 {section['title'][:25]}**")
-                            with col2:
-                                if st.button("📐", key=f"sec_svg_{section_key}", help=f"図解: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        svg = generate_preview_svg(section['content'], section['title'])
-                                        if svg:
-                                            st.session_state[f"inline_svg_{section_key}"] = svg
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-                            with col3:
-                                if st.button("🌐", key=f"sec_html_{section_key}", help=f"HTML: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        html = generate_preview_html(section['content'], section['title'])
-                                        if html:
-                                            st.session_state[f"inline_html_{section_key}"] = html
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-
-                    # サブセクション（###）の場合、インデントして表示（チェックボックスなし）
-                    else:
-                        if registration_mode:
-                            col1, col2, col3 = st.columns([0.3, 2.7, 2])
-                        else:
-                            col1, col2, col3 = st.columns([0.3, 2.7, 2])
-                        with col1:
-                            st.markdown("")  # インデント用スペース
-                        with col2:
-                            st.markdown(f"└─ {section['title'][:20]}")
-                        with col3:
-                            btn1, btn2 = st.columns(2)
-                            with btn1:
-                                if st.button("📐", key=f"sec_svg_{section_key}", help=f"図解: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        svg = generate_preview_svg(section['content'], section['title'])
-                                        if svg:
-                                            st.session_state[f"inline_svg_{section_key}"] = svg
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-                            with btn2:
-                                if st.button("🌐", key=f"sec_html_{section_key}", help=f"HTML: {section['title']}"):
-                                    with st.spinner("生成中..."):
-                                        html = generate_preview_html(section['content'], section['title'])
-                                        if html:
-                                            st.session_state[f"inline_html_{section_key}"] = html
-                                            st.session_state[f"inline_section_{section_key}"] = section
-                                            st.rerun()
-
-                # 登録モード：選択したセクションを学習リストに追加ボタン
-                if registration_mode and selected_sections:
-                    st.markdown("---")
-                    if st.button(f"🧠 選択した{len(selected_sections)}セクションを学習リストに追加", type="primary", key="add_sections_to_learning"):
-                        added_count = 0
-                        for sec in selected_sections:
-                            success = add_to_learning_list(
-                                practice_id=f"section_{hash(sec['title'] + sec['content'][:50])}",
-                                title=sec["title"],
-                                description=sec["content"][:500],
-                                category=selected_category if selected_category != "all" else "other"
-                            )
-                            if success:
-                                added_count += 1
-                        st.success(f"✅ {added_count}セクションを学習リストに追加しました！")
-                        st.rerun()
 
             # インライン生成結果表示（登録モードON/OFF両方で表示）
             if len(sections) >= 2:
@@ -762,7 +751,7 @@ if query:
                                     "tags": ["図解", "SVG", "セクション"],
                                     "generated_svg": svg_content,
                                     "code_html": None, "code_css": None, "code_js": None,
-                                    "notes": f"元の検索: {query}", "image_path": None
+                                                                        "notes": f"元の検索: {query}", "image_path": None
                                 }
                                 practice_id = st.session_state.data_manager.add(new_practice)
                                 new_practice["id"] = practice_id
@@ -790,7 +779,7 @@ if query:
                                     "tags": ["HTML", "プレビュー", "セクション"],
                                     "generated_html": html_content,
                                     "code_html": None, "code_css": None, "code_js": None,
-                                    "notes": f"元の検索: {query}", "image_path": None
+                                                                        "notes": f"元の検索: {query}", "image_path": None
                                 }
                                 practice_id = st.session_state.data_manager.add(new_practice)
                                 new_practice["id"] = practice_id
@@ -802,131 +791,9 @@ if query:
                                 del st.session_state[f"inline_html_{section_key}"]
                                 st.rerun()
 
-            # 🔹 保存済み図解を自動表示（意図マッチング検索）
-            # 通常検索とは別に、図解専用の類似度検索を実行
-            visual_results = st.session_state.chroma_manager.search_visuals(
-                query=query,
-                min_score=0.65,  # 65%以上の類似度で表示
-                top_k=3
-            )
 
-            # 図解データを取得
-            visual_practices = []
-            for vr in visual_results:
-                vp = st.session_state.data_manager.get_by_id(vr["id"])
-                if vp:
-                    vp["_score"] = vr["score"]
-                    visual_practices.append(vp)
 
-            saved_svgs = [p for p in visual_practices if p.get("generated_svg")]
-            saved_htmls = [p for p in visual_practices if p.get("generated_html")]
 
-            if saved_svgs:
-                st.markdown("---")
-                st.markdown(f"### 📐 関連する保存済み図解（{len(saved_svgs)}件）")
-                for p in saved_svgs:
-                    # タイトルと削除ボタンを横並び
-                    col_svg_title, col_svg_del = st.columns([8, 1])
-                    with col_svg_title:
-                        st.caption(f"{p.get('title', '無題')} (類似度: {p.get('_score', 0):.0%})")
-                    with col_svg_del:
-                        if st.button("🗑", key=f"result_del_svg_{p['id']}", help="図解を削除"):
-                            st.session_state[f"result_confirm_del_svg_{p['id']}"] = True
-
-                    # SVG表示
-                    svg_html = f"""
-                    <html>
-                    <body style="margin:0; padding:15px; background:#ffffff;">
-                        <div style="border: 1px solid #4caf50; border-radius: 8px; padding: 10px; background: #ffffff;">
-                            {p['generated_svg']}
-                        </div>
-                    </body>
-                    </html>
-                    """
-                    st.components.v1.html(svg_html, height=600, scrolling=True)
-
-                    # 図解削除確認
-                    if st.session_state.get(f"result_confirm_del_svg_{p['id']}"):
-                        col_msg, col_yes, col_no = st.columns([2, 1, 1])
-                        with col_msg:
-                            st.warning("削除？")
-                        with col_yes:
-                            if st.button("はい", key=f"result_svg_yes_{p['id']}"):
-                                # generated_svgをNoneに更新（データ自体は残す）
-                                st.session_state.data_manager.update(p["id"], {"generated_svg": None})
-                                # ChromaDBも更新
-                                st.session_state.chroma_manager.delete(p["id"])
-                                updated_p = st.session_state.data_manager.get_by_id(p["id"])
-                                if updated_p:
-                                    st.session_state.chroma_manager.add_practice(updated_p)
-                                del st.session_state[f"result_confirm_del_svg_{p['id']}"]
-                                st.success("図解を削除しました")
-                                logger.info(f"[検索結果] SVG削除: {p['id']}")
-                                st.rerun()
-                        with col_no:
-                            if st.button("いいえ", key=f"result_svg_no_{p['id']}"):
-                                del st.session_state[f"result_confirm_del_svg_{p['id']}"]
-                                st.rerun()
-                logger.info(f"[検索] 保存済みSVG表示: {len(saved_svgs)}件")
-
-            if saved_htmls:
-                st.markdown("---")
-                st.markdown(f"### 🌐 関連する保存済みHTML（{len(saved_htmls)}件）")
-                for p in saved_htmls:
-                    st.markdown(f"**{p.get('title', '無題')}** (類似度: {p.get('_score', 0):.0%})")
-                    st.components.v1.html(p['generated_html'], height=300, scrolling=True)
-                logger.info(f"[検索] 保存済みHTML表示: {len(saved_htmls)}件")
-
-            # 🔹 関連する保存済み画像を表示（画像専用検索）
-            image_results = st.session_state.chroma_manager.search_images(
-                query=query,
-                min_score=0.65,  # 65%以上の類似度で表示
-                top_k=3
-            )
-            saved_images = []
-            for ir in image_results:
-                ip = st.session_state.data_manager.get_by_id(ir["id"])
-                if ip and ip.get("image_path"):
-                    ip["_score"] = ir["score"]
-                    saved_images.append(ip)
-
-            if saved_images:
-                st.markdown("---")
-                st.markdown(f"### 📷 関連する保存済み画像（{len(saved_images)}件）")
-                for p in saved_images:
-                    image_full_path = PROJECT_ROOT / p["image_path"]
-                    if image_full_path.exists():
-                        # タイトルと削除ボタンを横並び
-                        col_title, col_del = st.columns([8, 1])
-                        with col_title:
-                            st.caption(f"{p.get('title', '無題')} (類似度: {p.get('_score', 0):.0%})")
-                        with col_del:
-                            if st.button("🗑", key=f"result_del_img_{p['id']}", help="画像を削除"):
-                                st.session_state[f"result_confirm_del_img_{p['id']}"] = True
-
-                        # 画像表示
-                        st.image(str(image_full_path), use_container_width=True)
-
-                        # 画像削除確認（ボタン押下時のみ表示）
-                        if st.session_state.get(f"result_confirm_del_img_{p['id']}"):
-                            col_msg, col_yes, col_no = st.columns([2, 1, 1])
-                            with col_msg:
-                                st.warning("削除？")
-                            with col_yes:
-                                if st.button("はい", key=f"result_img_yes_{p['id']}"):
-                                    try:
-                                        image_full_path.unlink()
-                                        logger.info(f"[検索結果] 画像削除: {image_full_path}")
-                                    except Exception as e:
-                                        logger.error(f"[検索結果] 画像削除エラー: {e}")
-                                    st.session_state.data_manager.update(p["id"], {"image_path": None})
-                                    del st.session_state[f"result_confirm_del_img_{p['id']}"]
-                                    st.rerun()
-                            with col_no:
-                                if st.button("いいえ", key=f"result_img_no_{p['id']}"):
-                                    del st.session_state[f"result_confirm_del_img_{p['id']}"]
-                                    st.rerun()
-                logger.info(f"[検索] 保存済み画像表示: {len(saved_images)}件")
 
             # 🔹 全体の図解生成ボタン（既存機能を維持）
             st.markdown("---")

@@ -4,13 +4,14 @@ from pathlib import Path
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from config.settings import PRACTICES_JSON, PROJECT_ROOT, logger, GOOGLE_DRIVE_CREDENTIALS_PATH, GOOGLE_DRIVE_FOLDER_ID
+from config.settings import PRACTICES_JSON, ANSWER_CACHE_JSON, PROJECT_ROOT, logger, GOOGLE_DRIVE_CREDENTIALS_PATH, GOOGLE_DRIVE_FOLDER_ID
 
 # 定数
 SCOPES = ['https://www.googleapis.com/auth/drive']
 CREDENTIALS_PATH = Path(GOOGLE_DRIVE_CREDENTIALS_PATH)
 DRIVE_FOLDER_NAME = "RAG_APP_DATA"
 TARGET_FILE_NAME = "practices.json"
+CACHE_FILE_NAME = "answer_cache.json"
 
 class DriveManager:
     """Google Driveとのデータ同期を管理するクラス"""
@@ -105,13 +106,13 @@ class DriveManager:
             logger.error(f"[DriveManager] フォルダ取得エラー: {e}")
             return None
 
-    def _find_file_in_drive(self):
-        """フォルダ内のpractices.jsonを探す"""
+    def _find_file_in_drive(self, filename: str):
+        """指定されたファイル名を探す"""
         if not self.service or not self.folder_id:
             return None
         
         try:
-            query = f"name='{TARGET_FILE_NAME}' and '{self.folder_id}' in parents and trashed=false"
+            query = f"name='{filename}' and '{self.folder_id}' in parents and trashed=false"
             # supportsAllDrives=True を追加
             results = self.service.files().list(
                 q=query, 
@@ -125,17 +126,17 @@ class DriveManager:
                 return items[0]['id']
             return None
         except Exception as e:
-            logger.error(f"[DriveManager] ファイル検索エラー: {e}")
+            logger.error(f"[DriveManager] ファイル検索エラー ({filename}): {e}")
             return None
 
-    def download_practices(self) -> bool:
-        """Driveからダウンロードしてローカルを上書き"""
+    def _download_file(self, filename: str, local_path: Path) -> bool:
+        """汎用ダウンロード処理"""
         if not self.service:
             return False
 
-        file_id = self._find_file_in_drive()
+        file_id = self._find_file_in_drive(filename)
         if not file_id:
-            logger.info("[DriveManager] Drive上にファイルなし。スキップします。")
+            logger.info(f"[DriveManager] Drive上にファイルなし: {filename}")
             return False
 
         try:
@@ -145,57 +146,70 @@ class DriveManager:
                 supportsAllDrives=True
             ).execute()
             
-            # 下書き保存（万が一の破損防止）しないで直接上書きでOK（今回はシンプルに）
-            with open(PRACTICES_JSON, 'wb') as f:
+            with open(local_path, 'wb') as f:
                 f.write(content)
             
-            logger.info(f"[DriveManager] ダウンロード完了: {PRACTICES_JSON}")
+            logger.info(f"[DriveManager] ダウンロード完了: {local_path.name}")
             return True
             
         except Exception as e:
-            logger.error(f"[DriveManager] ダウンロード失敗: {e}")
+            logger.error(f"[DriveManager] ダウンロード失敗 ({filename}): {e}")
             return False
 
-    def upload_practices(self) -> bool:
-        """ローカルのpractices.jsonをDriveにアップロード（上書き）"""
+    def _upload_file(self, filename: str, local_path: Path) -> bool:
+        """汎用アップロード処理"""
         if not self.service or not self.folder_id:
             return False
 
-        if not PRACTICES_JSON.exists():
-            logger.warning("[DriveManager] アップロード対象のローカルファイルがありません")
+        if not local_path.exists():
+            logger.warning(f"[DriveManager] アップロード対象のローカルファイルがありません: {local_path}")
             return False
 
-        file_id = self._find_file_in_drive()
+        file_id = self._find_file_in_drive(filename)
         
         try:
-            media = MediaFileUpload(str(PRACTICES_JSON), mimetype='application/json', resumable=True)
+            media = MediaFileUpload(str(local_path), mimetype='application/json', resumable=True)
             
             if file_id:
                 # 更新 (update)
-                # supportsAllDrives=True を追加
                 self.service.files().update(
                     fileId=file_id,
                     media_body=media,
                     supportsAllDrives=True
                 ).execute()
-                logger.info(f"[DriveManager] アップロード完了（更新）: {file_id}")
+                logger.info(f"[DriveManager] アップロード完了（更新）: {filename}")
             else:
                 # 新規作成 (create)
                 file_metadata = {
-                    'name': TARGET_FILE_NAME,
+                    'name': filename,
                     'parents': [self.folder_id]
                 }
-                # supportsAllDrives=True を追加
                 self.service.files().create(
                     body=file_metadata,
                     media_body=media,
                     fields='id',
                     supportsAllDrives=True
                 ).execute()
-                logger.info("[DriveManager] アップロード完了（新規作成）")
+                logger.info(f"[DriveManager] アップロード完了（新規作成）: {filename}")
             
             return True
 
         except Exception as e:
-            logger.error(f"[DriveManager] アップロード失敗: {e}")
+            logger.error(f"[DriveManager] アップロード失敗 ({filename}): {e}")
             return False
+
+    def download_practices(self) -> bool:
+        """practices.json ダウンロード"""
+        return self._download_file(TARGET_FILE_NAME, PRACTICES_JSON)
+
+    def upload_practices(self) -> bool:
+        """practices.json アップロード"""
+        return self._upload_file(TARGET_FILE_NAME, PRACTICES_JSON)
+
+    def download_cache(self) -> bool:
+        """answer_cache.json ダウンロード"""
+        return self._download_file(CACHE_FILE_NAME, ANSWER_CACHE_JSON)
+
+    def upload_cache(self) -> bool:
+        """answer_cache.json アップロード"""
+        return self._upload_file(CACHE_FILE_NAME, ANSWER_CACHE_JSON)
